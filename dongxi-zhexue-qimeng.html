@@ -1,0 +1,2342 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>东西哲学启蒙课 · 读书蒸馏</title>
+<style>
+/* ===== TOKENS:7 主题(:root=warm-paper 默认 + 6 个 body[data-theme] 覆盖块) =====
+   规则: hex 只许出现在下面这 7 个 token 块内;组件样式一律 var(--*)(Zero Hex Colors, verify_page.py 强拦)
+   token 块内只放声明,不得嵌套 {},注释里不得出现右花括号 */
+:root{
+  --ink:#171411;
+  --muted:#6d6258;
+  --paper:#f8f2e7;
+  --paper-deep:#ece1cf;
+  --line:#d8c8af;
+  --red:#8B4513;
+  --blue:#2F4F4F;
+  --green:#556B2F;   /* 品牌对齐: 原 #4d6f48, 见 brand-tokens.md §3 */
+  --gold:#8B6914;    /* 品牌对齐: 原 #c2872d */
+  --white:#fffaf0;
+  --surface:rgba(255,250,240,.62);
+  --surface-strong:rgba(255,250,240,.72);
+  --bar-bg:rgba(248,242,231,.95);
+  --font-body:"Songti SC","Noto Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --font-display:"Kaiti SC","STKaiti","Noto Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --bg:radial-gradient(circle at 22% 12%, rgba(184,137,47,.18), transparent 28rem),
+       linear-gradient(135deg,#fbf6ec 0%,#efe1ca 100%);
+  --shadow:0 18px 50px rgba(55,38,19,.14);
+  --tint-accent:rgba(184,137,47,.12);
+  --tint-accent-strong:rgba(184,137,47,.15);
+  --ink-soft:#3d332b;
+  --ink-soft-2:#44392f;
+  /* 脑图深色画布 dark token(自绘 SVG 脑图专用,主题无关恒深墨绿;SVG 生成器经 getComputedStyle 读同一套 -> 零 hex 单一来源,勿散写进组件) */
+  --mm-bg:#14332e; --mm-bg2:#1a423b; --mm-panel:#173a34;
+  --mm-root-fill:#235c4f; --mm-root-bd:#3c8272; --mm-root-tx:#f4efe4;
+  --mm-ink:#f2ede1; --mm-ink2:#dfe8e0; --mm-ink3:#bccfc4;
+  --mm-sec:#d7c48c; --mm-judge:#a9c2b7; --mm-muted:#8fa89d; --mm-line:#5f8579;
+  --mm-chip-bg:rgba(143,208,191,.15); --mm-chip-bd:rgba(143,208,191,.32); --mm-chip-tx:#bfe0d3;
+  --mm-accent:#2f6b57; --mm-accent-tx:#f4efe4;
+  --mm-border:rgba(160,190,180,.18); --mm-hair:rgba(207,224,216,.045);
+}
+body[data-theme="minimal"]{
+  --ink:#111111; --muted:#6b6b6b; --paper:#ffffff; --paper-deep:#f6f6f4; --line:#e4e4e0;
+  --red:#111111; --blue:#2f4858; --green:#2f4858; --gold:#2f4858; --white:#ffffff;
+  --surface:#fafaf8; --surface-strong:#f2f2ef; --bar-bg:rgba(248,248,246,.95);
+  --font-body:-apple-system,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+  --font-display:"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+  --bg:#ffffff; --shadow:0 12px 40px rgba(17,17,17,.06);
+  --tint-accent:rgba(47,72,88,.10); --tint-accent-strong:rgba(47,72,88,.14);
+  --ink-soft:#2a2a2a; --ink-soft-2:#333333;
+}
+body[data-theme="dark"]{
+  --ink:#ece1cf; --muted:#a89a86; --paper:#221d18; --paper-deep:#2a241e; --line:#3a3128;
+  --red:#e07a66; --blue:#7fb0c4; --green:#9bbf8e; --gold:#d9a441; --white:#fffaf0;
+  --surface:rgba(58,49,40,.45); --surface-strong:rgba(58,49,40,.6); --bar-bg:rgba(34,29,24,.95);
+  --font-body:"Songti SC","Noto Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --font-display:"Kaiti SC","STKaiti","Noto Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --bg:radial-gradient(circle at 22% 12%, rgba(194,135,45,.08), transparent 28rem),
+       linear-gradient(135deg,#1a1714 0%,#221d18 100%);
+  --shadow:0 18px 50px rgba(0,0,0,.4);
+  --tint-accent:rgba(217,164,65,.14); --tint-accent-strong:rgba(217,164,65,.18);
+  --ink-soft:#d8ccb8; --ink-soft-2:#c9bca6;
+}
+body[data-theme="ink-wash"]{
+  --ink:#1a1a1a; --muted:#7a7468; --paper:#f4f0e6; --paper-deep:#eae3d2; --line:#cfc6b0;
+  --red:#9c2b1f; --blue:#3a352d; --green:#6b6354; --gold:#9c2b1f; --white:#fbf8ef;
+  --surface:rgba(255,253,247,.5); --surface-strong:rgba(255,253,247,.7); --bar-bg:rgba(244,240,230,.95);
+  --font-body:"Songti SC","STKaiti","KaiTi","Noto Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --font-display:"Songti SC","STSong","Noto Serif SC",serif;
+  --bg:#f4f0e6; --shadow:0 14px 44px rgba(60,50,35,.10);
+  --tint-accent:rgba(156,43,31,.08); --tint-accent-strong:rgba(156,43,31,.12);
+  --ink-soft:#3a352d; --ink-soft-2:#2e2a23;
+}
+body[data-theme="vintage-editorial"]{
+  --ink:#1f1a15; --muted:#8c8176; --paper:#f5f3ee; --paper-deep:#ebe6dc; --line:#d9d1c4;
+  --red:#c05a4a; --blue:#4a5568; --green:#6b7064; --gold:#b8893e; --white:#faf8f2;
+  --surface:rgba(250,248,242,.55); --surface-strong:rgba(250,248,242,.72); --bar-bg:rgba(245,243,238,.95);
+  --font-body:"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif;
+  --font-display:"Songti SC","STSong","Noto Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --bg:#f5f3ee; --shadow:0 14px 44px rgba(50,38,28,.08);
+  --tint-accent:rgba(192,90,74,.08); --tint-accent-strong:rgba(192,90,74,.12);
+  --ink-soft:#3d3530; --ink-soft-2:#4a403b;
+}
+body[data-theme="paper-ink"]{
+  --ink:#1a1a1a; --muted:#7a7268; --paper:#faf9f7; --paper-deep:#f0ece6; --line:#d4cdc2;
+  --red:#b53a3a; --blue:#3d4f5f; --green:#5a6b56; --gold:#b53a3a; --white:#fdfbf7;
+  --surface:rgba(253,251,247,.5); --surface-strong:rgba(253,251,247,.7); --bar-bg:rgba(250,249,247,.95);
+  --font-body:"STKaiti","KaiTi","Songti SC","Noto Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --font-display:"Songti SC","STSong","Noto Serif SC","Noto Serif CJK SC",Georgia,serif;
+  --bg:#faf9f7; --shadow:0 12px 38px rgba(30,25,20,.06);
+  --tint-accent:rgba(181,58,58,.07); --tint-accent-strong:rgba(181,58,58,.10);
+  --ink-soft:#2d2a26; --ink-soft-2:#36322d;
+}
+body[data-theme="brand-dark"]{
+  --ink:#CBD4E0; --muted:#8A94A6; --ink-soft:#8A94A6; --ink-soft-2:rgba(138,148,166,.7);
+  --paper:#0B111A; --paper-deep:#05080D; --line:rgba(232,238,245,.10);
+  --red:#E2654E; --blue:#5FA8C9; --green:#34D399; --gold:#E8B84B; --white:#0B111A;
+  --surface:rgba(255,255,255,.04); --surface-strong:rgba(13,18,26,.72);
+  --bar-bg:rgba(5,8,13,.95); --shadow:0 18px 50px rgba(0,0,0,.5);
+  --tint-accent:rgba(52,211,153,.10); --tint-accent-strong:rgba(52,211,153,.20);
+  --bg:radial-gradient(1200px 800px at 20% -10%, rgba(14,159,110,.12), transparent 60%), #05080D;
+}
+
+/* ===== 主题专属组件微调(零 hex,只许 var 与 content) ===== */
+body[data-theme="minimal"] .verdict-bar{border-left-color:var(--ink)}
+body[data-theme="minimal"] .arg-restate{border-left-color:var(--ink)}
+body[data-theme="ink-wash"] .qw-card{border-left-color:var(--red)}
+body[data-theme="vintage-editorial"] .qw-card{border-left-color:var(--red)}
+
+/* ===== 基础 ===== */
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:var(--bg);font-family:var(--font-body);font-size:17px;line-height:1.75}
+button{font:inherit;color:inherit}
+a{color:var(--blue)}
+[hidden]{display:none!important}
+main{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:0 0 60px;isolation:isolate}
+
+/* ===== 6 级字阶(T0-T5,section 2.3.2;组件标题只取梯内值) =====
+   T0 hero<=48 / T1 书名36 / T2 板块题26 / T3 章题·子页题22 / T4 卡片题18 / T5 标签13 */
+.section-title,.zone-title{margin:0 0 16px;font:900 1.625rem/1.25 var(--font-display);color:var(--ink)}   /* T2 26px */
+.section-lead{margin:0 0 22px;color:var(--ink-soft);font-size:1.0625rem;line-height:1.8}
+.block-lead{margin:26px 0 12px;color:var(--ink-soft);font-size:1.0625rem;line-height:1.75}
+.eyebrow{margin:0 0 12px;color:var(--red);font:700 .8125rem/1.3 var(--font-display);letter-spacing:.1em}   /* T5 */
+
+/* ===== 头部层1: .cb-banner 纸底 + 森林绿粗色带刊头(section 2.3.1) ===== */
+.cb-banner{display:grid;grid-template-columns:300px 1fr;margin:18px 0 8px;border:0;border-left:6px solid var(--green);border-radius:6px;background:linear-gradient(135deg,var(--paper),var(--paper-deep));box-shadow:var(--shadow);position:relative;overflow:hidden}
+.cb-banner::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--gold),transparent 72%)}
+.cb-banner img.cb-cover{width:100%;height:100%;max-height:420px;object-fit:contain;padding:32px 8px 32px 32px;filter:drop-shadow(0 14px 26px rgba(0,0,0,.20)) drop-shadow(0 1px 1px rgba(0,0,0,.26))}   /* 双投影=书封落纸阴影 + 轻边定义 */
+.cb-banner .cb-meta{padding:44px 48px 40px 24px}
+.cb-banner .cb-kicker{display:inline-flex;align-items:center;gap:9px;margin:0 0 14px;padding:5px 13px 5px 11px;border:1.5px solid var(--gold);border-radius:999px;background:var(--tint-accent);color:var(--ink-soft);font:700 .8125rem/1.3 var(--font-display);letter-spacing:.13em}   /* T5 金章 */
+.cb-banner .cb-kicker::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.cb-banner .cb-title{margin:0 0 10px;color:var(--ink);font:900 2.25rem/1.22 var(--font-display);letter-spacing:.01em}   /* T1 36px 深字 */
+.cb-banner .cb-author{margin:0 0 16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;color:var(--ink-soft);font-size:.9375rem}
+.cb-banner .cb-author-lead{color:var(--muted)}
+.cb-banner .cb-author-link{display:inline-flex;align-items:center;padding:4px 14px;border:1.5px solid var(--gold);border-radius:999px;background:var(--tint-accent-strong);color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--gold);transition:transform .18s ease,background .18s ease}
+.cb-banner .cb-author-link:hover{transform:translateX(3px);background:color-mix(in srgb,var(--gold) 30%,transparent)}
+.cb-banner .cb-author-hint{color:var(--muted);font:700 .8125rem/1 var(--font-display);letter-spacing:.02em}
+.cb-banner .cb-intro{margin:0;max-width:40em;color:var(--ink-soft);font-size:1.0625rem;line-height:1.9}
+.cb-banner .cb-intro strong{color:var(--ink);font-weight:700;border-bottom:2px solid var(--gold)}
+
+/* ===== 头部层间: .author-entry 演变入口卡(banner→hero 之间;作者 ≥2 部已蒸才渲染,否则整卡删) ===== */
+.author-entry{display:flex;align-items:center;flex-wrap:wrap;gap:9px 14px;margin:14px 0 4px;padding:12px 18px;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;background:var(--surface-strong);color:var(--ink-soft);text-decoration:none;transition:border-color .18s ease,transform .18s ease}
+.author-entry:hover{border-color:var(--gold);transform:translateX(3px)}
+.author-entry .ae-badge{flex:0 0 auto;padding:3px 11px;border:1.5px solid var(--gold);border-radius:999px;background:var(--tint-accent);color:var(--ink-soft);font:700 .75rem/1.3 var(--font-display);letter-spacing:.08em}
+.author-entry .ae-text{flex:1 1 auto;min-width:12ch;color:var(--ink-soft);font-size:.9375rem;line-height:1.6}
+.author-entry .ae-text b{color:var(--ink);font-weight:800}
+.author-entry .ae-go{flex:0 0 auto;color:var(--blue);font:800 .875rem/1.3 var(--font-display);white-space:nowrap}
+
+/* ===== 头部层3: .hero 标语(降级 T0) ===== */
+.hero{padding:30px 0 18px}
+.hero h1{margin:0;max-width:920px;font:900 clamp(2.25rem,4vw,3rem)/1.15 var(--font-display);letter-spacing:.005em}   /* T0 36-48px */
+
+/* ===== Tabs / Panels(激活态类名 = on) ===== */
+.tabs{position:sticky;top:0;z-index:50;display:grid;gap:8px;padding:10px;margin:20px 0 28px;border:1px solid var(--line);background:var(--bar-bg);grid-template-columns:repeat(5,1fr)}
+.tab{min-height:56px;border:0;border-radius:4px;background:transparent;cursor:pointer;font:800 1rem/1.2 var(--font-display);padding:6px 6px}
+.tab .tab-sub{display:block;margin-top:3px;font:600 .75rem/1.2 var(--font-display);color:var(--muted)}
+.tab.on{color:var(--paper);background:var(--green)}
+.tab.on .tab-sub{color:var(--paper);opacity:.72}
+.panel{display:none;animation:rise .36s ease both}
+.panel.on{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== 板尾 .next-cta(每板底一枚,指向下一板) ===== */
+.next-cta{display:flex;align-items:center;justify-content:center;gap:8px;margin:34px 0 6px;padding:18px 22px;border:0;border-radius:6px;background:var(--green);color:var(--paper);cursor:pointer;font:800 1.0625rem/1.3 var(--font-display);text-decoration:none;width:100%;transition:transform .2s}
+.next-cta:hover{transform:translateY(-2px)}
+
+/* ===== (1) 餐巾纸 .bd-napkin ===== */
+.note{padding:22px;border:1px solid var(--line);background:var(--surface)}
+.bd-napkin{border-top:3px solid var(--gold)}
+.bd-napkin h3{margin:0 0 10px;font:800 1.125rem/1.3 var(--font-display)}   /* T4 */
+.bd-napkin .formula{margin:6px 0 8px;color:var(--green);font:900 1.625rem/1.4 var(--font-display)}
+/* 公式读法 .formula-read(v4,Q4-1:.formula 正下方,小一号,前缀「怎么读:」,点明运算符语义) */
+.bd-napkin .formula-read{margin:0 0 14px;color:var(--ink-soft);font-size:.9375rem;line-height:1.7}
+.bd-napkin .formula-read::before{content:"怎么读:";margin-right:2px;color:var(--green);font-weight:700}
+.bd-napkin p:not(.formula):not(.formula-read){margin:0;color:var(--ink-soft-2);font-size:1.0625rem;line-height:1.75}
+
+/* ===== (1) 因果骨架草图 .napkin-sketch(v4,Q4-2:内联 SVG 纵向因果流,直角经典/浅色/静态一屏;
+   餐巾纸后、脑图前;色只走 token -- --paper 底 / --green 引线与描边 / --ink 文字 / 中间产物 --gold 描边) ===== */
+.napkin-sketch{margin:6px 0 22px;padding:14px 12px 8px;border:1px solid var(--line);border-radius:8px;background:var(--paper)}
+.napkin-sketch .sk-caption{margin:0 0 8px;color:var(--ink-soft);font:700 .8125rem/1.5 var(--font-display);letter-spacing:.02em;text-align:center}
+.napkin-sketch .sk-caption b{color:var(--green)}
+.napkin-sketch svg{display:block;width:100%;height:auto;max-height:70vh;margin:0 auto}
+/* 二阶实底(作者:中间产物 + 终点统一绿实底白字 / 支柱·过程=浅底描边) */
+.napkin-sketch .sk-node{fill:var(--surface-strong);stroke:var(--green);stroke-width:1.4}
+.napkin-sketch .sk-node.sk-mid{fill:var(--green);stroke:none}
+.napkin-sketch .sk-node.sk-end{fill:var(--green);stroke:none}
+.napkin-sketch .sk-label{fill:var(--ink);font-family:var(--font-display);font-weight:700;font-size:11px}
+.napkin-sketch .sk-label.sk-tmid,.napkin-sketch .sk-label.sk-tend{fill:var(--white)}
+.napkin-sketch .sk-line{fill:none;stroke:var(--green);stroke-width:1.4;stroke-opacity:.45;shape-rendering:crispEdges}
+.napkin-sketch .sk-arrow{fill:var(--green)}
+/* 转换标签:纯文字挪到引线上方(不套框、不压箭头) */
+.napkin-sketch .sk-elabel{fill:var(--green);font-family:var(--font-display);font-weight:700;font-size:11px}
+
+/* ===== (1) 脑图 .bd-mindmap-wrap(v4.1 自绘 SVG 深色版:tidy-tree 确定性布局 + viewBox 缩放 viewer;
+   深墨绿圆角画布嵌浅色纸页,上下留白过渡不生硬贴边;配色全走 --mm-* dark token(零 hex);
+   SVG 生成器读内嵌 nodeData 通用出图,只画父子直角引线、不画任何关联箭头/收纳虚线) ===== */
+.bd-mindmap-wrap{position:relative;margin:26px 0 22px}
+/* 深色画布 = viewBox viewer 视口:点阵磨砂纹 + 极缓径向渐变,圆角、软投影(留白过渡),拖动手势、不选中 */
+.bd-mindmap-wrap #bd-mindmap{position:relative;display:block;width:100%;height:clamp(460px,64vh,680px);
+  border-radius:16px;overflow:hidden;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;
+  box-shadow:0 16px 44px rgba(9,26,22,.30),0 0 0 1px rgba(120,150,140,.16);
+  background:
+    radial-gradient(circle at 26px 26px, var(--mm-hair) 1px, transparent 1.4px) 0 0/26px 26px,
+    radial-gradient(120% 120% at 26% 32%, var(--mm-bg2) 0%, var(--mm-bg) 66%)}
+.bd-mindmap-wrap #bd-mindmap.grabbing{cursor:grabbing}
+.bd-mindmap-wrap #bd-mindmap .mm-stage{position:absolute;top:0;left:0}
+.bd-mindmap-wrap #bd-mindmap .mm-stage svg{display:block}
+.bd-mindmap-wrap #bd-mindmap a.jump{cursor:pointer}
+.bd-mindmap-wrap #bd-mindmap a{-webkit-user-drag:none;user-drag:none}
+/* 工具栏(缩小/放大/复位/全屏),浮在深色画布右上 */
+.bd-mindmap-wrap .mm-toolbar{position:absolute;top:16px;right:16px;z-index:6;display:flex;gap:8px}
+.bd-mindmap-wrap .mm-toolbar button{font:inherit;font-size:13px;line-height:1;cursor:pointer;
+  background:rgba(255,255,255,.05);color:var(--mm-ink);border:1px solid var(--mm-border);border-radius:6px;
+  padding:7px 11px;transition:background .15s,border-color .15s;-webkit-tap-highlight-color:transparent}
+.bd-mindmap-wrap .mm-toolbar button:hover{background:rgba(255,255,255,.12);border-color:rgba(160,190,180,.42)}
+.bd-mindmap-wrap .mm-toolbar button.mm-fs{background:var(--mm-accent);color:var(--mm-accent-tx);border-color:var(--mm-root-bd)}
+.bd-mindmap-wrap .mm-toolbar button.mm-fs:hover{background:var(--mm-root-fill)}
+/* 交互提示 / 跳章 toast / 缩放徽标(全浮在深色画布内) */
+.bd-mindmap-wrap .mm-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:7;
+  background:rgba(9,26,22,.9);color:var(--mm-ink);font:12.5px/1.4 var(--font-display);padding:9px 15px;
+  border-radius:20px;pointer-events:none;border:1px solid var(--mm-border);box-shadow:0 4px 18px rgba(0,0,0,.4);
+  opacity:0;transition:opacity .4s;white-space:nowrap;max-width:92%}
+.bd-mindmap-wrap .mm-hint.show{opacity:1}
+.bd-mindmap-wrap .mm-toast{position:absolute;left:50%;top:16px;transform:translateX(-50%) translateY(-8px);z-index:8;
+  background:var(--mm-accent);color:var(--mm-accent-tx);font:13px/1.4 var(--font-display);padding:9px 16px;border-radius:8px;
+  opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;border:1px solid var(--mm-chip-bd);box-shadow:0 8px 24px rgba(0,0,0,.45)}
+.bd-mindmap-wrap .mm-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.bd-mindmap-wrap .mm-zoom{position:absolute;right:16px;bottom:16px;z-index:6;background:rgba(9,26,22,.72);
+  border:1px solid var(--mm-border);color:var(--mm-ink2);font:12px/1 var(--font-display);padding:5px 10px;border-radius:6px;
+  font-variant-numeric:tabular-nums;pointer-events:none}
+/* 画布下方一行引导(留在纸底浅色页,故用页面 token) */
+.bd-mindmap-wrap .mm-caption{margin:12px 4px 2px;color:var(--muted);font:12px/1.6 var(--font-display)}
+/* 全屏聚焦态:纯深色铺满视口(JS 会把 wrap 临时移到 <body> 顶层,逃离 main/panel 祖先 stacking context;z 高于 nav/主题浮层) */
+.bd-mindmap-wrap.mm-fullscreen{position:fixed;inset:0;z-index:9999;margin:0;padding:0;background:var(--mm-bg)}
+.bd-mindmap-wrap.mm-fullscreen #bd-mindmap{height:100%;border-radius:0;box-shadow:none}
+.bd-mindmap-wrap.mm-fullscreen .mm-caption{display:none}
+@media(max-width:880px){
+  .bd-mindmap-wrap .mm-toolbar{top:12px;right:12px;gap:6px}
+  .bd-mindmap-wrap .mm-toolbar button{padding:8px 10px}
+}
+
+/* ===== (1) 核心观点卡 .bd-coreideas(展开态必渲三件:explain/evidence/evlevel,T8) ===== */
+.bd-coreideas{margin-top:30px}
+.ci-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:8px}
+.ci{padding:18px 20px;border:1px solid var(--line);background:var(--surface);cursor:pointer;transition:border-color .2s}
+.ci:hover{border-color:var(--gold)}
+.ci .ci-idea{margin:0;font:800 1.125rem/1.5 var(--font-display);color:var(--ink)}   /* T4 18px */
+.ci .ci-analogy{margin:8px 0 0;color:var(--ink-soft-2);font-size:1rem;line-height:1.7}
+.ci-primary{grid-column:1/-1;border-left:4px solid var(--red);background:var(--surface-strong);padding:24px 26px}
+.ci-primary .ci-idea{font-size:1.375rem;line-height:1.4}
+.ci-primary .ci-analogy{font-size:1.0625rem}
+.ci-more{margin:12px 0 0;color:var(--blue);font:700 .8125rem/1.3 var(--font-display)}
+.ci.on .ci-more{color:var(--muted)}
+.ci-detail{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.ci.on .ci-detail{display:block;animation:rise .3s ease both}
+.ci-explain{margin:0 0 10px;color:var(--ink-soft);font-size:1rem;line-height:1.8}
+.ci-evidence{margin:0 0 10px;padding-left:12px;border-left:2px solid var(--line);color:var(--ink-soft-2);font-size:.9375rem;line-height:1.75}
+.ci-evlevel{display:inline-flex;align-items:center;gap:6px;font:700 .8125rem/1.3 var(--font-display);color:var(--ink-soft-2)}
+.ci-evlevel::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--muted)}
+.ci-evlevel[data-level="confirmed"]::before{background:var(--green)}   /* 原文确认 */
+.ci-evlevel[data-level="inferred"]::before{background:var(--gold)}     /* 结构推断 */
+.ci-evlevel[data-level="review"]::before{background:var(--red)}        /* 需复核 */
+.ci-teleport{display:inline-block;margin-top:10px;color:var(--blue);font:700 .875rem/1.3 var(--font-display);text-decoration:none}
+/* pillar 分组(v4,Q1-3):观点卡按脑图一级分支归组,组头=分支名 */
+.ci-group{margin-top:18px}
+.ci-group-head{display:flex;align-items:center;gap:10px;margin:0 0 4px;color:var(--red);font:800 1rem/1.4 var(--font-display);letter-spacing:.02em}
+.ci-group-head::before{content:"";flex:0 0 auto;width:8px;height:8px;border-radius:2px;background:var(--red);transform:rotate(45deg)}
+.ci-portal{display:inline-block;margin-top:10px;color:var(--gold);font:700 .8125rem/1.3 var(--font-display);text-decoration:none}
+.ci-portal:hover{text-decoration:underline}
+
+/* ===== (1) 两种养法对照 .soul-block(soul_module 三型择一) ===== */
+.soul-block{margin:30px 0 0;padding:22px 24px;border:1px solid var(--line);background:var(--surface)}
+.soul-title{margin:0 0 6px;font:900 1.375rem/1.35 var(--font-display);color:var(--ink)}   /* T3 */
+.soul-subtitle{margin:0 0 8px;color:var(--red);font:700 .9375rem/1.5 var(--font-display)}
+.soul-intro{margin:0 0 16px;color:var(--ink-soft-2);font-size:1rem;line-height:1.8}
+.soul-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.soul-state{padding:16px 18px;border:1px solid var(--line);background:var(--surface-strong)}
+.soul-state h4{margin:0 0 8px;font:800 1.0625rem/1.3 var(--font-display);color:var(--ink)}
+.soul-state p{margin:0 0 10px;color:var(--ink-soft-2);font-size:.9375rem;line-height:1.7}
+.soul-state ul{margin:0;padding-left:18px;color:var(--muted);font-size:.875rem;line-height:1.7}
+.soul-chain{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap}
+.soul-link{flex:1 1 160px;display:flex;gap:10px;padding:14px 16px;border:1px solid var(--line);background:var(--surface-strong)}
+.soul-link .sl-no{flex:0 0 auto;width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:var(--blue);color:var(--white);font:800 14px/1 var(--font-display)}
+.soul-link h4{margin:0 0 4px;font:800 .9375rem/1.3 var(--font-display)}
+.soul-link p{margin:0;color:var(--ink-soft-2);font-size:.875rem;line-height:1.6}
+.soul-arrow{display:grid;place-items:center;color:var(--red);font:900 22px/1 var(--font-display)}
+.soul-curve{margin:0 0 16px}
+.soul-curve-svg{display:block;width:100%;height:200px;border:1px solid var(--line);background:var(--surface-strong)}
+.soul-curve-svg .sc-axis{stroke:var(--line);stroke-width:1;stroke-dasharray:4 4}
+.soul-curve-svg .sc-line{fill:none;stroke:var(--red);stroke-width:3;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
+.soul-curve-svg .sc-dot{fill:var(--red)}
+.sc-legend{display:flex;align-items:center;gap:8px;margin:8px 0 0;color:var(--muted);font:13px/1.4 var(--font-display)}
+.sc-legend .sc-swatch{width:14px;height:3px;background:var(--red);display:inline-block}
+
+/* ===== (2) 概念筹码条 .concept-chips(概念唯一归宿) ===== */
+.concept-chips{margin-bottom:28px}
+.cc-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.cc-chip{padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);cursor:pointer;font:700 .9375rem/1.2 var(--font-display);color:var(--ink)}
+.cc-chip:hover{border-color:var(--gold)}
+.cc-chip.on{background:var(--green);color:var(--paper);border-color:var(--green)}
+/* 概念中英对照(视频型 Q6):英文原词跟在中文概念后,弹卡内以 --gold 斜体呈现 */
+.cc-chip .cc-en{margin-left:6px;color:var(--muted);font:600 .8125rem/1 var(--font-body);font-style:italic}
+.cc-chip.on .cc-en{color:var(--paper)}
+.cc-pop .cc-en{margin-left:6px;color:var(--gold);font-style:italic;font-weight:700}
+/* 误读角标(v4,Q2-2):common_misread 非空的 chip 面上右上角小「≠」,提示点进去有误读纠偏 */
+.cc-chip{position:relative}
+.cc-chip.cc-has-mis::after{content:"\2260";position:absolute;top:-6px;right:-6px;width:18px;height:18px;display:grid;place-items:center;border-radius:50%;background:var(--red);color:var(--white);font:800 11px/1 var(--font-display)}
+.cc-pops{margin-top:12px}
+.cc-pop{display:none;padding:16px 20px;border:1px solid var(--line);border-left:4px solid var(--gold);background:var(--surface-strong)}
+.cc-pop.on{display:block;animation:rise .3s ease both}
+.cc-pop .cc-one{margin:0 0 8px;font:800 1rem/1.5 var(--font-display);color:var(--ink)}
+.cc-pop .cc-mis{margin:0 0 6px;color:var(--red);font-size:.9375rem;line-height:1.6}
+.cc-pop .cc-stance{margin:0;color:var(--ink-soft-2);font-size:.9375rem;line-height:1.6}
+
+/* ===== (2) 章目录 .chapter-toc(目录态,默认收起 + 手风琴逃生门) ===== */
+.chapter-toc{margin-bottom:30px}
+.toc-head{display:flex;align-items:center;flex-wrap:wrap;gap:10px 16px;padding:14px 18px;border:1px solid var(--line);border-top:3px solid var(--ink);background:var(--surface-strong)}
+.toc-summary{font:700 1rem/1.4 var(--font-display);color:var(--ink)}
+.toc-progress{color:var(--muted);font:700 .875rem/1.3 var(--font-display)}
+.toc-expand{margin-left:auto;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--surface);cursor:pointer;font:700 .8125rem/1.2 var(--font-display);color:var(--ink-soft)}
+.toc-expand:hover{border-color:var(--gold);color:var(--ink)}
+.toc-list{display:grid;gap:8px;margin-top:12px}
+.toc-row{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:12px 16px;border:1px solid var(--line);background:var(--surface);cursor:pointer;transition:border-color .2s}
+.toc-row:hover{border-color:var(--gold)}
+.toc-row.hl{border-color:var(--gold);box-shadow:var(--shadow)}
+.toc-no{flex:0 0 auto;width:36px;height:36px;display:grid;place-items:center;border-radius:50%;background:var(--line);color:var(--ink);font:800 15px/1 var(--font-display)}
+.toc-row.open .toc-no,.toc-row.read .toc-no{background:var(--gold);color:var(--white)}
+.toc-main{flex:1 1 auto;min-width:0}
+.toc-title{font:800 1.125rem/1.35 var(--font-display);color:var(--ink)}   /* T4 */
+.toc-sum{margin:2px 0 0;color:var(--muted);font-size:.875rem;line-height:1.5}
+/* 悬念钩子(v4,Q5-5):收起行第三层,强调色短句,取该章招牌案例的具象意象 */
+.toc-hook{display:block;margin:4px 0 0;color:var(--gold);font:700 .8125rem/1.4 var(--font-display)}
+.toc-hook::before{content:"\2192\00a0";color:var(--gold)}
+.toc-meta{flex:0 0 auto;display:flex;align-items:center;gap:10px;color:var(--muted);font:700 .8125rem/1.3 var(--font-display)}
+.toc-arrow{transition:transform .2s}
+.toc-row.open .toc-arrow{transform:rotate(180deg)}
+
+/* ===== (2) 手风琴章节 .bd-chapters / .bd-chapter(默认收起) ===== */
+.bd-chapters{margin-bottom:30px}
+.bd-chapter{margin:0 0 14px;border:1px solid var(--line);border-top:3px solid var(--red);background:var(--surface)}
+.bd-chapter:not(.open){display:none}
+.bd-chapter .ch-inner{padding:24px 26px}
+.bd-chapter h3{margin:0 0 16px;font:800 1.375rem/1.35 var(--font-display);color:var(--ink)}   /* T3 22px */
+.bd-chapter p{margin:0 0 14px;color:var(--ink-soft);font-size:1.0625rem;line-height:1.9}
+.bd-chapter .excerpt{margin:18px 0;padding:16px 20px;border-left:4px solid var(--gold);background:var(--paper-deep);color:var(--ink-soft);font-size:1rem;line-height:1.8;font-style:normal}
+.ch-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;padding-top:14px;border-top:1px dashed var(--line)}
+.ch-act{padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);cursor:pointer;font:700 .8125rem/1.2 var(--font-display);color:var(--ink-soft);text-decoration:none}
+.ch-act:hover{border-color:var(--gold);color:var(--ink)}
+.ch-act.ch-next{background:var(--green);color:var(--paper);border-color:var(--green)}
+
+/* ===== 出处小灰字 .src-note(随文常显,无开关) ===== */
+.src-note{display:block;margin-top:10px;color:var(--muted);font:12px/1.5 var(--font-display);text-align:right}
+.excerpt .src-note{text-align:left;margin-top:8px}
+
+/* ===== (2) 全书金句墙 .quote-wall(金句唯一集中归宿) ===== */
+.quote-wall{margin-top:8px}
+.qw-list{display:grid;gap:14px;margin-top:12px}
+.qw-card{margin:0;padding:22px 26px;border-left:4px solid var(--gold);background:var(--surface-strong)}
+.qw-card.qw-featured{border-left-width:6px;background:var(--paper-deep)}
+.qw-card blockquote{margin:0;color:var(--ink-soft);font:600 1.1875rem/1.8 var(--font-body)}
+.qw-featured blockquote{font-size:1.375rem}
+.qw-card figcaption{margin-top:10px;color:var(--muted);font:13px/1.5 var(--font-display)}
+.qw-card .qw-teleport{display:inline-block;margin-top:8px;color:var(--blue);font:700 .8125rem/1.3 var(--font-display);text-decoration:none}
+/* 双语引用(视频型 Q6):中文译作可读主行,英文原话照录在 blockquote[lang=en] 作原文佐证 */
+.qw-card blockquote[lang="en"]{font-style:italic;font-size:1.0625rem;color:var(--ink-soft-2)}
+.qw-card .qw-zh{margin:10px 0 0;color:var(--ink);font:600 1.1875rem/1.8 var(--font-body)}
+.qw-featured .qw-zh{font-size:1.375rem}
+
+/* ===== (3) 裁决条 .verdict-bar ===== */
+.verdict-bar{display:flex;align-items:center;gap:22px;padding:22px 26px;border:1px solid var(--line);border-left:6px solid var(--gold);background:var(--surface-strong);margin-bottom:24px}
+.vb-score{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;line-height:1}
+.vb-score b{font:900 2.75rem/1 var(--font-display);color:var(--gold)}
+.vb-score span{margin-top:4px;color:var(--muted);font:700 .75rem/1.3 var(--font-display)}
+.vb-text{margin:0;color:var(--ink-soft);font-size:1.0625rem;line-height:1.75}
+/* 热度条(视频型 Q6:替豆瓣评分):频道订阅大数 + 系列合计播放/赞,标 as_of 快照 */
+.verdict-bar .vb-heat{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;line-height:1}
+.verdict-bar .vb-heat b{font:900 2.25rem/1 var(--font-display);color:var(--gold)}
+.verdict-bar .vb-heat span{margin-top:4px;color:var(--muted);font:700 .75rem/1.3 var(--font-display)}
+.verdict-bar .vb-body{display:flex;flex-direction:column;gap:6px}
+.vb-heatline{margin:0;color:var(--ink-soft-2);font:700 .875rem/1.55 var(--font-display)}
+.vb-heatline b{color:var(--green)}
+
+/* ===== (3) 立论复述 .arg-restate(arguments.chain 唯一归宿) ===== */
+.arg-restate{margin:0 0 26px;padding:20px 24px;border-left:5px solid var(--red);background:var(--surface-strong)}
+.arg-restate .ar-sub{margin:0 0 10px;color:var(--red);font:700 .875rem/1.3 var(--font-display)}
+.arg-restate p{margin:0;color:var(--ink-soft);font-size:1.0625rem;line-height:1.85}
+/* 论证链胶囊(v4,Q4-7):散文段之上一条横向 step 链,5 秒可扫;窄屏纵排 */
+.arg-steps{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 16px;padding:0;list-style:none}
+.arg-step{padding:6px 13px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font:700 .875rem/1.3 var(--font-display)}
+.arg-step.arg-step-last{background:var(--green);color:var(--paper);border-color:var(--green)}
+.arg-arrow{flex:0 0 auto;color:var(--red);font:900 .9375rem/1 var(--font-display)}
+@media(max-width:560px){.arg-steps{flex-direction:column;align-items:flex-start}.arg-arrow{transform:rotate(90deg);margin-left:16px}}
+
+/* ===== (3) 内在张力 .tensions(A<->B 窄行,点开仲裁) ===== */
+.tensions{margin-bottom:26px}
+.tn-list{display:grid;gap:10px;margin-top:12px}
+.tn-row{padding:14px 18px;border:1px solid var(--line);background:var(--surface);cursor:pointer}
+.tn-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font:800 1.0625rem/1.4 var(--font-display);color:var(--ink)}
+.tn-a,.tn-b{flex:1 1 38%}
+.tn-vs{flex:0 0 auto;color:var(--red);font:900 1.125rem/1 var(--font-display)}
+.tn-note{display:none;margin:10px 0 0;color:var(--ink-soft-2);font-size:.9375rem;line-height:1.7}
+.tn-row.open .tn-note{display:block;animation:rise .3s ease both}
+
+/* ===== (3) 批判四区 .crit-quad(2x2 四色分区,全部可见) ===== */
+.crit-quad{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px;margin-bottom:26px}
+.cq-zone{padding:18px 20px;border:1px solid var(--line);border-radius:6px}
+.cq-zone .zone-title{margin:0 0 12px;font:900 1.125rem/1.3 var(--font-display);border:0;padding:0}   /* T4 内标题 */
+.cq-zone .cq-item{margin:0 0 10px;color:var(--ink-soft-2);font-size:.9375rem;line-height:1.7}
+.cq-zone .cq-item:last-child{margin-bottom:0}
+.cq-assume{background:color-mix(in srgb,var(--gold) 10%,transparent);border-left:4px solid var(--gold)}
+.cq-blind{background:color-mix(in srgb,var(--blue) 10%,transparent);border-left:4px solid var(--blue)}
+.cq-era{background:color-mix(in srgb,var(--green) 10%,transparent);border-left:4px solid var(--green);grid-column:1/-1}
+.cq-object{background:color-mix(in srgb,var(--red) 12%,transparent);border-left:4px solid var(--red);grid-column:1/-1}
+.cq-object .cq-strong{margin:0 0 10px;font:800 1.1875rem/1.5 var(--font-display);color:var(--ink)}
+
+/* ===== (3) 书评 .reviews(正反两列) ===== */
+.reviews{margin-bottom:26px}
+.review-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+.review-col h4{margin:0 0 10px;font:800 1rem/1.3 var(--font-display)}
+.review-col.review-pos h4{color:var(--green)}
+.review-col.review-neg h4{color:var(--red)}
+.review-item{margin:0 0 10px;padding:14px 18px;border:1px solid var(--line);border-left:3px solid var(--blue);background:var(--surface);font-size:.9375rem;line-height:1.75;color:var(--ink-soft-2)}
+.review-item .stance{margin-right:8px;color:var(--green);font:700 12px/1 var(--font-display)}
+.review-item .stance.neg{color:var(--red)}
+.review-item .r-src{display:block;margin-top:8px;color:var(--muted);font:12px/1.5 var(--font-display)}
+
+/* ===== (3) 观点对照入口卡 .views-entry ===== */
+.views-entry{display:block;margin-bottom:26px;padding:22px 26px;border:1px solid var(--line);border-radius:6px;background:var(--surface);text-decoration:none;color:inherit;transition:border-color .2s,transform .2s}
+.views-entry:hover{border-color:var(--gold);transform:translateY(-2px)}
+.ve-kicker{color:var(--red);font:700 .8125rem/1.3 var(--font-display);letter-spacing:.08em}
+.ve-title{margin:6px 0 0;font:800 1.125rem/1.3 var(--font-display);color:var(--ink)}
+.ve-list{margin:10px 0;padding-left:20px;color:var(--ink-soft);font-size:1rem;line-height:1.8}
+.ve-go{color:var(--blue);font:700 .9375rem/1.3 var(--font-display)}
+
+/* ===== (4) 行动路线图 .chain(全可见 + .chain-detail + 回环 .chain-loop) ===== */
+.chain{position:relative;margin-top:8px}
+.chain-steps{display:grid;gap:12px}
+.chain-step{display:block;padding:16px 20px;border:1px solid var(--line);border-left:4px solid var(--line);background:var(--surface);cursor:pointer;transition:border-color .2s}
+.chain-step:hover,.chain-step.hl{border-left-color:var(--gold)}
+.cs-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.cs-no{flex:0 0 auto;width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:var(--ink);color:var(--paper);font:800 15px/1 var(--font-display)}
+.cs-label{font:800 1.125rem/1.3 var(--font-display);color:var(--ink)}   /* T4 */
+.cs-badge{margin-left:auto;padding:3px 10px;border-radius:999px;background:var(--tint-accent);color:var(--ink-soft-2);font:700 .75rem/1.3 var(--font-display)}
+.chain-explain{margin:10px 0 0;color:var(--ink-soft);font-size:1rem;line-height:1.75}
+.chain-detail{margin:10px 0 0;padding:12px 16px;border-left:2px solid var(--line);background:var(--surface-strong);color:var(--ink-soft-2);font-size:.9375rem;line-height:1.8}
+.chain-loop{display:flex;align-items:center;gap:12px;margin-top:14px;padding:10px 16px;color:var(--muted);font:700 .875rem/1.3 var(--font-display)}
+.chain-loop svg{flex:0 0 auto}
+.chain-loop .cl-path{fill:none;stroke:var(--gold);stroke-width:2;stroke-dasharray:5 4;stroke-linecap:round}
+
+/* ===== (4) 情境决策卡 .rules(.rule-chips 筛选 + .rule-card 三行全可见) ===== */
+.rules{margin-top:12px}
+.rule-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.rc-group-label{width:100%;margin:6px 0 0;color:var(--muted);font:700 .75rem/1.3 var(--font-display);letter-spacing:.06em}
+.rc-chip{padding:7px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);cursor:pointer;font:700 .875rem/1.2 var(--font-display);color:var(--ink-soft-2)}
+.rc-chip:hover{border-color:var(--gold)}
+.rc-chip.on{background:var(--green);color:var(--paper);border-color:var(--green)}
+.rule-list{display:grid;gap:10px}
+.rule-card{padding:16px 20px;border:1px solid var(--line);background:var(--surface)}
+.rule-card.hl{border-color:var(--gold);box-shadow:var(--shadow)}
+.rc-when{margin:0 0 6px;font:700 1rem/1.5 var(--font-display);color:var(--ink)}
+.rc-do{margin:0 0 6px;font-size:1rem;line-height:1.6;color:var(--ink-soft)}
+.rc-because{margin:0;color:var(--muted);font-size:.9375rem;line-height:1.6}
+.rc-when b{color:var(--red)}
+.rc-do b{color:var(--green)}
+.rc-because b{color:var(--muted)}
+.rc-teleport{display:inline-block;margin-top:8px;color:var(--blue);font:700 .8125rem/1.3 var(--font-display);text-decoration:none}
+
+/* ===== (4) 心智模型抽屉卡 .models / .model-drawer(含 boundary) ===== */
+.models{margin-top:12px}
+.model-list{display:grid;gap:10px}
+.model-drawer{border:1px solid var(--line);background:var(--surface)}
+.md-head{display:flex;align-items:center;gap:10px;width:100%;padding:16px 20px;cursor:pointer;background:transparent;border:0;text-align:left}
+.md-name{font:800 1.125rem/1.3 var(--font-display);color:var(--ink)}   /* T4 */
+.md-essence{color:var(--muted);font-size:.9375rem;line-height:1.5}
+.md-toggle{margin-left:auto;flex:0 0 auto;color:var(--blue);font:700 .875rem/1 var(--font-display)}
+.model-drawer.open .md-head{border-bottom:1px solid var(--line)}
+.md-body{display:none;padding:6px 20px 18px}
+.model-drawer.open .md-body{display:block;animation:rise .3s ease both}
+.md-seg{margin:12px 0 0}
+.md-seg .md-k{display:block;margin-bottom:3px;color:var(--red);font:700 .8125rem/1.3 var(--font-display);letter-spacing:.06em}
+.md-seg.md-how .md-k{color:var(--green)}
+.md-seg.md-boundary .md-k{color:var(--red)}
+.md-seg p{margin:0;color:var(--ink-soft-2);font-size:.9375rem;line-height:1.75}
+
+/* ===== (4) 读完自检 .questions(followup 直显,无勾选) ===== */
+.questions{display:grid;gap:12px;counter-reset:q;margin-top:12px}
+.question{display:grid;grid-template-columns:54px 1fr;gap:14px;align-items:start;padding:18px;border:1px solid var(--line);background:var(--surface)}
+.question::before{counter-increment:q;content:counter(q,decimal-leading-zero);display:grid;place-items:center;width:46px;height:46px;color:var(--paper);background:var(--gold);font:900 20px/1 var(--font-display)}
+.question h3{margin:0 0 6px;font:800 1.125rem/1.35 var(--font-display)}   /* T4 */
+.question p{margin:0 0 6px;color:var(--ink-soft-2);font-size:1rem;line-height:1.7}
+.question .q-back{color:var(--blue);font:700 .8125rem/1.3 var(--font-display);text-decoration:none}
+
+/* ===== (5) 同类书卡 .similar(relation 三色徽标) ===== */
+.similar{margin-bottom:30px}
+.sim-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:12px}
+.sim-card{padding:18px 20px;border:1px solid var(--line);background:var(--surface);transition:border-color .2s,box-shadow .2s}
+.sim-card.hl{border-color:var(--gold);box-shadow:var(--shadow)}
+.sim-card h3{margin:0 0 4px;font:800 1.125rem/1.3 var(--font-display);display:flex;align-items:center;gap:10px;flex-wrap:wrap}   /* T4 */
+.sim-rel{padding:2px 10px;border-radius:999px;font:700 12px/1.5 var(--font-display);color:var(--white)}
+.rel-support{background:var(--green)}
+.rel-extend{background:var(--blue)}
+.rel-rebut{background:var(--red)}
+.sim-card .sim-author{margin:0 0 8px;color:var(--muted);font-size:.875rem}
+.sim-card .sim-why{margin:0 0 6px;color:var(--ink-soft);font-size:.9375rem;line-height:1.7}
+.sim-card .sim-fit{margin:0;color:var(--ink-soft-2);font-size:.875rem}
+
+/* ===== (5) 阅读路径 .reading-path(stepper) ===== */
+.reading-path{margin-bottom:30px}
+.rp-desc{margin:0 0 12px;color:var(--ink-soft);font-size:1rem;line-height:1.7}
+.rp-steps{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.rp-step{display:flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:var(--surface);cursor:pointer;font:700 .9375rem/1.2 var(--font-display)}
+.rp-step:hover,.rp-step.hl{border-color:var(--gold)}
+.rp-step .rp-no{flex:0 0 auto;width:22px;height:22px;display:grid;place-items:center;border-radius:50%;background:var(--ink);color:var(--paper);font:800 12px/1 var(--font-display)}
+.rp-arrow{color:var(--muted)}
+
+/* ===== (5) 作者书架 .author-shelf ===== */
+.author-shelf{margin-bottom:30px}
+.shelf-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.shelf-head a{color:var(--blue);font:700 .9375rem/1.3 var(--font-display);text-decoration:none}
+.shelf-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px}
+.shelf-card{flex:0 0 210px;padding:16px 18px;border:1px solid var(--line);background:var(--surface)}
+.shelf-card .sh-year{color:var(--muted);font:700 .8125rem/1.3 var(--font-display)}
+.shelf-card .sh-title{margin:4px 0;font:800 1rem/1.3 var(--font-display);color:var(--ink)}
+.shelf-card .sh-one{margin:0;color:var(--ink-soft-2);font-size:.875rem;line-height:1.6}
+
+/* ===== (5) 跨域命名 .cross-domain(v4,Q4-3:这套思想在别处叫什么;排 crossbook 之前) ===== */
+.cross-domain{margin-bottom:24px}
+.xd-list{display:grid;gap:10px;margin-top:12px}
+.xd-item{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 12px;padding:14px 18px;border:1px solid var(--line);border-left:4px solid var(--gold);background:var(--surface)}
+.xd-domain{flex:0 0 auto;padding:3px 10px;border-radius:999px;background:var(--tint-accent);color:var(--ink-soft-2);font:700 .75rem/1.3 var(--font-display);white-space:nowrap}
+.xd-name{flex:0 0 auto;color:var(--ink);font:800 1.0625rem/1.3 var(--font-display)}
+.xd-note{flex:1 1 240px;min-width:0;color:var(--ink-soft-2);font-size:.9375rem;line-height:1.6}
+
+/* ===== (5) 跨书回声 .crossbook ===== */
+.crossbook{margin-bottom:24px}
+.xb-list{display:grid;gap:10px;margin-top:12px}
+.xb-echo{padding:14px 18px;border:1px solid var(--line);background:var(--surface);font-size:.9375rem;line-height:1.7;color:var(--ink-soft-2)}
+.xb-echo .tag{margin-right:8px;padding:3px 8px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font:700 11px/1 var(--font-display);white-space:nowrap}
+.xb-echo a{color:var(--blue)}
+
+/* ===== (5) 离开前带走 .takeaway-strip(v4,Q2-1:出口骨架复现,声明式回顾;排末行指路之前) ===== */
+.takeaway-strip{margin:26px 0 0;padding:16px 18px;border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:8px;background:var(--surface)}
+.takeaway-strip .tw-head{margin:0 0 8px;color:var(--ink);font:800 1rem/1.4 var(--font-display)}
+.takeaway-strip .tw-formula{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 10px;margin:0 0 12px}
+.takeaway-strip .tw-formula .tw-eq{color:var(--green);font:800 1.0625rem/1.4 var(--font-display)}
+.takeaway-strip .tw-formula .tw-tag{padding:2px 9px;border:1px solid var(--gold);border-radius:999px;background:var(--tint-accent);color:var(--ink-soft);font:700 .6875rem/1.3 var(--font-display);white-space:nowrap}
+.takeaway-strip .tw-rings{display:flex;flex-wrap:wrap;gap:8px}
+.takeaway-strip .tw-ring{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:700 .8125rem/1.3 var(--font-display);text-decoration:none;transition:transform .15s ease,border-color .15s ease}
+.takeaway-strip .tw-ring::before{content:counter(tw-ring);counter-increment:tw-ring;display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--green);color:var(--paper);font-size:.6875rem}
+.takeaway-strip .tw-rings{counter-reset:tw-ring}
+.takeaway-strip .tw-ring:hover{transform:translateY(-1px);border-color:var(--gold)}
+
+/* ===== (5) 末行指路 .extend-pointer(⑤ 不设 next-cta) ===== */
+.extend-pointer{margin:22px 0 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.9375rem;line-height:1.7;text-align:center}
+.extend-pointer a{color:var(--blue)}
+
+/* ===== Footer ===== */
+.footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font:14px/1.75 var(--font-display)}
+
+/* ===== 浮动控件: 主题切换器(右下,弹层,非默认主题在前) ===== */
+.theme-picker{position:fixed;right:16px;bottom:20px;z-index:100}
+.theme-picker .tp-trigger{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border:1.5px solid var(--line);border-radius:999px;background:var(--bar-bg);backdrop-filter:blur(8px);color:var(--ink-soft);cursor:pointer;font:800 13px/1 var(--font-display);letter-spacing:.02em;box-shadow:var(--shadow);transition:border-color .2s,color .2s,transform .2s,box-shadow .2s}
+.theme-picker .tp-trigger:hover{border-color:var(--gold);color:var(--ink);transform:translateY(-2px);box-shadow:0 14px 34px color-mix(in srgb,var(--gold) 30%,transparent)}
+.theme-picker .tp-trigger .tp-ico{font-size:15px;line-height:1}
+.theme-picker .tp-trigger .tp-caret{transition:transform .2s}
+.theme-picker[data-open="1"] .tp-trigger .tp-caret{transform:rotate(180deg)}
+.theme-picker .tp-menu{position:absolute;right:0;bottom:calc(100% + 8px);display:none;flex-direction:column;gap:2px;width:172px;padding:7px;border:1px solid var(--line);border-radius:10px;background:var(--bar-bg);backdrop-filter:blur(10px);box-shadow:var(--shadow)}
+.theme-picker[data-open="1"] .tp-menu{display:flex}
+.theme-picker .tp-menu button{display:flex;align-items:center;gap:9px;width:100%;padding:8px 10px;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--ink-soft);cursor:pointer;font:600 13px/1.2 var(--font-display);text-align:left}
+.theme-picker .tp-menu button:hover{background:var(--tint-accent);color:var(--ink)}
+.theme-picker .tp-menu button[aria-current="true"]{border-color:var(--gold);color:var(--ink)}
+.theme-picker .tp-menu button .sw{flex:0 0 auto;width:9px;height:9px;border-radius:50%;background:var(--line)}
+.theme-picker .tp-menu button[aria-current="true"] .sw{background:var(--gold)}
+
+/* ===== 出处溯源(data-source 边线 + hover 气泡,常显) ===== */
+[data-source]{position:relative}
+[data-source]::after{content:attr(data-source);position:absolute;left:-4px;bottom:calc(100% + 4px);padding:3px 8px;background:var(--ink);color:var(--paper);font:11px/1.3 var(--font-display);border-radius:3px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;z-index:3}
+[data-source]:hover::after{opacity:1}
+
+/* ===== 页内子视图 .subpage(全屏覆盖,hash 路由;返回件墨色胶囊 + 归属语境) ===== */
+.subpage{position:fixed;inset:0;z-index:200;overflow-y:auto;background:var(--bg);-webkit-overflow-scrolling:touch}
+.subpage-inner{width:min(980px,calc(100% - 32px));margin:0 auto;padding-bottom:80px}
+.subpage-bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:16px;padding:16px 0;margin-bottom:20px;background:var(--bar-bg);backdrop-filter:blur(8px);border-bottom:2px solid var(--ink)}
+.sub-back{display:inline-flex;align-items:center;gap:8px;padding:10px 20px 10px 16px;border:0;border-radius:999px;background:var(--green);color:var(--paper);font:700 .875rem/1 var(--font-display);cursor:pointer;box-shadow:var(--shadow)}
+.sub-back::before{content:"\2190";font-size:1rem;line-height:1;transition:transform .18s ease}
+.sub-back:hover::before{transform:translateX(-3px)}
+.sub-back:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.sub-back:active{transform:scale(.97)}
+.subpage-bar .subpage-title{margin:0;font:800 1.375rem/1.2 var(--font-display);color:var(--ink)}   /* T3 22px */
+.subpage-bar .subpage-from{margin-left:auto;color:var(--muted);font:700 .8125rem/1.3 var(--font-display);letter-spacing:.06em}
+.subpage-body{color:var(--ink-soft);font-size:17px;line-height:1.9}
+.subpage-body .sp-lead{margin:0 0 18px;color:var(--ink-soft-2);font-size:18px;line-height:1.8;padding-left:14px;border-left:3px solid var(--red)}
+.sp-srcs{margin-top:20px;color:var(--muted);font:13px/1.6 var(--font-display)}
+.sp-srcs a{color:var(--blue)}
+
+/* ===== 作者子页 au-*(infobox 归一栏 + 五栏,F2) ===== */
+.au-body{display:grid;grid-template-columns:minmax(0,1fr) 296px;gap:24px 28px;align-items:start}
+.au-tagline{grid-column:1/-1;grid-row:1;margin:0;font:700 1.1875rem/1.7 var(--font-display);color:var(--ink);padding-left:14px;border-left:4px solid var(--gold)}
+/* 身份卡(v4,Q1-6):仅人物书,第一人称引块渲 persona_card;跨全宽,排 au-tagline 之下 */
+.au-persona{grid-column:1/-1;grid-row:2;margin:0;padding:18px 22px;border:1px solid var(--line);border-left:4px solid var(--red);background:var(--surface-strong);color:var(--ink-soft);font:italic 500 1.0625rem/1.85 var(--font-body);position:relative}
+.au-persona::before{content:"\201C";position:absolute;top:2px;left:10px;color:var(--red);font:900 2rem/1 var(--font-display);opacity:.35}
+.au-infobox{grid-column:2;grid-row:3;align-self:start;position:sticky;top:82px;padding:20px;border:1px solid var(--line);border-top:3px solid var(--red);border-radius:6px;background:var(--surface-strong)}
+.au-photo{margin:0 0 14px;display:grid;place-items:center}
+.au-photo img{width:120px;height:120px;object-fit:cover;border-radius:8px}
+.au-monogram{width:120px;height:120px;display:grid;place-items:center;border-radius:8px;background:var(--gold);color:var(--white);font:900 56px/1 var(--font-display)}
+.au-name{margin:0 0 4px;font:800 1.125rem/1.3 var(--font-display);color:var(--ink)}   /* T4 */
+.au-roles{margin:0 0 14px;color:var(--muted);font-size:.875rem;line-height:1.5}
+.au-facts{margin:0}
+.au-fact{display:grid;grid-template-columns:74px 1fr;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
+.au-fact dt{color:var(--muted);font:700 .8125rem/1.5 var(--font-display)}
+.au-fact dd{margin:0;color:var(--ink-soft);font-size:.875rem;line-height:1.6}
+.au-fact dd a{color:var(--blue)}
+.au-thisbook-badge{margin-left:6px;padding:1px 7px;border-radius:999px;background:var(--gold);color:var(--white);font:700 11px/1.4 var(--font-display);font-style:normal}
+.au-main{grid-column:1;grid-row:3;min-width:0}
+.au-sec{margin:0 0 30px}
+.au-sec-title{margin:0 0 14px;font:800 1.375rem/1.35 var(--font-display);color:var(--ink);padding-bottom:8px;border-bottom:2px solid var(--line)}   /* T3 */
+.au-timeline{list-style:none;margin:0;padding:0 0 0 22px;border-left:2px solid var(--gold)}
+.au-tl{position:relative;margin-bottom:20px}
+.au-tl::before{content:"";position:absolute;left:-29px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--gold)}
+.au-tl-period{color:var(--muted);font:700 .8125rem/1.3 var(--font-display)}
+.au-tl-body strong{display:block;margin:4px 0;font:800 1rem/1.3 var(--font-display);color:var(--ink)}
+.au-tl-body p{margin:0;color:var(--ink-soft-2);font-size:.9375rem;line-height:1.7}
+.au-stats{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px}
+.au-stat{padding:14px 18px;border:1px solid var(--line);background:var(--surface-strong);min-width:120px}
+.au-stat b{display:block;font:900 1.5rem/1.1 var(--font-display);color:var(--green)}
+.au-stat span{color:var(--muted);font:700 .8125rem/1.3 var(--font-display)}
+.au-debate-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.au-dcol h4{margin:0 0 10px;font:800 1rem/1.3 var(--font-display)}
+.au-dcol-pro h4{color:var(--green)}
+.au-dcol-con h4{color:var(--red)}
+.au-dentry{margin:0 0 10px;padding:12px 14px;border:1px solid var(--line);background:var(--surface)}
+.au-dentry a{color:var(--blue);font-size:13px}
+.au-lineage{margin:12px 0 0;padding:12px 16px;background:var(--tint-accent);color:var(--ink-soft-2);font:700 .9375rem/1.6 var(--font-display)}
+.au-works-list{list-style:none;margin:0;padding:0}
+.au-work{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:12px 8px;border-bottom:1px solid var(--line)}
+.au-work-this{background:var(--surface-strong)}
+.au-wyear{color:var(--red);font:700 .875rem/1.6 var(--font-display)}
+.au-work strong{font:800 1rem/1.4 var(--font-display)}
+.au-work a{color:var(--blue)}
+.au-work p{margin:4px 0 0;color:var(--ink-soft-2);font-size:.875rem;line-height:1.6}
+
+/* ===== 观点对照子页 view-topic(沿用 v2 + .vt-focus 争议焦点) ===== */
+.view-topic{margin:0 0 22px;padding:18px 20px;border:1px solid var(--line);background:var(--surface)}
+.vt-viewpoint{margin:0 0 8px;font:800 1.125rem/1.4 var(--font-display);color:var(--ink)}
+.vt-focus{margin:0 0 14px;color:var(--red);font:700 .9375rem/1.5 var(--font-display)}
+.vt-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.vt-col-label{margin:0 0 8px;font:800 .875rem/1.3 var(--font-display)}
+.vt-support .vt-col-label{color:var(--green)}
+.vt-critic .vt-col-label{color:var(--red)}
+.vt-entry{margin:0 0 10px;padding:12px 14px;border:1px solid var(--line);background:var(--surface-strong)}
+.vt-entry .vt-who{margin:0 0 4px;font:700 .875rem/1.3 var(--font-display);color:var(--ink)}
+.vt-entry .vt-say{margin:0 0 6px;color:var(--ink-soft-2);font-size:.875rem;line-height:1.65}
+.vt-entry a{color:var(--blue);font-size:13px}
+.vt-empty{color:var(--muted);font-size:.875rem;font-style:italic}
+
+/* ===== hash 路由落点高亮 ===== */
+.flash{animation:bd-flash 1.6s ease}
+@keyframes bd-flash{0%{background:var(--tint-accent-strong)}100%{background:transparent}}
+.panel [id]{scroll-margin-top:calc(var(--tab-h, 88px) + 12px)}
+
+/* ===== 响应式(移动端整体降半级) ===== */
+@media (max-width:880px){
+  .cb-banner{grid-template-columns:1fr}
+  .cb-banner img.cb-cover{max-height:280px;padding:24px}
+  .cb-banner .cb-meta{padding:26px 24px 30px}
+  .tabs{position:static;grid-template-columns:repeat(2,1fr)}
+  .ci-list,.sim-grid,.crit-quad,.au-debate-cols,.review-cols,.vt-cols{grid-template-columns:1fr}
+  .theme-picker .tp-menu{width:min(200px,calc(100vw - 28px))}
+}
+@media (max-width:720px){
+  .cb-banner .cb-title{font-size:1.75rem}     /* T1 mobile 28px */
+  .hero h1{font-size:2rem}                     /* T0 mobile 32px */
+  .section-title,.zone-title{font-size:1.375rem} /* T2 mobile 22px */
+  .bd-chapter h3,.subpage-bar .subpage-title,.au-sec-title,.soul-title{font-size:1.25rem} /* T3 mobile 20px */
+  .subpage-bar .subpage-from{display:none}
+  .sub-back{min-height:44px}
+  .au-body{grid-template-columns:1fr}
+  .au-infobox{grid-column:1;grid-row:auto;position:static;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:start}
+  .au-main{grid-row:auto}
+  .au-persona{grid-row:auto}
+  .au-photo{grid-row:1/4;margin:0}
+  .au-photo img,.au-monogram{width:76px;height:76px;font-size:34px}
+  .au-name,.au-roles,.au-facts{grid-column:2}
+}
+@media (max-width:520px){
+  .question{grid-template-columns:1fr}
+  .au-infobox{grid-template-columns:1fr}
+  .au-photo{grid-row:auto}
+}
+
+/* ============================================================
+   v4 批次 C(逐章交互 + UI 精修 + 手机端)· Q5/Q7 追加层
+   全走 token · 零 hex · 禁 prefers-reduced-motion 门控(作者机器常开减少动效,门控=看到静止)
+   ============================================================ */
+/* Q7-11 圆角三档 token(收敛 0/4/6/10/999 混用;--r-card 内容卡 / --r-ui 容器件 / --r-pill 胶囊) */
+:root{--r-card:0;--r-ui:6px;--r-pill:999px}
+.tab{border-radius:var(--r-ui)}
+
+/* Q5-1 / Q7-2 目录行:论点标题独占一行(永不截)+ 摘要另起一行;移动端摘要截 2 行 */
+.toc-title{display:block;text-wrap:pretty}
+.toc-sum{display:block;margin:3px 0 0;line-height:1.6}
+@media (max-width:880px){
+  .toc-sum{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+}
+
+/* Q7-1 正文行长收窄至中文舒适区(~40-44 字/行) */
+.bd-chapter .ch-inner{max-width:46em;margin:0 auto}
+.section-lead,.arg-restate p,.vb-text,.soul-intro{max-width:44em}
+.bd-chapter p{text-wrap:pretty}
+.section-title,.zone-title,.bd-chapter h3{text-wrap:balance}
+.qw-card blockquote{max-width:40em}
+
+/* Q7-5 sticky tab 毛玻璃 + 吸顶阴影(sentinel + IntersectionObserver 切 .stuck) */
+.tabs{backdrop-filter:saturate(160%) blur(12px);-webkit-backdrop-filter:saturate(160%) blur(12px)}
+.tabs.stuck{box-shadow:0 8px 24px -18px rgba(0,0,0,.4)}
+.tabs-sentinel{height:1px;margin:0 0 -1px}
+
+/* Q7-4 微动效:章展开 rise / 按压 scale .985 / 主题弹层 pop -- 无 reduced-motion 门控 */
+.bd-chapter.open .ch-inner{animation:rise .3s ease both}
+.tab,.next-cta,.cc-chip,.rc-chip,.toc-row,.ci,.md-head,.sub-back,.toc-expand,.ch-act,.rp-step,.tn-row,.chain-step{transition:transform .12s ease,border-color .2s ease,background .2s ease}
+.tab:active,.next-cta:active,.cc-chip:active,.rc-chip:active,.toc-row:active,.ci:active,.md-head:active,.toc-expand:active,.ch-act:active,.rp-step:active,.tn-row:active,.chain-step:active{transform:scale(.985)}
+@keyframes tp-pop{from{opacity:0;transform:scale(.94) translateY(4px)}to{opacity:1;transform:none}}
+.theme-picker[data-open="1"] .tp-menu{animation:tp-pop .18s cubic-bezier(.2,.8,.3,1.1) both;transform-origin:100% 100%}
+
+/* Q7-8 触达目标 ≥44px(行内传送门负 margin 扩热区,版面零位移)+ 全局焦点环 */
+.qw-teleport,.rc-teleport,.q-back,.r-src,.ci-teleport,.ci-portal,.extend-pointer a{padding:12px 10px;margin:-12px -10px;position:relative;z-index:1}
+@media (pointer:coarse){
+  .cc-chip,.rc-chip,.toc-expand,.ch-act,.sub-back,.tp-trigger,.rp-step{min-height:44px}
+}
+:is(.tab,.toc-row,.ci,.cc-chip,.rc-chip,.next-cta,.md-head,.toc-expand,.ch-act,.rp-step,.tn-row,.chain-step,a):focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* Q5-8 目录行整行可点 + hover 底色(点开平滑滚动落 tab 下沿由 scroll-margin-top 兜) */
+.toc-row:hover{background:var(--tint-accent)}
+
+/* Q5-3 读/开态视觉分离:开=金标+金描边高亮(正在读);读=绿标+✓ 角标(读到章尾才计,见 JS IO) */
+.toc-no{position:relative}
+.toc-row.open .toc-no{background:var(--gold);color:var(--white)}
+.toc-row.open{border-color:var(--gold);box-shadow:var(--shadow)}
+.toc-row.read .toc-no{background:var(--green);color:var(--white)}
+.toc-row.read .toc-no::after{content:"\2713";position:absolute;right:-4px;bottom:-4px;width:15px;height:15px;display:grid;place-items:center;border-radius:50%;background:var(--green);color:var(--white);border:2px solid var(--paper);font:800 9px/1 var(--font-display)}
+
+/* Q5-2 章尾下一章预告卡 / 末章终局卡(JS 读 toc 论点标题 + 读时填充,保留 .ch-next 契约) */
+.ch-actions .ch-next.cn-card,.ch-actions .ch-final{flex:1 1 100%;display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:14px 18px;text-align:left;border-radius:var(--r-ui)}
+.ch-next .cn-kick{font:700 .75rem/1.3 var(--font-display);opacity:.86;letter-spacing:.02em}
+.ch-next .cn-title{font:800 1.0625rem/1.35 var(--font-display)}
+.ch-next .cn-meta{font:700 .8125rem/1.3 var(--font-display);opacity:.92}
+
+/* Q5-4 阅读中微型上下文条:挂 tab 栏下沿(top:--tab-h,与 Q7-6 同吸顶层,两者总高约 96px)
+   章正文入视口时显、离开隐(IntersectionObserver,与 Q5-3 共用观测) */
+.ch-ctxbar{position:sticky;top:var(--tab-h,64px);z-index:40;display:none;align-items:center;gap:9px;height:32px;padding:0 6px 0 14px;margin:0 0 12px;border:1px solid var(--line);border-radius:var(--r-pill);background:var(--bar-bg);backdrop-filter:saturate(160%) blur(12px);-webkit-backdrop-filter:saturate(160%) blur(12px);color:var(--ink-soft);font:700 .8125rem/1 var(--font-display);box-shadow:var(--shadow)}
+.ch-ctxbar.show{display:flex}
+.ch-ctxbar .cx-ch{color:var(--ink);white-space:nowrap}
+.ch-ctxbar .cx-sep{color:var(--line)}
+.ch-ctxbar .cx-progress{color:var(--muted);white-space:nowrap}
+.ch-ctxbar .cx-totoc{margin-left:auto;flex:0 0 auto;padding:6px 13px;border:1px solid var(--line);border-radius:var(--r-pill);background:var(--surface);color:var(--ink-soft);font:700 .75rem/1 var(--font-display);cursor:pointer}
+.ch-ctxbar .cx-totoc:hover{border-color:var(--gold);color:var(--ink)}
+
+/* Q7-11 张力行三栏居中(A 右 / 箭头中 / B 左)+ 行尾 ▾ 可点线索;观点卡奇数末卡跨满 */
+.tn-head{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px}
+.tn-a{text-align:right}
+.tn-b{text-align:left}
+.tn-row::after{content:"\25BE";display:block;margin:6px 0 0;text-align:center;color:var(--muted);font-size:.75rem;transition:transform .2s}
+.tn-row.open::after{transform:rotate(180deg)}
+.ci-list .ci:last-child:nth-child(odd):not(.ci-primary){grid-column:1/-1}
+
+/* Q7-11 出处气泡 z 提高(防被 sticky 栏截半)+ 贴左缘归位 */
+[data-source]::after{z-index:60;left:0}
+
+/* Q7-11 主题浮钮小屏图标钮化(48 圆钮,达 44 触达,只留 🎨) */
+@media (max-width:720px){
+  .theme-picker .tp-trigger{width:48px;height:48px;padding:0;justify-content:center;border-radius:50%}
+  .theme-picker .tp-trigger .tp-label,.theme-picker .tp-trigger .tp-caret{display:none}
+}
+
+/* Q7-6 移动端 tab 栏改 sticky 单行横滑(~64px;tab-sub 隐藏;min 48;激活 tab 由 JS scrollIntoView 居中) */
+@media (max-width:880px){
+  .tabs{position:sticky;top:0;display:flex;overflow-x:auto;gap:6px;padding:6px 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;min-height:48px;padding:6px 16px}
+  .tab .tab-sub{display:none}
+}
+
+/* Q7-7 暗色主题眉题对比:深底暗红 13px 小字不过 AA → 改金(金在深底天然达标,仍零 hex) */
+body[data-theme="dark"] .eyebrow,body[data-theme="brand-dark"] .eyebrow{color:var(--gold)}
+</style>
+</head>
+<body>
+<main data-book-slug="dongxi-zhexue-qimeng">
+
+  <header class="cb-banner">
+    <img class="cb-cover" alt="东西哲学启蒙课 封面" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='320'%20height='440'%3E%3Crect%20width='320'%20height='440'%20fill='%23ece1cf'/%3E%3Ctext%20x='160'%20y='200'%20font-size='28'%20text-anchor='middle'%20fill='%233d332b'%20font-family='serif'%3E东西哲学启蒙课%3C/text%3E%3Ctext%20x='160'%20y='240'%20font-size='16'%20text-anchor='middle'%20fill='%236d6258'%3E王东岳%3C/text%3E%3C/svg%3E">
+    <div class="cb-meta">
+      <p class="cb-kicker">论说型 · 自然哲学书系</p>
+      <h2 class="cb-title">东西哲学启蒙课</h2>
+      <p class="cb-author"><span class="cb-author-lead">作者 ·</span> <a class="cb-author-link" href="#sub-author">王东岳</a> <span class="cb-author-hint">查看作者档案 →</span></p>
+      <p class="cb-intro">这不是一门实用的课。王东岳用145堂讲座，从宇宙物质演化讲到诸子百家，从古希腊哲学讲到<strong>递弱代偿</strong>，搭建一个反直觉的文明诊断框架：越进化越脆弱，越发展越危险。全书以递弱代偿为底层逻辑，贯穿文明溯源、老子、西方哲学、孔儒、法家、诸子百家、人体哲理、易经、佛教、中国文化衰落，最终收束于万物演化的总法则。</p>
+    </div>
+  </header>
+
+  <section class="hero">
+    <p class="eyebrow">人类文明程度越高、能力越强，为什么反而危机越深重？东西方思想的分野从何而来，又将走向何处？</p>
+    <h1>进步即衰退，发展即坠落</h1>
+  </section>
+
+  <nav class="tabs" id="bd-tabs">
+    <button class="tab on" data-panel="panel-glance">全书速览<span class="tab-sub">先看全貌</span></button>
+    <button class="tab" data-panel="panel-full">逐章精读<span class="tab-sub">一章一章读</span></button>
+    <button class="tab" data-panel="panel-judge">批判与评价<span class="tab-sub">别急着全信</span></button>
+    <button class="tab" data-panel="panel-action">行动清单<span class="tab-sub">读完这么用</span></button>
+    <button class="tab" data-panel="panel-extend">延伸阅读<span class="tab-sub">接着读什么</span></button>
+  </nav>
+  <section class="panel on" id="panel-glance">
+    <div class="note bd-napkin" data-source="全书收束章">
+      <h3>餐巾纸背面</h3>
+      <p class="formula">存在度(Ed)↘ + 代偿度/属性(Pb)↗ = 存在阈(Ts, 常量)
+越原始越稳定，越进化越脆弱</p>
+      <p class="formula-read"></p>
+      <p>进步即衰退，发展即坠落</p>
+    </div>
+    <div class="napkin-sketch">
+      <script type="application/json" id="bd-sketch-data">{"type": "cascade", "caption": "每一级存在度递减，属性和能力代偿递增 -- 能力越强，存在越弱", "nodes": [{"id": "particle", "label": "基本粒子", "exist": "137亿年/质量95%", "ability": "仅强弱作用力"}, {"id": "atom", "label": "原子", "exist": "恒星级别/上百亿年", "ability": "电磁感应"}, {"id": "molecule", "label": "分子", "exist": "行星级别/迟发早亡", "ability": "化学键/布朗运动"}, {"id": "cell", "label": "单细胞", "exist": "38亿年未灭绝/质量最大", "ability": "细胞膜受体辨原子", "mid": true}, {"id": "animal", "label": "高等动物", "exist": "千万年级/大灭绝", "ability": "五官+神经网"}, {"id": "human", "label": "人类", "exist": "20万年/危机深渊", "ability": "理性+科技+毁灭武器"}], "edges": [{"from": "particle", "to": "atom", "label": "存在度↘"}, {"from": "atom", "to": "molecule", "label": "存在度↘"}, {"from": "molecule", "to": "cell", "label": "生命涌现"}, {"from": "cell", "to": "animal", "label": "代偿↗"}, {"from": "animal", "to": "human", "label": "理性代偿"}]}</script>
+      <div id="bd-sketch"></div>
+    </div>
+    <div class="bd-mindmap-wrap">
+      <script type="application/json" id="bd-mindmap-data">{"layout": "chapter-span", "nodeData": {"id": "root", "topic": "东西哲学启蒙课", "root": true, "children": [{"id": "p1", "topic": "① 文明溯源 · 第1-4章", "children": [{"id": "ch1", "topic": "文明不是人选的，", "tags": ["人类文明的走向不是自由意志的产物，而", "第1章"], "hyperLink": "#ch-1", "expanded": false, "children": [{"id": "ch1-c0", "topic": "📖 中华文明为什么是世界上唯", "_src": "第1章·narrative"}]}, {"id": "ch2", "topic": "老子是人类思想史", "tags": ["老子的道论（弱者道之用）和德论（无为", "第2章"], "hyperLink": "#ch-2", "expanded": false, "children": [{"id": "ch2-c0", "topic": "📖 2600年前，老子就预判", "_src": "第2章·narrative"}]}, {"id": "ch3", "topic": "西方哲科不是智慧", "tags": ["西方狭义哲学的产生不是天赋智慧的产物", "第3章"], "hyperLink": "#ch-3", "expanded": false, "children": [{"id": "ch3-c0", "topic": "📖 哲学和科学不是人类智力的", "_src": "第3章·narrative"}]}, {"id": "ch4", "topic": "知识不是在逼近真", "tags": ["从柏拉图到康德，古典哲学围绕知与在的", "第4章"], "hyperLink": "#ch-4", "expanded": false, "children": [{"id": "ch4-c0", "topic": "📖 如果知识是在逼近真理，为", "_src": "第4章·narrative"}]}]}, {"id": "p2", "topic": "② 中国哲学 · 第5-7章", "children": [{"id": "ch5", "topic": "孔子的道德体系不", "tags": ["孔子学说的核心不是道德理想主义，而是", "第5章"], "hyperLink": "#ch-5", "expanded": false, "children": [{"id": "ch5-r0", "topic": "⚖️ 判断一种社会制度的合理性：看", "_src": "第5章·decision_rule"}, {"id": "ch5-c1", "topic": "📖 为什么中国古人不发展科学", "_src": "第5章·narrative"}]}, {"id": "ch6", "topic": "法家不是邪恶，是", "tags": ["商鞅变法和韩非子法术势体系不是暴政的", "第6章"], "hyperLink": "#ch-6", "expanded": false, "children": [{"id": "ch6-r0", "topic": "⚖️ 判断一种社会制度的合理性：看", "_src": "第6章·decision_rule"}, {"id": "ch6-c1", "topic": "📖 商鞅变法让秦国强大到统一", "_src": "第6章·narrative"}]}, {"id": "ch7", "topic": "诸子百家不是自由", "tags": ["墨家的兼爱非攻是工商业者的诉求，庄子", "第7章"], "hyperLink": "#ch-7", "expanded": false, "children": [{"id": "ch7-r0", "topic": "⚖️ 判断一种社会制度的合理性：看", "_src": "第7章·decision_rule"}, {"id": "ch7-c1", "topic": "📖 庄子为什么反对文明？因为", "_src": "第7章·narrative"}]}]}, {"id": "p3", "topic": "③ 文明诊断 · 第8-12章", "children": [{"id": "ch8", "topic": "进化就是畸变 -", "tags": ["人类直立行走导致脊柱病、内脏下垂、难", "第8章"], "hyperLink": "#ch-8", "expanded": false, "children": [{"id": "ch8-r0", "topic": "⚖️ 判断一个文明的发展阶段：看它", "_src": "第8章·decision_rule"}, {"id": "ch8-c1", "topic": "📖 所有哺乳动物灭亡前的第一", "_src": "第8章·narrative"}]}, {"id": "ch9", "topic": "易经不是算命，是", "tags": ["易经的象数理体系不是神秘主义，而是上", "第9章"], "hyperLink": "#ch-9", "expanded": false, "children": [{"id": "ch9-r0", "topic": "⚖️ 判断一个文明的发展阶段：看它", "_src": "第9章·decision_rule"}, {"id": "ch9-c1", "topic": "📖 算卦和博弈论有什么本质区", "_src": "第9章·narrative"}]}, {"id": "ch10", "topic": "佛教的逻辑台阶", "tags": ["佛教不是宗教信仰，而是一套精密的逻辑", "第10章"], "hyperLink": "#ch-10", "expanded": false, "children": [{"id": "ch10-r0", "topic": "⚖️ 判断一个文明的发展阶段：看它", "_src": "第10章·decision_rule"}, {"id": "ch10-c1", "topic": "📖 佛教为什么在印度消亡却在", "_src": "第10章·narrative"}]}, {"id": "ch11", "topic": "中国文化衰落不是", "tags": ["中国文化衰落不是因为不学习西方，而是", "第11章"], "hyperLink": "#ch-11", "expanded": false, "children": [{"id": "ch11-r0", "topic": "⚖️ 判断一个文明的发展阶段：看它", "_src": "第11章·decision_rule"}, {"id": "ch11-c1", "topic": "📖 宋朝GDP占全球30%，", "_src": "第11章·narrative"}]}, {"id": "ch12", "topic": "递弱代偿是宇宙物", "tags": ["从基本粒子到人类社会，存在度一路递减", "第12章"], "hyperLink": "#ch-12", "expanded": false, "children": [{"id": "ch12-r0", "topic": "⚖️ 判断一个文明的发展阶段：看它", "_src": "第12章·decision_rule"}, {"id": "ch12-c1", "topic": "📖 我们拼命赶着车往前跑，却", "_src": "第12章·narrative"}]}]}]}}</script>
+      <div id="bd-mindmap">
+        <div class="mm-stage" aria-hidden="false"></div>
+        <div class="mm-toolbar">
+          <button type="button" data-mm="out" title="缩小" aria-label="缩小脑图">－</button>
+          <button type="button" data-mm="in" title="放大" aria-label="放大脑图">＋</button>
+          <button type="button" data-mm="fit">复位</button>
+          <button type="button" class="mm-fs" data-mm="fs" aria-label="全屏查看脑图">⤢ 全屏</button>
+        </div>
+        <div class="mm-hint" aria-hidden="true"></div>
+        <div class="mm-toast" aria-hidden="true"></div>
+        <div class="mm-zoom" aria-hidden="true">100%</div>
+      </div>
+      <p class="mm-caption">点任一分支的章码,直达该章精读。滚轮 / 双指缩放 · 拖动平移 · 双击复位 · 矢量放大不糊。</p>
+    </div>
+    <div class="bd-coreideas">
+      <h2 class="section-title">核心观点</h2>
+      <p class="section-lead">全书 10 条主张按三卷归组,每条一句讲清 + 一句生活类比;最核心 4 条放大。点任一条看它的解释、证据与证据强度。</p>
+      <div class="ci-group">
+        <h3 class="ci-group-head">① 文明溯源 · 第1-4章</h3>
+        <div class="ci-list">          <article class="ci ci-primary" data-source="第3课">
+            <p class="ci-idea">文明发生是自然进程规定性的必然</p>
+            <p class="ci-analogy">就像 -- 就像同一颗种子落在沙漠和雨林会长成完全不同的植物，同一批智人落在中原和地中海也长出了完全不同的文明。</p>
+            <p class="ci-more">点击展开:解释 + 证据 + 证据强度 ▾</p>
+            <div class="ci-detail">
+              <p class="ci-explain">人类文明的走向不由人的自由意志决定，而由地理、气候、资源等自然条件的规定性决定。东西方文明分化不是文化选择，而是生存结构的必然适配。</p>
+              <p class="ci-evidence">人类文明的走向不由人的自由意志决定，而由地理、气候、资源等自然条件的规定性决定。东西方文明分化不是文化选择，而是生存结构的必然适配。</p>
+              <span class="ci-evlevel" data-level="confirmed">证据强度:论证</span>
+              <a class="ci-teleport" href="#ch-3">出自第 3 章 →</a>
+            </div>
+          </article>          <article class="ci ci-primary" data-source="第9课">
+            <p class="ci-idea">东西方思维分化源于文字符号的差异</p>
+            <p class="ci-analogy">就像 -- 用画图记录信息的人永远看见的是事物本身，用符号记录信息的人永远在追问符号背后的抽象规律。</p>
+            <p class="ci-more">点击展开:解释 + 证据 + 证据强度 ▾</p>
+            <div class="ci-detail">
+              <p class="ci-explain">象形文字保留具象思维，迫使中国人走经验直觉路线；拼音字母强制抽象思维，逼迫西方人走逻辑推理路线。文字不是思维的工具，而是思维的规定者。</p>
+              <p class="ci-evidence">象形文字保留具象思维，迫使中国人走经验直觉路线；拼音字母强制抽象思维，逼迫西方人走逻辑推理路线。文字不是思维的工具，而是思维的规定者。</p>
+              <span class="ci-evlevel" data-level="confirmed">证据强度:论证</span>
+              <a class="ci-teleport" href="#ch-9">出自第 9 章 →</a>
+            </div>
+          </article>          <article class="ci" data-source="第28课">
+            <p class="ci-idea">西方哲学是生存逼迫的代偿产物</p>
+            <p class="ci-analogy">就像 -- 沙漠里的游牧民族不会发明农耕，就像封闭地貌的农耕民族不会发明逻辑学 -- 不是能力问题，是需求问题。</p>
+            <p class="ci-more">点击展开:解释 + 证据 + 证据强度 ▾</p>
+            <div class="ci-detail">
+              <p class="ci-explain">古希腊贫瘠多山、面向地中海的开放地貌逼迫希腊人经商殖民，跨海贸易需要契约精神和抽象计算能力，由此催生哲学和科学的逻辑体系。哲科不是天赋智慧的产物，而是特定生存压力下的代偿。</p>
+              <p class="ci-evidence">古希腊贫瘠多山、面向地中海的开放地貌逼迫希腊人经商殖民，跨海贸易需要契约精神和抽象计算能力，由此催生哲学和科学的逻辑体系。哲科不是天赋智慧的产物，而是特定生存压力下的代偿。</p>
+              <span class="ci-evlevel" data-level="confirmed">证据强度:论证</span>
+              <a class="ci-teleport" href="#ch-28">出自第 28 章 →</a>
+            </div>
+          </article>          <article class="ci" data-source="第46课">
+            <p class="ci-idea">科学不是真理的逼近，是逻辑变革的产物</p>
+            <p class="ci-analogy">就像 -- 地心说统治天文学生千年，日心说又统治五百年 -- 每次换的不是答案，而是看问题的方式。</p>
+            <p class="ci-more">点击展开:解释 + 证据 + 证据强度 ▾</p>
+            <div class="ci-detail">
+              <p class="ci-explain">科学革命的本质不是知识积累，而是范式更替。每一次科学革命都推翻前一个范式，说明知识不是在逼近绝对真理，而是存在度递减后精神属性的代偿性增益。真理是演动的，不是静止的。</p>
+              <p class="ci-evidence">科学革命的本质不是知识积累，而是范式更替。每一次科学革命都推翻前一个范式，说明知识不是在逼近绝对真理，而是存在度递减后精神属性的代偿性增益。真理是演动的，不是静止的。</p>
+              <span class="ci-evlevel" data-level="confirmed">证据强度:论证</span>
+              <a class="ci-teleport" href="#ch-46">出自第 46 章 →</a>
+            </div>
+          </article>        </div>
+      </div>
+      <div class="ci-group">
+        <h3 class="ci-group-head">② 中国哲学 · 第5-7章</h3>
+        <div class="ci-list">          <article class="ci ci-primary" data-source="第22课">
+            <p class="ci-idea">老子道论德论盯准了递弱和代偿两个点</p>
+            <p class="ci-analogy">就像 -- 所有人都在说跑得越快越好，只有老子在2600年前说：慢下来，能力越强越危险。</p>
+            <p class="ci-more">点击展开:解释 + 证据 + 证据强度 ▾</p>
+            <div class="ci-detail">
+              <p class="ci-explain">弱者道之用 -- 弱化是道的实现方式；无为 -- 不要提升能力。老子的道论指向递弱，德论指向代偿。这是人类思想史上最早对递弱代偿现象的直觉猜测，比西方哲学的进步观深远得多。</p>
+              <p class="ci-evidence">弱者道之用 -- 弱化是道的实现方式；无为 -- 不要提升能力。老子的道论指向递弱，德论指向代偿。这是人类思想史上最早对递弱代偿现象的直觉猜测，比西方哲学的进步观深远得多。</p>
+              <span class="ci-evlevel" data-level="confirmed">证据强度:文本解读</span>
+              <a class="ci-teleport" href="#ch-22">出自第 22 章 →</a>
+            </div>
+          </article>          <article class="ci ci-primary" data-source="第57课">
+            <p class="ci-idea">儒家道德是农业文明的生存策略</p>
+            <p class="ci-analogy">就像 -- 在一个所有人种地为生的社会里，最贵的不是创新而是稳定 -- 道德就是维持稳定的润滑剂。</p>
+            <p class="ci-more">点击展开:解释 + 证据 + 证据强度 ▾</p>
+            <div class="ci-detail">
+              <p class="ci-explain">孔子的仁义礼智信不是普世道德理想，而是封闭地貌农耕社会降低摩擦成本的最优解。重德轻智不是愚昧，而是农耕生存结构不需要抽象逻辑的理性选择。</p>
+              <p class="ci-evidence">孔子的仁义礼智信不是普世道德理想，而是封闭地貌农耕社会降低摩擦成本的最优解。重德轻智不是愚昧，而是农耕生存结构不需要抽象逻辑的理性选择。</p>
+              <span class="ci-evlevel" data-level="confirmed">证据强度:论证</span>
+              <a class="ci-teleport" href="#ch-57">出自第 57 章 →</a>
+            </div>
+          </article>          <article class="ci" data-source="第66课">
+            <p class="ci-idea">法家是文明内卷到极致的急救方案</p>
+            <p class="ci-analogy">就像 -- 当家庭成员还能靠亲情维持秩序时不需要法律，当家庭变成社区再变成国家时，法律就是不可替代的结构代偿。</p>
+            <p class="ci-more">点击展开:解释 + 证据 + 证据强度 ▾</p>
+            <div class="ci-detail">
+              <p class="ci-explain">商鞅变法和韩非子法术势体系标志着道德维系失效后的强权替代。法家的出现不是暴政的选择，而是社会结构复杂化到道德无法维系时的必然代偿。变法悖论：越彻底越强大，也越脆弱。</p>
+              <p class="ci-evidence">商鞅变法和韩非子法术势体系标志着道德维系失效后的强权替代。法家的出现不是暴政的选择，而是社会结构复杂化到道德无法维系时的必然代偿。变法悖论：越彻底越强大，也越脆弱。</p>
+              <span class="ci-evlevel" data-level="confirmed">证据强度:论证</span>
+              <a class="ci-teleport" href="#ch-66">出自第 66 章 →</a>
+            </div>
+          </article>        </div>
+      </div>
+      <div class="ci-group">
+        <h3 class="ci-group-head">③ 文明诊断 · 第8-12章</h3>
+        <div class="ci-list">          <article class="ci ci-primary" data-source="第86课">
+            <p class="ci-idea">进化即畸变：文明病是存在度递减的人体表达</p>
+            <p class="ci-analogy">就像 -- 升级手机系统永远会带来新bug -- 人体的每一次进化升级也都在制造新的疾病。</p>
+            <p class="ci-more">点击展开:解释 + 证据 + 证据强度 ▾</p>
+            <div class="ci-detail">
+              <p class="ci-explain">直立行走带来脊柱病和难产，文明饮食带来龋齿和肥胖，医疗干预带来医源性疾病。所有文明病不是偶然失误，而是存在度递减在人体层面的必然表达。越先进的医疗体系，制造的医源性疾病越多。</p>
+              <p class="ci-evidence">直立行走带来脊柱病和难产，文明饮食带来龋齿和肥胖，医疗干预带来医源性疾病。所有文明病不是偶然失误，而是存在度递减在人体层面的必然表达。越先进的医疗体系，制造的医源性疾病越多。</p>
+              <span class="ci-evlevel" data-level="confirmed">证据强度:论证</span>
+              <a class="ci-teleport" href="#ch-86">出自第 86 章 →</a>
+            </div>
+          </article>          <article class="ci ci-primary" data-source="第138课">
+            <p class="ci-idea">递弱代偿是宇宙物演的总法则</p>
+            <p class="ci-analogy">就像 -- 越高级的物种活得越短、灭绝越快：基本粒子137亿年不衰，人类才20万年就已危机四伏。</p>
+            <p class="ci-more">点击展开:解释 + 证据 + 证据强度 ▾</p>
+            <div class="ci-detail">
+              <p class="ci-explain">从基本粒子到人类社会，存在度一路递减（质量分布递减、时效递减、稳定性递减），代偿度一路递增（属性和能力递增）。两者反比互补，和为常量。人类提高能力等于加速奔赴死灭。</p>
+              <p class="ci-evidence">从基本粒子到人类社会，存在度一路递减（质量分布递减、时效递减、稳定性递减），代偿度一路递增（属性和能力递增）。两者反比互补，和为常量。人类提高能力等于加速奔赴死灭。</p>
+              <span class="ci-evlevel" data-level="confirmed">证据强度:论证</span>
+              <a class="ci-teleport" href="#ch-138">出自第 138 章 →</a>
+            </div>
+          </article>          <article class="ci" data-source="第140课">
+            <p class="ci-idea">中国文化衰落预示西方文化行将步同一后尘</p>
+            <p class="ci-analogy">就像 -- 宋朝是全球最富裕的国家却最先被征服 -- 今天最发达的国家也在面临同样的困境：越强大越脆弱。</p>
+            <p class="ci-more">点击展开:解释 + 证据 + 证据强度 ▾</p>
+            <div class="ci-detail">
+              <p class="ci-explain">中国文化衰落不是因为不学习西方，而是农业文明过度精致后丧失转型能力。西方工商业文明也在走向存在度极限 -- 环境污染、气候异常、大规模毁灭性武器都是同一法则的不同表达。</p>
+              <p class="ci-evidence">中国文化衰落不是因为不学习西方，而是农业文明过度精致后丧失转型能力。西方工商业文明也在走向存在度极限 -- 环境污染、气候异常、大规模毁灭性武器都是同一法则的不同表达。</p>
+              <span class="ci-evlevel" data-level="confirmed">证据强度:论证</span>
+              <a class="ci-teleport" href="#ch-140">出自第 140 章 →</a>
+            </div>
+          </article>        </div>
+      </div>    </div>
+    <div class="soul-block" id="soul-block" data-source="全书 · 递弱代偿原理">
+      <h3 class="soul-title">进步观 vs 递弱观：人类文明的两种诊断</h3>
+      <p class="soul-subtitle"></p>
+      <p class="soul-intro"></p>
+      <div class="soul-grid">        <article class="soul-state">
+          <h4>主流进步观</h4>
+          <p></p>
+          <ul></ul>
+        </article>        <article class="soul-state">
+          <h4>递弱代偿观</h4>
+          <p></p>
+          <ul></ul>
+        </article>      </div>      <p class="soul-verdict">两种观不是非此即彼：小尺度看进步观成立（寿命延长、技术突破），大尺度看递弱观成立（物种稳定性下降、文明危机加深）。关键在于你选择哪个时间尺度 -- 人类的问题可能是只看小尺度不看大尺度。</p>    </div>
+    <a class="next-cta" data-panel="panel-full">下一步:进入逐章精读 →</a>
+  </section>
+  <section class="panel" id="panel-full">
+
+    <div class="ch-ctxbar" aria-hidden="true">
+      <span class="cx-ch"></span>
+      <span class="cx-sep" aria-hidden="true">·</span>
+      <span class="cx-progress"></span>
+      <button class="cx-totoc" type="button">回目录</button>
+    </div>
+    <div class="concept-chips">
+      <h2 class="section-title">本书关键词</h2>
+      <p class="section-lead">全书反复出现的关键词,点一个看它的准确含义、常见误读与作者立场;带「≠」角标的词常被理解错。</p>
+      <div class="cc-row">        <button class="cc-chip cc-has-mis" type="button" data-concept-idx="0" data-concept-chs="1 2 3 4 5 6 7 8 9 10 11 12" title="这个词常被理解错">递弱代偿</button>        <button class="cc-chip cc-has-mis" type="button" data-concept-idx="1" data-concept-chs="1 2 3 4 5 6 7 8 9 10 11 12" title="这个词常被理解错">存在度</button>        <button class="cc-chip cc-has-mis" type="button" data-concept-idx="2" data-concept-chs="1 2 3 4 5 6 7 8 9 10 11 12" title="这个词常被理解错">代偿度</button>        <button class="cc-chip cc-has-mis" type="button" data-concept-idx="3" data-concept-chs="1 2 3 4 5 6 7 8 9 10 11 12" title="这个词常被理解错">自然进程规定性</button>        <button class="cc-chip cc-has-mis" type="button" data-concept-idx="4" data-concept-chs="1 2 3 4 5 6 7 8 9 10 11 12" title="这个词常被理解错">前神学文化</button>        <button class="cc-chip cc-has-mis" type="button" data-concept-idx="5" data-concept-chs="1 2 3 4 5 6 7 8 9 10 11 12" title="这个词常被理解错">知在与关系</button>        <button class="cc-chip cc-has-mis" type="button" data-concept-idx="6" data-concept-chs="1 2 3 4 5 6 7 8 9 10 11 12" title="这个词常被理解错">文明病</button>        <button class="cc-chip cc-has-mis" type="button" data-concept-idx="7" data-concept-chs="1 2 3 4 5 6 7 8 9 10 11 12" title="这个词常被理解错">六经注我</button>        <button class="cc-chip cc-has-mis" type="button" data-concept-idx="8" data-concept-chs="1 2 3 4 5 6 7 8 9 10 11 12" title="这个词常被理解错">变法悖论</button>        <button class="cc-chip cc-has-mis" type="button" data-concept-idx="9" data-concept-chs="1 2 3 4 5 6 7 8 9 10 11 12" title="这个词常被理解错">越精致越脆弱</button>      </div>
+      <div class="cc-pops">        <div class="cc-pop" data-concept-idx="0">
+          <p class="cc-one">宇宙物演中，存在度递减必然伴随代偿度递增，二者反比互补，能力越强存在越弱。</p>
+          <p class="cc-mis">常见误读:递弱代偿不是悲观主义，而是大尺度事实观察 -- 它描述的是趋势，不提供处方。</p>
+          <p class="cc-stance">作者立场:</p>
+        </div>        <div class="cc-pop" data-concept-idx="1">
+          <p class="cc-one">存在物的可存在程度，由质量分布、时效、稳定性三项硬指标衡量，在演化中单向递减。</p>
+          <p class="cc-mis">常见误读:存在度不等于生存能力 -- 能力是属性代偿，存在度是本体稳定。</p>
+          <p class="cc-stance">作者立场:</p>
+        </div>        <div class="cc-pop" data-concept-idx="2">
+          <p class="cc-one">存在度不足时被迫发展出的属性和能力的补偿量，与存在度反比递增。</p>
+          <p class="cc-mis">常见误读:代偿不是进步 -- 代偿是被迫的补缺，补了也回不到原来的存在度。</p>
+          <p class="cc-stance">作者立场:</p>
+        </div>        <div class="cc-pop" data-concept-idx="3">
+          <p class="cc-one">文明的发生和走向不由人的意志决定，而由地理、气候、资源等自然条件的规定性决定。</p>
+          <p class="cc-mis">常见误读:不是宿命论 -- 规定性约束方向，但具体路径仍有选择空间。</p>
+          <p class="cc-stance">作者立场:</p>
+        </div>        <div class="cc-pop" data-concept-idx="4">
+          <p class="cc-one">中国文化保留了人类文明在神学阶段以前的思想底层，是人类最古老的文化活化石。</p>
+          <p class="cc-mis">常见误读:前神学不是原始落后 -- 它是最古老但也最稳定的思维方式。</p>
+          <p class="cc-stance">作者立场:</p>
+        </div>        <div class="cc-pop" data-concept-idx="5">
+          <p class="cc-one">古典哲学的核心问题：认知（知）与存在（在）的关系 -- 知识是对客观的反映还是存在度递减的代偿？</p>
+          <p class="cc-mis">常见误读:知在问题不是认识论问题，而是存在论问题 -- 知识本身是存在度递减的表征。</p>
+          <p class="cc-stance">作者立场:</p>
+        </div>        <div class="cc-pop" data-concept-idx="6">
+          <p class="cc-one">文明进程导致的系统性健康问题（进化病+文明生活方式病+医源性疾病），是存在度递减的人体表达。</p>
+          <p class="cc-mis">常见误读:文明病不是医疗技术不足 -- 越先进的医疗制造越多的医源性疾病。</p>
+          <p class="cc-stance">作者立场:</p>
+        </div>        <div class="cc-pop" data-concept-idx="7">
+          <p class="cc-one">用后向大信息量重新解读前人文本，读出新视野而非复述原意 -- 是做学问的规范方式。</p>
+          <p class="cc-mis">常见误读:六经注我不是乱引申 -- 必须先做到我注六经（忠实原文），才能六经注我。</p>
+          <p class="cc-stance">作者立场:</p>
+        </div>        <div class="cc-pop" data-concept-idx="8">
+          <p class="cc-one">变法越彻底，社会越强大也越脆弱 -- 强大和脆弱是同一枚硬币的两面。</p>
+          <p class="cc-mis">常见误读:变法悖论不是说变法不该做，而是说变法的收益和代价是绑定在一起的。</p>
+          <p class="cc-stance">作者立场:</p>
+        </div>        <div class="cc-pop" data-concept-idx="9">
+          <p class="cc-one">一个系统越高度优化和耦合，转型能力越差，面对环境变化越脆弱。</p>
+          <p class="cc-mis">常见误读:精致不等于精细 -- 精致是过度适应，精细可以是恰当的精确。</p>
+          <p class="cc-stance">作者立场:</p>
+        </div>      </div>
+    </div>
+    <div class="chapter-toc">
+      <div class="toc-head">
+        <span class="toc-summary">全书 12 章 · 详实转述约 1.4 万字 · 通读约 35 分钟</span>
+        <span class="toc-progress">已读 0/12</span>
+        <button class="toc-expand" type="button" data-toc-toggle>全部展开</button>
+      </div>
+      <div class="toc-list">        <button class="toc-row" type="button" data-ch="1">
+          <span class="toc-no">1</span>
+          <span class="toc-main"><span class="toc-title">文明不是人选的，是自然选的 -- 东西分化的地理铁律</span><span class="toc-sum">人类文明的走向不是自由意志的产物，而是自然进程规定性的必然。东西方文明的分化源于地理地貌的差异：中原封闭地貌孕育农业文明和具象思维，地中海开放地貌催生工商业文明和抽象逻辑。</span><span class="toc-hook">中华文明为什么是世界上唯一一脉延续到今天的文明？答案不在文化优劣，而在地理封闭。</span></span>
+          <span class="toc-meta">约 5 分钟<span class="toc-arrow" aria-hidden="true">▾</span></span>
+        </button>        <button class="toc-row" type="button" data-ch="2">
+          <span class="toc-no">2</span>
+          <span class="toc-main"><span class="toc-title">老子是人类思想史上最早敲响递弱警钟的人</span><span class="toc-sum">老子的道论（弱者道之用）和德论（无为）恰好盯在递弱和代偿两个点上。道论指出弱化是道的实现方式，德论警告不要提升能力。这是人类思想史上唯一一个最早对递弱代偿现象有所猜测的思想者。</span><span class="toc-hook">2600年前，老子就预判了大气污染、河流枯竭和物种大灭绝。</span></span>
+          <span class="toc-meta">约 5 分钟<span class="toc-arrow" aria-hidden="true">▾</span></span>
+        </button>        <button class="toc-row" type="button" data-ch="3">
+          <span class="toc-no">3</span>
+          <span class="toc-main"><span class="toc-title">西方哲科不是智慧更高，是生存结构更险 -- 古希腊的逻辑发生学</span><span class="toc-sum">西方狭义哲学的产生不是天赋智慧的产物，而是古希腊特殊地理环境下的生存逼迫。贫瘠多山、面向地中海的开放地貌迫使希腊人经商殖民，由此催生抽象思维、逻辑推理和追求绝对真理的哲科体系。</span><span class="toc-hook">哲学和科学不是人类智力的高峰，而是一种特定生存压力下的代偿产物。</span></span>
+          <span class="toc-meta">约 5 分钟<span class="toc-arrow" aria-hidden="true">▾</span></span>
+        </button>        <button class="toc-row" type="button" data-ch="4">
+          <span class="toc-no">4</span>
+          <span class="toc-main"><span class="toc-title">知识不是在逼近真理，是在代偿存在度的不足</span><span class="toc-sum">从柏拉图到康德，古典哲学围绕知与在的关系反复争论。递弱代偿原理揭示：知识不是对客观世界的越来越精确的反映，而是存在度递减后精神属性的被迫增益。科学不是真理的化身，而是逻辑变革的产物。</span><span class="toc-hook">如果知识是在逼近真理，为什么科学革命总是推翻前一个范式？</span></span>
+          <span class="toc-meta">约 5 分钟<span class="toc-arrow" aria-hidden="true">▾</span></span>
+        </button>        <button class="toc-row" type="button" data-ch="5">
+          <span class="toc-no">5</span>
+          <span class="toc-main"><span class="toc-title">孔子的道德体系不是伦理选择，是农业文明的生存规定</span><span class="toc-sum">孔子学说的核心不是道德理想主义，而是农业文明的生存适配。在封闭地貌的农耕社会中，道德是降低社会摩擦成本的最优解。重德轻智、重农抑商不是落后，而是农业文明的求存策略。</span><span class="toc-hook">为什么中国古人不发展科学？不是不会，是不需要 -- 农耕生存结构不需要抽象逻辑。</span></span>
+          <span class="toc-meta">约 5 分钟<span class="toc-arrow" aria-hidden="true">▾</span></span>
+        </button>        <button class="toc-row" type="button" data-ch="6">
+          <span class="toc-no">6</span>
+          <span class="toc-main"><span class="toc-title">法家不是邪恶，是文明解体的急救方案</span><span class="toc-sum">商鞅变法和韩非子法术势体系不是暴政的选择，而是农业文明内卷到极致时的结构急救。法家的出现标志着道德维系失效，必须用强权暴力维持社会秩序。变法悖论在于：变法越彻底，社会越脆弱。</span><span class="toc-hook">商鞅变法让秦国强大到统一六国，但也让秦国二世而亡 -- 变法的收益和代价是同一个东西。</span></span>
+          <span class="toc-meta">约 5 分钟<span class="toc-arrow" aria-hidden="true">▾</span></span>
+        </button>        <button class="toc-row" type="button" data-ch="7">
+          <span class="toc-no">7</span>
+          <span class="toc-main"><span class="toc-title">诸子百家不是自由争鸣，是文明病态的症状图谱</span><span class="toc-sum">墨家的兼爱非攻是工商业者的诉求，庄子的反文明是对递弱代偿的直觉反抗，杨子的贵己是个人主义的萌芽，名家的逻辑演绎是抽象思维的孤岛。诸子百家不是思想繁荣，而是社会结构松解后各阶层利益的代偿性表达。</span><span class="toc-hook">庄子为什么反对文明？因为他隐约看到了进步即衰落。</span></span>
+          <span class="toc-meta">约 5 分钟<span class="toc-arrow" aria-hidden="true">▾</span></span>
+        </button>        <button class="toc-row" type="button" data-ch="8">
+          <span class="toc-no">8</span>
+          <span class="toc-main"><span class="toc-title">进化就是畸变 -- 人体是文明病的活标本</span><span class="toc-sum">人类直立行走导致脊柱病、内脏下垂、难产；文明饮食导致龋齿、肥胖、心血管病；医疗干预导致医源性疾病。文明病不是偶然失误，而是存在度递减在人体层面的必然表达。中医的衰落和西医的局限都是同一个问题的两面。</span><span class="toc-hook">所有哺乳动物灭亡前的第一指征是雄性精子数下降 -- 50年间英国男子下降了45%。</span></span>
+          <span class="toc-meta">约 5 分钟<span class="toc-arrow" aria-hidden="true">▾</span></span>
+        </button>        <button class="toc-row" type="button" data-ch="9">
+          <span class="toc-no">9</span>
+          <span class="toc-main"><span class="toc-title">易经不是算命，是远古人类对时空的追问模型</span><span class="toc-sum">易经的象数理体系不是神秘主义，而是上古农业文明对时间节律和空间方位的模型化追问。算卦准的原理不是超自然，而是博弈论 -- 在信息不足时，任何决策模型的预测力都来自对行为模式的统计归纳。</span><span class="toc-hook">算卦和博弈论有什么本质区别？答案是没有 -- 都是信息不足时的决策补偿。</span></span>
+          <span class="toc-meta">约 5 分钟<span class="toc-arrow" aria-hidden="true">▾</span></span>
+        </button>        <button class="toc-row" type="button" data-ch="10">
+          <span class="toc-no">10</span>
+          <span class="toc-main"><span class="toc-title">佛教的逻辑台阶：从苦的 diagnosis 到出世的处方</span><span class="toc-sum">佛教不是宗教信仰，而是一套精密的逻辑体系。缘起理论诊断出存在的本质是空，四圣谛开出离苦的处方。佛教在中国的传播不是文化征服，而是农业文明内卷到极致时精神代偿的必然需求。</span><span class="toc-hook">佛教为什么在印度消亡却在中国生根？因为中国农业文明的内卷程度更需要出世的代偿。</span></span>
+          <span class="toc-meta">约 5 分钟<span class="toc-arrow" aria-hidden="true">▾</span></span>
+        </button>        <button class="toc-row" type="button" data-ch="11">
+          <span class="toc-no">11</span>
+          <span class="toc-main"><span class="toc-title">中国文化衰落不是落后，是农业文明的必然终点</span><span class="toc-sum">中国文化衰落不是因为不学习西方，而是农业文明自身过度精致后丧失了转型能力。宋朝的经济技术高峰反而是衰落的起点 -- 越精致越脆弱。西方文化行将步同一后尘：工商业文明也在走向自身的存在度极限。</span><span class="toc-hook">宋朝GDP占全球30%，却最先被游牧民族征服 -- 越发达越脆弱，这在文明史上不是第一次。</span></span>
+          <span class="toc-meta">约 5 分钟<span class="toc-arrow" aria-hidden="true">▾</span></span>
+        </button>        <button class="toc-row" type="button" data-ch="12">
+          <span class="toc-no">12</span>
+          <span class="toc-main"><span class="toc-title">递弱代偿是宇宙物演的总法则 -- 文明的终点是自我否定</span><span class="toc-sum">从基本粒子到人类社会，存在度一路递减，代偿度一路递增。人类拼命提高能力等于加速奔赴死灭。递弱代偿不是悲观主义，而是大尺度事实。人类文明的前途不在于更快更高更强，而在于认清自身在宇宙物演中的位置。</span><span class="toc-hook">我们拼命赶着车往前跑，却没有人说清楚我们的目标是什么。</span></span>
+          <span class="toc-meta">约 5 分钟<span class="toc-arrow" aria-hidden="true">▾</span></span>
+        </button>      </div>
+    </div>    <div class="bd-chapters">      <section class="bd-chapter" id="ch-1" data-source="第2课">
+        <div class="ch-inner">
+          <h3>文明不是人选的，是自然选的 -- 东西分化的地理铁律</h3>          <p>中华文明为什么是世界上唯一一脉延续到今天的文明？不是因为我们的文化更优秀，而是因为我们被关住了。这个回答听着简单，但要把道理讲透，得先从人类走出非洲说起。</p>          <p>现代智人大约20万年前出现在非洲东部。约7万年前，一小群人开始走出非洲，沿着海岸线向东迁徙。冰川期的海平面比现在低100米，很多地方可以步行通过，但每一步都面临食物短缺和未知威胁。农业文明大约1万年前自然发生。在中东的新月沃地，野生小麦被驯化；在黄河流域，粟和黍被驯化。农业不是某个天才的发明，而是气候稳定后采集狩猎者对特定植物长期观察的结果。一旦进入农业，人口激增，定居成为必然，文明的车轮就此启动。</p>          <blockquote class="excerpt" data-source="第5课">
+            它不是任何少数人或者少数智者设计规划的产物，它完全是自然地理地貌和自然物候条件的促成产物。
+            <span class="src-note">-- 原文,第5课</span>
+          </blockquote>          <p>东西方文明的分化，根源在地理。先看中国。黄土高原是一个地质奇迹：从260万年前开始，冬季风从西北戈壁沙漠吹来，携带细粒物质沉降，年复一年堆积成厚达数百米的黄土层。黄土疏松肥沃，用简单的木石工具就能耕种。更重要的是，中国的地理环境高度封闭：北面是荒漠、草原和西伯利亚冻土；西面是帕米尔高原；西南面是青藏高原，世界屋脊；南面是云贵高原和横断山脉，古人根本无法翻越；东面是浩瀚的太平洋。这种封闭地貌让农业文明在黄河流域自发生长，不需要也不容易与外部文明竞争融合。中华文明之所以能一脉延续，恰恰因为封闭让它免于被其他文明覆灭。</p>          <p>再看西方。古希腊所在的巴尔干半岛南部多山贫瘠，可耕地稀少。公元前600年以前人口还少，当地粮食还勉强够吃。可公元前600年以后人口暴涨，粮食根本养不活人，而可开发的土地已经没有了。这逼迫古希腊人极早进入工商业谋生。他们把橄榄榨成橄榄油，把葡萄做成葡萄酒，发展大量手工艺，然后渡过地中海到北非埃及和近东巴比伦换取粮食。经商需要做出奇巧的商品才能换到别人的粮食，这逼出了创新精神。商人独自冒险跋涉，家眷留在雅典，由此缔造了冒险精神和自由精神。商业是等价交换，即使瞧不起对方，交换的那一刻必须视对方为平等伙伴，由此缔造了平等精神和契约精神。</p>          <blockquote class="excerpt" data-source="第6课">
+            一种结构一旦形成，它的内在规定性就会逼迫着它朝某一个既定方向运行。
+            <span class="src-note">-- 原文,第6课</span>
+          </blockquote>          <p>中国为什么走不了这条路？《战国策》记载，吕不韦中年发了大财后说：务农有十倍利，珠玉有百倍利。经商利润远高于农业，可在中国全封闭地貌中经商换不回粮食。古希腊经商恰恰是通过环地中海换回粮食，而中国经商恰恰是丧失粮食的过程。如果不压抑工商业，没有人安心种地，中华民族早在数千年前就饿毙了。重农抑商不是愚昧，而是封闭地貌下农业文明的求存策略。</p>          <p>文字的分化加剧了思维的分野。腓尼基人3000年前占据环地中海远洋贸易的50%以上，发明了22个字母的拼音文字。这套系统完全脱离了事物的具象形态，一个符号只代表一个音素，意义要在头脑中重新组装。而中国的象形文字保留了对事物具象形态的描摹。文字不是思维的工具，而是思维的规定者。</p>          <p>王东岳用角鹿和孔雀做比喻：角鹿的雄性鹿角长得比体长还大，不利于穿越密林逃避天敌，但因为雌性只选鹿角最大的雄性，性选择逼迫角鹿把鹿角越长越大直至灭绝。一种结构一旦形成，它的内在规定性就会逼迫它朝某一个既定方向运行。东西方文明当年差距极小，但就像从原点射出两支箭，夹角极小，射到远方距离就拉得极大。文明不是人选的，是自然选的。这就引出下一个问题：如果自然进程规定了文明的方向，那文明进步是否也受制于某种更深的法则？老子在2600年前就给出了他的回答。</p>          <div class="ch-actions">
+            <button class="ch-act" type="button" data-ch-collapse="1">收起</button>
+            <button class="ch-act" type="button" data-ch-totoc>回目录</button>
+            <a class="ch-act ch-next" data-ch-next="1">继续读第 2 章 →</a>
+          </div>        </div>
+      </section>      <section class="bd-chapter" id="ch-2" data-source="第22课">
+        <div class="ch-inner">
+          <h3>老子是人类思想史上最早敲响递弱警钟的人</h3>          <p>2600年前，一个管理周朝皇家图书馆的老人写下五千言，预判了大气污染、河流枯竭和物种大灭绝。他叫李耳，后人称他老子。</p>          <p>司马迁在《史记》中记载，老子是楚国苦县人，姓李名耳，担任周朝&quot;守藏室之史&quot;，相当于今天的国家图书馆馆长加国家档案馆馆长。这个职位让他能读到周朝收藏的全部典籍，是当时信息量最大的学者。司马迁还记载了一个耐人寻味的细节：老子晚年看到周朝衰落，骑青牛西出函谷关，关令尹喜拦住他，请他留下著作。老子于是写了上下两篇共五千余言，然后出关而去，不知所终。这段记载真假难辨，但它揭示了一个事实：《道德经》不是在书斋里写成的学术著作，而是一个看尽兴衰的老人对文明走向的最后忠告。</p>          <blockquote class="excerpt" data-source="第22课">
+            越低级越原始的物质存在形态或者物种，它的存在度反而越高；越进化越高级的，存在度反而越低。存在度越低的，属性和能力反而越强。
+            <span class="src-note">-- 原文,第22课</span>
+          </blockquote>          <p>老子的思想分两个部分：道论和德论。道论的核心是四个字：&quot;弱者道之用&quot;。这句话通常被解读为以柔克刚的策略，但王东岳认为这是误读。老子说的不是策略，而是宇宙运行的事实：弱化是道的实现方式。万物演化的方向不是从弱到强，而是从强到弱。基本粒子存在137亿年不衰，原子存在上百亿年，分子迟发早亡，单细胞38亿年未灭绝，高等动物千万年级就大灭绝，人类才20万年就已经危机四伏。越高级的物种存在度越低，这就是&quot;弱者道之用&quot;的真正含义 -- 弱化是演化本身的方向。</p>          <p>德论的核心同样是两个字：&quot;无为&quot;。无为不是什么都不做，而是不要提升能力。老子说&quot;失道而后德，失德而后仁，失仁而后义，失义而后礼&quot;，这是对文明代偿进程的精确描述：每失去一层存在度，就要增加一层人为规范来补偿。礼是最后的代偿，也是衰亡的标志。老子说&quot;大道废，有仁义；智慧出，有大伪&quot;，能力和虚伪是同步增长的。</p>          <blockquote class="excerpt" data-source="第22课">
+            我们拼命地赶着车往前跑，却没有人说清楚我们的目标是什么。我们究竟要到哪里去？
+            <span class="src-note">-- 原文,第22课</span>
+          </blockquote>          <p>老子对文明进程的观察精确到令人震惊。他说&quot;天下多忌讳，而民弥贫；民多利器，国家滋昏；人多伎巧，奇物滋起；法令滋彰，盗贼多有。&quot;忌讳越多人民越穷，武器越多国家越乱，技术越多怪事越多，法令越严犯罪越多。这几乎是对现代社会困境的预言。他还说&quot;天之道，损有余而补不足；人之道则不然，损不足以奉有余。&quot;自然法则是从有余处减损来补充不足，人类文明的做法恰恰相反：从已经不足的人那里掠夺，来供养已经有余的人。这是对贫富分化最早的哲学批判。</p>          <p>更令人不寒而栗的是老子对&quot;物壮&quot;的态度。&quot;物壮则老，谓之不道，不道早已。&quot;事物发展到壮盛就会衰老，这是不合道的，不合道就会早亡。在所有文明都在追求壮盛的时候，老子说壮盛就是衰亡的开始。这在递弱代偿的框架下有精确含义：能力越强，存在度越低，壮盛不过是弱化的加速度阶段。</p>          <p>王东岳坦言，他对老子的解读是&quot;六经注我&quot; -- 用后向更大的信息量重新解读前人文本。但他强调，六经注我的前提是先做到&quot;我注六经&quot;，即忠实原文的本意，然后才能用新的理论框架加以延伸。老子的道论盯准了递弱，德论盯准了代偿，这是人类思想史上最早对递弱代偿现象的直觉猜测。老子的悲剧在于，他的警告没人听。文明的车轮照常向前碾压，能力一代比一代强，危机也一代比一代深。下一个问题自然浮现：西方哲科思维是如何在另一种生存压力下被逼出来的？</p>          <div class="ch-actions">
+            <button class="ch-act" type="button" data-ch-collapse="2">收起</button>
+            <button class="ch-act" type="button" data-ch-totoc>回目录</button>
+            <a class="ch-act ch-next" data-ch-next="2">继续读第 3 章 →</a>
+          </div>        </div>
+      </section>      <section class="bd-chapter" id="ch-3" data-source="第28课">
+        <div class="ch-inner">
+          <h3>西方哲科不是智慧更高，是生存结构更险 -- 古希腊的逻辑发生学</h3>          <p>哲学和科学不是人类智力的高峰，而是一种特定生存压力下的代偿产物。这个判断听着像是在贬低西方文明，但只要看看古希腊人当时过的是什么日子，你就会理解为什么只有他们发明了逻辑学。</p>          <p>王东岳把人类用智的方式分为三种：信主、重德、爱智。信主是宗教方式，把一切交给神，在中东一神教文明中最为典型。重德是中国方式，关注人伦道德和社会秩序，把智力用在人际关系上。爱智是古希腊方式，字面意思就是&quot;爱智慧&quot;。三种方式不是随意选择，而是各自生存结构的产物。</p>          <blockquote class="excerpt" data-source="第10课">
+            所谓哲学，是指古希腊一群大号儿童所玩弄的一种纯逻辑游戏叫哲学。这个纯逻辑游戏的延展分化产物，叫科学。
+            <span class="src-note">-- 原文,第10课</span>
+          </blockquote>          <p>中国的重德传统来自农业文明。在封闭地貌的农耕社会中，人口密集定居，最大的生存挑战不是对抗自然，而是协调人际。种地需要天文历法，但更需要让一群人和平共处。所以中国的智者把精力全部投向伦理：孔子讲仁义礼智信，争论的全是人应该怎么活在一起。这不是智力不够，而是需求不在那个方向。</p>          <p>古希腊人走的是另一条路。巴尔干半岛南部多山贫瘠，公元前600年以后人口暴涨，粮食根本养不活人。但希腊三面临海，地中海风平浪静，岛屿密布。走投无路的希腊人选择了经商和殖民。从公元前8世纪起，希腊人大量建立殖民地，从西西里到黑海北岸，数百年间建立了数百个殖民城邦。古希腊人居然有60%到80%迁徙到地中海周边。经商需要做出奇巧的商品才能换到粮食，这逼出了创新精神。商人独自冒险跋涉，由此缔造了冒险精神和自由精神。商业是等价交换，由此缔造了平等精神和契约精神。连西方今天的两院民主制、自由市场经济、陪审团制度，在2600年前的古希腊都已基本成型。</p>          <blockquote class="excerpt" data-source="第10课">
+            所谓技术，是实践经验在前，事后找一个理论把它贯通起来，这叫技术。所谓科学，它的思维方式恰恰相反，它是逻辑建模在前，然后建一个实验室，用实践经验来检验。这叫科学。
+            <span class="src-note">-- 原文,第10课</span>
+          </blockquote>          <p>腓尼基人在这个过程中扮演了关键角色。他们3000年前占据环地中海远洋贸易的50%以上，发明了22个字母的拼音文字。这套系统完全脱离了事物的具象形态，一个符号只代表一个音素。王东岳指出，拼音文字引出一个严重问题：文字符号失去概念。写一个sun，你不知道它是太阳还是大地还是椅子，它的概念来自谓语系词后面的定义。这意味着每说一句话、每想一个概念，都必须在强逻辑的规定下运行思维。数千年这种训练形成一种&quot;逻辑强迫症&quot;，由此缔造了纯逻辑游戏 -- 哲学。哲学的后演化形态，叫科学。</p>          <p>王东岳特别区分了技术和科学。技术是实践经验在前，事后找一个理论把它贯通起来。科学恰恰相反，是逻辑建模在前，然后建实验室用实践经验来检验。中国的四大发明全是经验产物，跟理论建模无关。所以中国在技术时代创建了世界技术体系的60%到70%，但到科学时代瞬间衰落。因为技术是硬态试错法，范围狭隘且耗时漫长；科学是逻辑软态试错法，一旦建模就扫平相关所有问题。</p>          <p>哥白尼是最好的例子。他建立日心说时没有任何证据，只是发现托勒密地心说的数学模型有破绽，设想把太阳放在中间可以简化模型。他死后50年布鲁诺提倡他的学说被烧死，死后七八十年伽利略支持他被软禁，学界一片安宁没有抗议 -- 因为没有证据。直到死后将近100年，金星盈亏、光行差和恒星视差三大证据才逐步出现。这就是科学：逻辑模型在前，实践检验在后。古希腊人发展出哲科思维的三个特点：追究终极、广义逻辑反思、科学前瞻。泰勒斯追问万物本原说是水，德谟克利特说是原子。亚里士多德建立了形式逻辑体系。德谟克利特的原子论、阿里斯塔克的日心说，这些不是偶然发现，而是逻辑推理的产物。</p>          <p>哲科思维的产生不是希腊人更聪明，而是生存结构更险。开放地貌逼经商，经商逼抽象，抽象逼逻辑，逻辑逼哲学。中国人在封闭的农业环境中没有走这条路，不是因为不会，而是不需要。但这留下了一个问题：如果哲科思维是生存压力的代偿产物，那它产生的知识到底是在逼近真理，还是只是另一种代偿？</p>          <div class="ch-actions">
+            <button class="ch-act" type="button" data-ch-collapse="3">收起</button>
+            <button class="ch-act" type="button" data-ch-totoc>回目录</button>
+            <a class="ch-act ch-next" data-ch-next="3">继续读第 4 章 →</a>
+          </div>        </div>
+      </section>      <section class="bd-chapter" id="ch-4" data-source="第46课">
+        <div class="ch-inner">
+          <h3>知识不是在逼近真理，是在代偿存在度的不足</h3>          <p>如果知识是在逼近真理，为什么科学革命总是推翻前一个范式？托勒密的地心说指导西方农业文明1400年以上，反复证明正确有效，结果今天沦为科学史上的笑谈。哥白尼的日心说不过数百年就被证明太阳连银河系中心都不是。牛顿力学精确预测行星，200年后被爱因斯坦挤到后排座。如果知识在逼近真理，它应该越来越稳定才对，为什么反而越来越不确定？</p>          <p>这个问题的根源在古典哲学的核心难题：知与在的关系。从柏拉图到黑格尔，两千多年的西方哲学史就是围绕这个问题反复争论的历史。柏拉图最早给出系统回答：他把世界分成可见世界和可知世界，我们看到的桌子只是&quot;桌子的理念&quot;的不完美投影，知识不是对感官经验的归纳，而是灵魂对理念的回忆。这个回答确立了西方哲学的基本原则：真理不在感官世界，而在理性世界。</p>          <blockquote class="excerpt" data-source="第45课">
+            正确不是求真，正确甚至是一种谬误的恰当时段的表达，正确只不过是生存形式的匹配。
+            <span class="src-note">-- 原文,第45课</span>
+          </blockquote>          <p>笛卡尔把问题推到悬崖边。他用怀疑一切的方法追问：有什么东西是不可怀疑的？最后找到&quot;我思故我在&quot; -- 我在思考这件事本身证明了我的存在。但留下致命裂缝：精神和物质是两个完全不同的实体，它们怎么相互作用？这个问题折磨了此后三百年所有哲学家。贝克莱走得更远：&quot;存在即被感知。&quot;休谟给了致命一击：因果律不可靠。我们看到太阳晒石头石头热了，但看到的只是&quot;晒&quot;和&quot;热&quot;的先后关系，从来没看到&quot;因果&quot;本身。康德用了十二年回答休谟：因果律不是来自经验，而是来自认知主体本身。我们永远无法认识&quot;物自体&quot;，只能认识经过认知系统加工后的&quot;现象&quot;。</p>          <p>王东岳用递弱代偿原理重新审视了这条思脉。他的判断是：古典哲学在知与在问题上的反复争论，不是越来越接近真理，而是存在度递减后精神属性被迫增益的表征。基本粒子的&quot;知识&quot;是强弱作用力，原子有了电磁感应，分子有了化学键，单细胞有了细胞膜受体辨原子，高等动物有了五官和神经网，人类有了理性思维。每一级存在度递减，认知能力就递增一级。知识不是对客观世界的越来越精确的反映，而是存在度下降后的代偿产物。</p>          <blockquote class="excerpt" data-source="第45课">
+            信息含量增大而含真量递减。你的信息量越大，一定标志着你的主观感知属性量越大，耦合和扭曲对象的成分越多。
+            <span class="src-note">-- 原文,第45课</span>
+          </blockquote>          <p>更惊人的结论是：信息含量增大而含真量递减。你的信息量越大，一定标志着你的主观感知属性量越大，耦合和扭曲对象的成分越多。我们的感知一定不是越来越逼近本真，而是越来越远离本真。这跟知识被证伪的速度越来越快相匹配：今天信息时代每十年知识就翻新一遍，十年前的知识全错。越高级的知识模型含真量越低，动摇度越高。</p>          <p>实践能不能检验真理？王东岳的回答是：实践不但不能检验真理，反而只能检验真理的破溃。地心说在实践上反复检验正确有效，指导农业文明1400年，可当它反复检验没有问题时，恰恰是它行将破溃的表征。伽利略推翻亚里士多德自由落体常识，不是靠实验，而是靠纯逻辑的归谬法：如果重的物体下落快、轻的下落慢，把两者绑在一起，从道理上讲重量更大应该更快，但轻的会拖累重的使之减速，逻辑上矛盾不能自洽。一个在实践上反复检验没有问题的真理，其实表达着它行将破溃的状态。</p>          <p>波普尔给科学的定义是证伪主义：凡是能够证明是错了的学问才叫科学。纵观科学史，托勒密地心说精确有效1400年今天沦为笑谈；哥白尼日心说数百年就发现重大纰漏；牛顿力学200年被爱因斯坦覆盖；爱因斯坦自己说他的学说只是短命的过渡。科学史上所有理论最终都被证明是错的，而且越错越快。知识的有效性不在于它更接近真理，而在于它更能维系当下的生存。逻辑三洽 -- 自洽、他洽、续洽 -- 是判断知识适当的标准，但这与真理无关。科学不是真理的化身，而是逻辑模型的代偿性更替。我们拼命追求知识，到底是在逼近真相，还是在代偿自身的脆弱？递弱代偿的回答是后者。而文明在这条路上越跑越快，越跑越不像是在寻找答案，越跑越像是在逃命。</p>          <div class="ch-actions">
+            <button class="ch-act" type="button" data-ch-collapse="4">收起</button>
+            <button class="ch-act" type="button" data-ch-totoc>回目录</button>
+            <a class="ch-act ch-next" data-ch-next="4">继续读第 5 章 →</a>
+          </div>        </div>
+      </section>      <section class="bd-chapter" id="ch-5" data-source="第57课">
+        <div class="ch-inner">
+          <h3>孔子的道德体系不是伦理选择，是农业文明的生存规定</h3>          <p>想象你站在公元前500年的鲁国曲阜街头。一个身材高大、腰间别着玉器的中年人正在讲学，身边围坐着几十个弟子。他的祖上是宋国贵族，但到他这一代，已经沦落到贫民区。他三岁丧父，母亲颜徵在带着他艰难度日，靠给人做针线活糊口。这个从底层爬起来的人，后来被称为&quot;万世师表&quot;--孔子。</p>          <p>孔子学说的核心，不是什么高深的形而上学，而是一个极其朴素的命题：用血缘纽带整顿超血缘社会。为什么？因为农业文明的社会结构需要一个低成本的秩序维护方案。他讲&quot;仁&quot;，讲&quot;礼&quot;，讲&quot;孝&quot;，背后有一条暗线：把家庭里的父子关系扩展为君臣关系，把兄弟关系扩展为朋友关系。整个社会就是一个放大的家族。这不是道德理想主义，这是封闭地貌下农耕文明的求存策略。</p>          <blockquote class="excerpt" data-source="第57课">
+            道德不是人类可以自由选择的东西，它是农业文明在特定生存结构下的硬性规定。乱伦禁忌根植于生物近亲繁殖退化的本能，不食同类则避免了朊病毒跨物种传播的灾难。孔子的学说，本质上是用血缘关系整顿超血缘社会，这是封闭地貌中农耕文明降低社会摩擦成本的最优解。
+            <span class="src-note">-- 原文,第57课</span>
+          </blockquote>          <p>王东岳在课中特别强调了一个观点：道德不是人类的选择，而是生存的规定。他举了两个硬核案例。第一，乱伦禁忌。几乎所有生物都有某种程度的近亲回避机制，因为近亲繁殖导致基因多样性降低、种群退化。但人类把这种生物本能上升为道德律令，用文化强制执行。第二，&quot;不食同类&quot;的禁忌。英国爆发的牛海绵状脑病--也就是疯牛病--就是因为人类把牛的内脏做成饲料喂牛，打破了物种不食同类的禁忌，导致朊病毒跨物种传播，造成恐慌性灾难。这说明道德戒律背后有深层的生存逻辑，不是圣人拍脑袋想出来的。</p>          <p>孔子还特别重视丧葬文化。表面上看，厚葬是浪费，但王东岳指出，在农业文明中，丧葬是一种财富再分配机制。一个家族办丧事，需要请邻里帮忙，需要采购大量物资，这实际上是把富裕家庭的财富分散到社区中。丧葬文化不只是情感表达，它的经济功能远比我们想象的复杂。</p>          <p>孔子为什么不发展科学？不是不会，是不需要。农耕生存结构需要的是秩序维护，不是抽象逻辑。重德轻智、重农抑商，在农业文明的语境下不是落后，而是求存的最优解。但当生存结构变了，这套道德体系必然动摇。当血缘纽带和礼乐制度无法维持社会秩序时，谁来维持秩序？法家的刀，已经磨好了。</p>          <div class="ch-actions">
+            <button class="ch-act" type="button" data-ch-collapse="5">收起</button>
+            <button class="ch-act" type="button" data-ch-totoc>回目录</button>
+            <a class="ch-act ch-next" data-ch-next="5">继续读第 6 章 →</a>
+          </div>        </div>
+      </section>      <section class="bd-chapter" id="ch-6" data-source="第63课">
+        <div class="ch-inner">
+          <h3>法家不是邪恶，是文明解体的急救方案</h3>          <p>公元前356年，秦国都城南门，一根三丈长的木头竖在那里。一个士兵宣布：谁能把这根木头搬到北门，赏十金。围观的人哄笑--这算什么？搬根木头就给十金？没人动。赏金加到五十金。终于有个壮汉扛起木头，走到北门，当场拿到了五十金。这就是&quot;徙木立信&quot;，商鞅变法的第一步。</p>          <p>商鞅不是在变法，他是在重建信任。秦国人已经不信政府了，因为之前的政策朝令夕改。商鞅用五十金买了一个信号：政府说话算数。信号建立之后，他推出十二项变法细则，核心只有三条：废井田开阡陌--土地私有化；废分封行县制--中央集权；奖励耕战--唯军功论。这三条每一条都在砸旧贵族的饭碗。</p>          <p>但变法的代价是什么？王东岳讲了另一个人的故事--吴起。吴起是卫国人，年轻时为了在鲁国做官，恰逢齐国攻鲁，鲁君想用吴起为将，但吴起的妻子是齐国女子，鲁君不放心。吴起怎么做？他回家杀了妻子，提着妻子的人头去见鲁君，以此证明自己的忠诚。这就是&quot;杀妻求将&quot;。吴起后来到楚国，帮助悼王变法，成效显著，楚国国力大增。但悼王刚死，楚国贵族立刻发动叛乱。吴起跑到灵堂，伏在悼王尸体上--他赌射杀他的人也会因为射中王尸而被灭族。结果箭矢如雨，吴起被射成刺猬。而新王即位后，果然以&quot;射中王尸&quot;为由灭族七十余家。吴起用最后一口气，拉了七十多家贵族陪葬。</p>          <blockquote class="excerpt" data-source="第63课">
+            商鞅用徙木立信建立政府公信力，随即推出十二项变法。吴起杀妻求将、楚国变法最终被射杀于灵堂。变法者死于自己变法--商鞅被五马分尸，韩非被李斯毒杀。法家的弱民三策（愚民、辱民、穷民）让政权稳固，却把社会变成高压锅，秦二世而亡。
+            <span class="src-note">-- 原文,第63课</span>
+          </blockquote>          <p>王东岳用这个故事说明一个悖论：变法者往往死于自己的变法。商鞅变法让秦国强大到统一六国，但商鞅本人被自己制定的法律五马分尸。韩非子集法家之大成，提出法、术、势三位一体的统治术，却被同学李斯毒杀于秦国监狱。</p>          <p>更令人不寒而栗的是韩非子的&quot;弱民三策&quot;：愚民--不让百姓有知识；辱民--用严刑峻法打击百姓尊严；穷民--不让百姓有积蓄。逻辑很简单：百姓越弱、越愚、越穷，政权就越稳固。这套方案在短期内极其有效，秦国的战争机器因此碾压六国。但它把社会变成了一个高压锅--秦二世而亡，十五年就崩了。</p>          <p>法家的出现，标志着道德维系的彻底失效。当血缘纽带和礼乐制度无法维持秩序时，暴力成了唯一选项。但暴力的代价是系统脆弱性的急剧增加。而在法家和儒家之外，还有一群人提出了截然不同的答案。</p>          <div class="ch-actions">
+            <button class="ch-act" type="button" data-ch-collapse="6">收起</button>
+            <button class="ch-act" type="button" data-ch-totoc>回目录</button>
+            <a class="ch-act ch-next" data-ch-next="6">继续读第 7 章 →</a>
+          </div>        </div>
+      </section>      <section class="bd-chapter" id="ch-7" data-source="第80课">
+        <div class="ch-inner">
+          <h3>诸子百家不是自由争鸣，是文明病态的症状图谱</h3>          <p>庄子在濮水边钓鱼。楚王派两个大夫来请他去做宰相。庄子头也不回，讲了一个故事：&quot;我听说楚国有一只神龟，死了三千年了，楚王把它包在锦缎里供在庙堂之上。你们说，这只龟是愿意死了被人供奉呢，还是愿意活着在泥水里拖尾巴？&quot;两位大夫说：&quot;自然是愿意活着在泥水里拖尾巴。&quot;庄子说：&quot;那就请回吧，我也要在泥水里拖我的尾巴。&quot;</p>          <p>这个故事的深意，不只是&quot;淡泊名利&quot;那么简单。王东岳在课中指出，庄子的反文明倾向，实际上是对&quot;递弱代偿&quot;的直觉反抗。庄子隐约看到了一件事：文明越发展，人越不自由；能力越强大，存在越脆弱。他选择做泥水里的龟，不是逃避，而是一种深刻的文明批判。鲲鹏之志的本意也不是励志--大鹏展翅九万里，看似壮阔，但它必须借风才能飞，仍然有所待。真正的逍遥是&quot;无待&quot;--不依赖任何外部条件。庄子追求的不是自由，而是对文明依赖链的彻底挣脱。</p>          <p>诸子百家的每一&quot;家&quot;，都不是凭空产生的思想火花，而是不同生存结构的代偿性表达。墨家代表底层手工商业者，他们提出&quot;兼爱&quot;&quot;非攻&quot;，是因为工商业者需要和平的贸易环境和跨血缘的合作关系。墨家还发展出&quot;墨辩&quot;--中国最早的逻辑学萌芽，因为工商业文明需要精确的契约思维和逻辑推理。王东岳指出，墨家的思想方向与古希腊非常接近，如果中国的生存结构允许，墨家完全可能发展出科学思维。可惜，封闭地貌的农业文明不需要这种东西。</p>          <blockquote class="excerpt" data-source="第80课">
+            庄子的反文明倾向不是消极避世，而是对递弱代偿的直觉反抗。他隐约看到文明越发展人越不自由，选择做泥水里的龟是对文明依赖链的挣脱。鲲鹏之志的本意也不是励志，大鹏借风才能飞仍有所待，真正的逍遥是无所依赖。
+            <span class="src-note">-- 原文,第80课</span>
+          </blockquote>          <p>杨子提出&quot;全生保真&quot;，&quot;不拔一毛利天下&quot;。这听起来自私，但王东岳认为这是中国历史上最早的个人主义萌芽。在一个一切围绕家族和集体运转的社会里，杨子第一次把个体生命本身作为目的。</p>          <p>名家的公孙龙提出&quot;白马非马&quot;，惠施提出&quot;指不至&quot;。这些看似诡辩的命题，实际上是抽象逻辑思维的萌芽。王东岳说，名家是墨家&quot;墨辩&quot;的延伸，代表工商业文明对精确思维的内在需求。可惜这种逻辑萌芽在中国没有土壤，最终沦为茶余饭后的笑料。</p>          <p>杂家的代表是吕不韦。他作为商人出身，做了秦国宰相，组织编撰《吕氏春秋》，公布后悬赏&quot;一字千金&quot;--谁能改动一个字就赏千金。但杂家的出现本身就说明一个问题：到了战国末期，思想已经无法整合，社会结构正在加速碎裂。</p>          <p>诸子百家不是思想繁荣的黄金时代，而是文明病态的症状图谱。每一家的主张，都是对同一个病症--社会解体--的不同处方。而当我们把目光从社会转向人体本身，会发现一个更惊人的事实：进化本身就是一种病。</p>          <div class="ch-actions">
+            <button class="ch-act" type="button" data-ch-collapse="7">收起</button>
+            <button class="ch-act" type="button" data-ch-totoc>回目录</button>
+            <a class="ch-act ch-next" data-ch-next="7">继续读第 8 章 →</a>
+          </div>        </div>
+      </section>      <section class="bd-chapter" id="ch-8" data-source="第86课">
+        <div class="ch-inner">
+          <h3>进化就是畸变 -- 人体是文明病的活标本</h3>          <p>1973年，耶路撒冷的所有医生罢诊一个月。有人去查殡仪馆的记录，发现这个月死亡人数下降了50%。三年后，1976年，哥伦比亚首都波哥大，医生罢医52天，死亡率下降35%。同年，美国洛杉矶医生怠医一个多月--只接急诊不看普通门诊--送尸量降低18%。王东岳问了一个刺骨的问题：你到医院去干什么去了？</p>          <p>他用这组数据，撕开了现代医学的一个深层悖论：医疗干预本身就是一种戕害。但他要讲的远不止于此。他的目标是从进化论的根本处颠覆一个信念：人体不是生物系统中最高级、最优势、最强健的有机体，恰恰相反，人体是整个生物有机体中最复杂、最劣势、最脆弱、最失衡的&quot;至弱生命载体&quot;。</p>          <blockquote class="excerpt" data-source="第86课">
+            越高级的物种灭绝速度反而越快。单细胞生物存在三十八亿年从未灭绝，恐龙存在一亿六千万年灭绝了，哺乳动物存在七八千万年99%以上早已灭绝，智人不过二十万年。所谓适者生存的说法与生物灭绝的事实完全相反。
+            <span class="src-note">-- 原文,第86课</span>
+          </blockquote>          <p>他先拆解达尔文学说的三大缺陷。第一，达尔文承认变异是随机的，基因突变在各个方向上发生，但演化却是定向的--只见过猴子变人，从没见过人变猴子。随机变异如何产生定向演化？达尔文没有回答。第二，达尔文说&quot;最适者生存&quot;，越高级的物种越有生存优势。但事实是：单细胞生物存在38亿年从未灭绝，恐龙存在1.6亿年灭绝了，哺乳动物存在七八千万年，99%以上早已灭绝，智人不过20万年。越高级的物种灭绝越快，这跟&quot;适者生存&quot;完全相反。第三，达尔文只讨论了自然选择这个外部动力，没有回答生物为什么会不断朝更复杂、更脆弱的方向变异--底层动力是什么？</p>          <p>王东岳的答案是&quot;递弱代偿&quot;：越演化的物质形态，存在度越低，必须用更复杂的结构来代偿，但这只会加速衰变。他举了一个令人震惊的例子：单细胞生物体积极小，表面积极大，细胞膜上布满受体和能量交换通道，太阳光一照就能获得全部生存所需。它是自养型生物，38亿年从未灭绝。当单细胞进化为多细胞，细胞膜被遮蔽，生存状态立即恶化。从单胚层到双胚层再到三胚层，中间层细胞的细胞膜完全被遮蔽，必死无疑，于是被迫分化出神经细胞来重新调配营养。所谓神经系统，所谓大脑，不是进化的&quot;成就&quot;，而是畸变的&quot;补救&quot;。</p>          <blockquote class="excerpt" data-source="第86课">
+            一切高等生物的生理系统，实际上不过是进化病理畸变过程的叠加化、有序化和系统化产物。生理的底层代码是一个病理进程。单细胞没有胃何来胃病，腔肠生物只是两层细胞的肠管不会有腹泻。越高级的物种结构越复杂，实质上是一个病理堆积过程。
+            <span class="src-note">-- 原文,第86课</span>
+          </blockquote>          <p>由此他得出一个石破天惊的结论：所谓生理，其实只不过是病理畸变过程的叠加化、有序化和系统化。一切生理的底层代码是病理进程。单细胞不会得胃病--它没有胃。腔肠动物不会拉肚子--它只是一个两层细胞的管子。你的胃病、肝病、胰腺癌，都是进化路上每一次畸变的遗产。</p>          <p>文明进程更加剧了这场危机。人类脑神经细胞高度分化后，只能代谢葡萄糖，这就是为什么我们必须种粮食--农业文明不是选择，是脑畸变的被迫适应。所有生物都吃不饱饭，有一组&quot;节能基因&quot;把偶尔吃饱时的能量储存起来。今天我们突然顿顿吃饱，这组基因把每个细胞撑死--这就是糖尿病。糖尿病在文明前几乎不存在，今天处于糖尿病前期的人已超过50%。再比如吃盐：没有动物会吃盐，因为所有生物体内天然含有0.9%的生理盐水浓度。人类因农业劳动大量出汗，才开始吃盐，从此高血压、心脏病接踵而至。近视眼也是文明病--非洲原始部落正常视力是8.0，今天中国小学生近视率达40%。</p>          <p>进化就是畸变，文明就是畸变的加速器。人体的每一个&quot;设计缺陷&quot;，都是存在度递减在肉体上的刻痕。</p>          <div class="ch-actions">
+            <button class="ch-act" type="button" data-ch-collapse="8">收起</button>
+            <button class="ch-act" type="button" data-ch-totoc>回目录</button>
+            <a class="ch-act ch-next" data-ch-next="8">继续读第 9 章 →</a>
+          </div>        </div>
+      </section>      <section class="bd-chapter" id="ch-9" data-source="第99课">
+        <div class="ch-inner">
+          <h3>易经不是算命，是远古人类对时空的追问模型</h3>          <p>你如果把《易经》当成算命的书，那就等于把一架天文望远镜当成拐杖。</p>          <p>王东岳在课程中做了一个重要的&quot;正名&quot;工作：《易经》的发生学根源不是占卜，而是远古人类对时空的追问模型。他先给出一个判断：一切神秘现象，其实是因为信息量太低，无法探究其究竟，才产生神秘感。《易经》之所以变成&quot;天书&quot;，不是因为它过于高深，恰恰是因为它过于幼稚--它是中国三千三百年前甲金文都没有发生以前的前文字符号系统。我们今天的思想全部运行在文字符号上，面对一个没有文字桥梁的原始符号系统，自然觉得深不可测。但其实，它的信息量远比文字系统小得多。</p>          <blockquote class="excerpt" data-source="第99课">
+            《易经》是一部天书，所谓天书就是看不懂的书。但《易经》是一部天书，不是由于它过于高深，恰恰是由于它过于幼稚所致。
+            <span class="src-note">-- 原文,第99课</span>
+          </blockquote>          <p>王东岳指出，《易经》排在五经之首不是偶然。越前端、越底层的东西，越具有奠基性和决定性--就像弗洛伊德说的，一个人幼年期的精神挫折会影响一生。《易经》处在中国人文化的最底层、最前端，所以对后世文化产生了潜移默化的重大影响。</p>          <p>核心解读是三法则：变易、简易、不易。变易指万物流变；简易指必须把复杂现象简化到可处理的模型；不易指要找到一个不变的基础原则来支撑前两条。这三条放到今天的科学哲学里依然成立：科学就是用简化模型处理流变世界，寻找底层不变量。</p>          <blockquote class="excerpt" data-source="第99课">
+            对神秘的态度可能导出两种结果，一者是对由此引发的神学或玄学之崇信。另一个结果便是引起对此类无知的好奇、凝思与深究，及引动无知革命。
+            <span class="src-note">-- 原文,第99课</span>
+          </blockquote>          <p>然后是河图洛书。一个是十个数字的白点黑点图，一个是九宫格数字排列。看起来像游戏，但这是远古人类在没有文字之前用数学符号搭建的第一个&quot;世界模型&quot;。接着是十二辟卦图：把一年十二个月对应十二个卦象，阴阳消长一目了然。复卦对应冬至一阳初生，乾卦对应夏至前阳气最盛，姤卦对应夏至一阴初生，坤卦对应冬至前阴气最盛。王东岳说这不是迷信，这是远古人类用二进制思维建立的第一个&quot;年度周期模型&quot;，跟今天的数据可视化在逻辑上没有本质区别。</p>          <p>关于算卦，王东岳做了一个精彩的比较分析。他说算卦本质上是一种&quot;博弈论决策辅助&quot;--在信息不足的情况下，你需要一个随机扰动机制来打破决策僵局。莱布尼茨发明二进制后看到易经大吃一惊，因为易经已经是二进制系统了。但这不意味着易经&quot;超前&quot;，而是说明人类的认知工具有某种收敛性：不同文明在不同时间独立发明类似的思维工具。</p>          <p>王东岳还追溯了易经的生殖追问。远古人类面临的最大生存问题是繁衍，所以易经的阴阳最初对应的是男女两性。从生殖追问扩展到天地万物的交感，这是易经从生物学模型升华为宇宙模型的路径。象数理三者统一：象是卦象，数是爻数，理是义理。没有象，数无以附着；没有数，理无以推演；没有理，象只是图画。</p>          <p>易经不是迷信的起点，而是科学的起点--它用数学符号对时空进行建模，是人类理性的第一缕曙光。</p>          <div class="ch-actions">
+            <button class="ch-act" type="button" data-ch-collapse="9">收起</button>
+            <button class="ch-act" type="button" data-ch-totoc>回目录</button>
+            <a class="ch-act ch-next" data-ch-next="9">继续读第 10 章 →</a>
+          </div>        </div>
+      </section>      <section class="bd-chapter" id="ch-10" data-source="第113课">
+        <div class="ch-inner">
+          <h3>佛教的逻辑台阶：从苦的 diagnosis 到出世的处方</h3>          <p>如果有人问你&quot;佛教是宗教还是哲学&quot;，标准答案应该是：佛教是一套诊断系统，跟医学的逻辑结构完全一致。</p>          <p>王东岳讲佛教，不是从&quot;信仰&quot;切入，而是从&quot;发生学&quot;切入。他先问了一个根本问题：佛教为什么出现在印度，而不是出现在中国或希腊？答案是：印度文明是人类文明的&quot;第三极&quot;。中国是农业文明的代表，希腊是商业海洋文明的代表，而印度恰好处在和西方环地中海文化充分沟通的地理条件下。从印度西边北行，就是现代智人迁徙到欧洲的高加索通道，向西一脉平川就到达环地中海。所以印度文化是远古时代农业文明和半工商业文明的交融性产物。</p>          <blockquote class="excerpt" data-source="第113课">
+            任何具有建设性文化压抑体系的文化，它一定需要一个对冲文化体系，以使之缓和，佛教由此发生。
+            <span class="src-note">-- 原文,第113课</span>
+          </blockquote>          <p>1922年，考古界在印度河流域发现了哈拉巴文明，距今4500年。它已经有了象形文字、规划完整的城镇、火烧砖建筑，甚至有致密的地下给排水系统--比中国商代殷墟的土木建筑早上千年。这个文明的成熟程度，正是印度作为&quot;第三极&quot;的地理交汇条件的产物。</p>          <p>但印度后来形成了严格的种姓制度。四大种姓--婆罗门（僧侣）、刹帝利（武士）、吠舍（商人）、首陀罗（农民）--各种姓之间不得通婚。王东岳指出，婆罗门教具有极高的社会建构性，是一种极具压迫力的稳定结构。而&quot;任何具有建设性文化压抑体系的文化，它一定需要一个对冲文化体系，以使之缓和，佛教由此发生。&quot;这就像中国：儒家建构社会秩序，老庄解构社会压力，两者形成互补。</p>          <blockquote class="excerpt" data-source="第113课">
+            所有宗教它都有两个特点，一个是极度拔高以至神圣；一个是极度降低以至庸俗。
+            <span class="src-note">-- 原文,第113课</span>
+          </blockquote>          <p>佛教的核心框架是四圣谛：苦、集、灭、道。王东岳说这完全是一个医学诊断结构：苦是症状描述（病症），集是病因分析（病理），灭是预后目标（治愈标准），道是治疗方案（处方）。这个结构之严密，放在今天的临床医学教学里都不需要修改。</p>          <p>然后是缘起理论。&quot;此有故彼有，此生故彼生&quot;--万物没有自性，都是条件关系的临时聚合。王东岳指出，这个理论在哲学上极其深刻：它比西方原子论更早地触及了&quot;关系先于实体&quot;的思想。三法印--诸行无常、诸法无我、涅槃寂静--则是佛教的&quot;验证标准&quot;：任何学说符合这三条就是佛法，不符合就不是。这等于给思想体系安装了一个自检程序，在宗教史上极其罕见。</p>          <p>王东岳讲了禅宗六祖慧能的故事。慧能是个不识字的樵夫，在集市上听人诵《金刚经》顿悟。他去找五祖弘忍，被安排去厨房舂米。后来弘忍传衣钵，让每人写一首偈子。大弟子神秀写的是&quot;身是菩提树，心如明镜台，时时勤拂拭，勿使惹尘埃&quot;。慧能听人念了之后，请人代写了一首：&quot;菩提本无树，明镜亦非台，本来无一物，何处惹尘埃。&quot;弘忍看到后半夜把慧能叫来讲《金刚经》，传了衣钵，让他连夜南逃。王东岳用这个故事说明：禅宗把佛教从经院哲学变成了&quot;直指人心&quot;的直觉认知工具，佛教传入中国后跟本土实用理性结合，催生了禅宗这个&quot;中国化佛教&quot;。</p>          <p>佛教不是逃避现实的工具，而是一套用极端理性构建的&quot;苦的诊疗方案&quot;--它的逻辑精密程度，至今仍未被任何宗教超越。</p>          <div class="ch-actions">
+            <button class="ch-act" type="button" data-ch-collapse="10">收起</button>
+            <button class="ch-act" type="button" data-ch-totoc>回目录</button>
+            <a class="ch-act ch-next" data-ch-next="10">继续读第 11 章 →</a>
+          </div>        </div>
+      </section>      <section class="bd-chapter" id="ch-11" data-source="第127课">
+        <div class="ch-inner">
+          <h3>中国文化衰落不是落后，是农业文明的必然终点</h3>          <p>如果你以为中国文化衰落是因为&quot;落后挨打&quot;，那王东岳会告诉你一个更残酷的答案：衰落不是因为落后，恰恰是因为农业文明走到了它的逻辑终点。</p>          <p>公元一千年前后，中国处在世界文明的前列，总体经济实力名列前茅。王东岳给了一个让人震惊的数据：宋朝时期，中国的GDP占全世界的50%以上。宋朝不是衰落的朝代，而是中国经济和文化的最高峰。活字印刷、火药、指南针--三大发明都在宋朝成熟。宋朝的工商业繁荣程度、城市化水平、文化精致度，都是农业文明的巅峰。</p>          <p>那为什么宋朝之后就开始衰落？王东岳引入了&quot;世界岛&quot;理论。1902年，英国地理学家麦金德提出：欧亚非大陆是地球上最大的&quot;世界岛&quot;，&quot;谁占有世界岛，谁将统治世界&quot;。但王东岳指出，历史反复证伪了这个理论。东罗马帝国占据世界岛东欧地区，结果根本没有拓展力。蒙古帝国在十二、十三世纪打通世界岛中部，结果快速退潮。近代中东、东欧、俄罗斯、中国，都在世界岛中心或边缘地区，却全都没有成为近代文明的启动者。反而在世界岛边缘的古希腊、荷兰、英国，以及不在世界岛上的美国，成为文明的引领者。</p>          <blockquote class="excerpt" data-source="第127课">
+            农耕文化势不可挽，就是农业文明退潮了。当工商业文明来临的时候，农业文明的衰败之局就已经注定，这才是问题的根本。
+            <span class="src-note">-- 原文,第127课</span>
+          </blockquote>          <p>王东岳的结论是：真正决定文明兴衰的不是地理位置，而是新思想。八千年前人类只有百分之一的人务农，结果他们引领了当时的文明潮流。三百年前全世界不到百分之一的工商业者在英国，结果引领了今天的工商业文明。三十年前全世界不到百分之一的人在网络上运行，结果缔造了信息时代。人类历来是百分之一引领百分之九十九。</p>          <p>世界岛中枢地区的古大国为什么全部衰败？因为它们是旧文化的守护者、遮蔽者、被羁绊者。国史长绝不是优势，国史长代表着旧文化的蕴藉。&quot;积贫积弱&quot;四个字，形容的正是国史长在积累贫困和弱势上去了。</p>          <p>然后王东岳讲了三大帝国的故事。元朝之后，世界上出现了三个大帝国：明朝中国、莫卧儿印度、奥斯曼土耳其。这三个帝国都是农业文明的&quot;完善化标本&quot;--把政治制度、文化体系发展到了极致。但极致就意味着终点：当一个文明把自身逻辑推到极致，就没有任何内部动力去突破自身了。</p>          <blockquote class="excerpt" data-source="第127课">
+            归根结底取决于谁引领新思想、新文化、新文明之时代风骚，谁才占据人类文明的世界岛。这个世界岛不是指地理，而是指文明的覆盖。
+            <span class="src-note">-- 原文,第127课</span>
+          </blockquote>          <p>明清的&quot;倒行逆施&quot;不是偶然失误，而是必然结果。明朝海禁、清朝闭关锁国，不是皇帝愚昧，而是农业文明的内在逻辑：农业文明需要稳定不需要冒险，需要服从不需要创新，需要循环不需要进步。当工商业文明在西方兴起时，中国不是&quot;不想跟上&quot;，而是&quot;跟不上&quot;--整个文化系统的底层逻辑跟新文明不兼容。</p>          <p>王东岳列举了近代文明的五大特征：第一，科学逻辑作为先导；第二，社会系统分化；第三，社会自由度增加；第四，公平递减（贫富分化加剧）；第五，震荡加剧（革命、战争频率上升）。这五条是工商业文明取代农业文明的必然代价，不是哪一个国家的问题，而是文明形态转换的通用模式。</p>          <p>中国文化衰落不是&quot;堕落&quot;的故事，而是&quot;完成&quot;的故事--农业文明在中国走到了它能走到的最远处，然后停在那里，等待下一波文明浪潮的冲击。</p>          <div class="ch-actions">
+            <button class="ch-act" type="button" data-ch-collapse="11">收起</button>
+            <button class="ch-act" type="button" data-ch-totoc>回目录</button>
+            <a class="ch-act ch-next" data-ch-next="11">继续读第 12 章 →</a>
+          </div>        </div>
+      </section>      <section class="bd-chapter" id="ch-12" data-source="第138课">
+        <div class="ch-inner">
+          <h3>递弱代偿是宇宙物演的总法则 -- 文明的终点是自我否定</h3>          <p>如果有人告诉你，人类不是进化的巅峰，而是宇宙中最脆弱的存在物；文明越发达，灭绝速度越快--你会觉得这是危言耸听，还是认真听一听他的论证？</p>          <p>王东岳的&quot;递弱代偿&quot;理论，是整部《东西哲学启蒙课》的思想主轴。他自己说，这个理论最初是一个&quot;副产品&quot;--写《物演通论》时没有任何功利目的，纯粹为了追问传统哲学的遗留问题，结果意外导出了对人类文明趋势的新解释。</p>          <p>理论的起点是一个朴素的反常现象。王东岳上大学时读到一篇关于生物灭绝的论文，发现一个让他震惊的规律：越高级的物种灭绝速度越快。这跟达尔文进化论的核心命题--&quot;越高级越适应，越有生存优势&quot;--直接矛盾。达尔文说&quot;最适者生存&quot;，但化石记录说的是&quot;最适者先灭&quot;。王东岳还指出达尔文学说的三个破绽：第一，变异是随机的，但物种演化总体态势却是定向的，达尔文没有讨论这两者的关系；第二，越高级的物种灭绝速度越快、范围越广，这跟&quot;适应性越强越有优势&quot;矛盾；第三，自然选择只讲外部条件对生物的影响，生物内部不断变异的内在驱动因素被完全忽略。</p>          <blockquote class="excerpt" data-source="第138课">
+            存在度丢失多少，代偿度补偿多少，代偿度的补偿部分只是存在度丢失部分的对应补偿，因此它在衍动轴把它拉成一个点拉成一条线以后它就变成一个普适常量。
+            <span class="src-note">-- 原文,第138课</span>
+          </blockquote>          <p>这个矛盾搁置了二十多年，最终构建了一个完整的替代模型。核心是一个简洁的数学关系：存在度加代偿度等于存在阈（常量）。存在度是万物&quot;自在&quot;的程度--质量越大、存续时间越长、越稳定，存在度越高。代偿度是万物&quot;自为&quot;的程度--能力越强、结构越复杂、感知越敏锐，代偿度越高。两者之和恒等于存在阈。这个公式意味着：能力增强不是存在增强，而是存在衰减的补偿。你越能干，说明你越脆弱。</p>          <p>王东岳用一张&quot;物演梯度示意图&quot;支撑论断。从宇宙奇点到基本粒子、原子、分子、有机大分子、单细胞、多细胞、人类--越底层的东西质量越大（氢占宇宙原子79%）、存续越久（基本粒子稳定137亿年）、越稳定；越顶层的东西质量越小、存续越短、越脆弱。人类智人只存在了20万年，已经站在灭绝的边缘。</p>          <p>最精彩的一个案例是蚊子。蚊子存在了上千万年，存在度极高，于是蚊子的智能判断能力极低--低到你夏天拍死它旁边的同伴，它照叮不误。它不计算损益平衡，因为一只蚊子产卵几百上千，完全不需要&quot;聪明&quot;。反过来，人类存在度极低，所以不得不发展出极高的智能来弥补。智能不是优势的标志，而是劣势的指标。</p>          <blockquote class="excerpt" data-source="第138课">
+            它的质量一定是递减的，它的时段一定是递缩的，最终达到方生方死，也就是它刚一产生它立即被否决，它立即死灭，这就是那条右端失存临界线。
+            <span class="src-note">-- 原文,第138课</span>
+          </blockquote>          <p>有效代偿与无效代偿的&quot;佯谬&quot;是理论的关键。代偿有效--因为属性增益弥补了存在度的丢失，使存在回到存在阈线上，所以你能活。但代偿又无效--因为这种弥补是&quot;虚补&quot;不是&quot;实补&quot;，不能真正恢复存在度。人类能力越来越强，但死灭速度越来越快，代偿始终无效。</p>          <p>这个理论还解释了费米悖论：为什么我们见不到外星人？银河系约有100万颗行星上可能有高智生物。王东岳说，递弱代偿原理就是&quot;大过滤器&quot;--任何高智生物在发展出恒星际航行能力之前，代偿度已经达到最高值，存在度趋近于零，进入灭绝或&quot;方生方死&quot;状态。&quot;方生方死&quot;是庄子的话：基因编辑人刚被造出来，新技术就把它淘汰了；机器人刚生产几台，更高智能的机器人就把它否定了。先进到极致，就是刚出生就过时，迭代速度快到等于不存在。</p>          <p>王东岳最终把理论落脚在社会哲学上，用&quot;早衰症&quot;患儿做比喻：12岁的身体已经像80岁的老人，快速增长的结果是快速逼近寿命极限。人类今天的进步论发展观，就是典型的人类文明早衰症形态。</p>          <p>递弱代偿不是悲观的预言，而是一把重新丈量宇宙的尺子--它把人类从&quot;万物之灵&quot;的宝座上请下来，放到物演链条的最末端，让你看清自己的真实位置。</p>          <div class="ch-actions">
+            <button class="ch-act" type="button" data-ch-collapse="12">收起</button>
+            <button class="ch-act" type="button" data-ch-totoc>回目录</button>
+          </div>        </div>
+      </section>    </div>
+    <div class="quote-wall">
+      <h2 class="section-title">全书金句墙</h2>
+      <p class="section-lead">全书值得带走的话,集中收在这里(章内不再单列金句)。每条带出处,可回原章对照。</p>
+      <div class="qw-list">        <figure class="qw-card qw-featured" data-source="第0课">
+          <blockquote>越是不追求实用性，才越能做自己精神基层的这个打底的工作。如果追求实用，就一定会一直把自己漂浮在最浅层。</blockquote>
+          <figcaption></figcaption>
+          <a class="qw-teleport" href="#ch-0">出自第 0 章 →</a>
+        </figure>        <figure class="qw-card qw-featured" data-source="第22课">
+          <blockquote>越低级越原始的物质存在形态或者物种，它的存在度反而越高；越进化越高级的，存在度反而越低。存在度越低的，属性和能力反而越强。</blockquote>
+          <figcaption></figcaption>
+          <a class="qw-teleport" href="#ch-22">出自第 22 章 →</a>
+        </figure>        <figure class="qw-card qw-featured" data-source="第22课">
+          <blockquote>我们拼命地赶着车往前跑，却没有人说清楚我们的目标是什么。我们究竟要到哪里去？</blockquote>
+          <figcaption></figcaption>
+          <a class="qw-teleport" href="#ch-22">出自第 22 章 →</a>
+        </figure>        <figure class="qw-card" data-source="第22课">
+          <blockquote>人类远古时代生存非常艰难，但作为一个物种，它总体上是安全的。今天高度发展、高度进步的结果，却是面临灭绝之险。</blockquote>
+          <figcaption></figcaption>
+          <a class="qw-teleport" href="#ch-22">出自第 22 章 →</a>
+        </figure>        <figure class="qw-card" data-source="第23课">
+          <blockquote>一朵绽开了的花朵，它的全部内在规定性，都包含在那个微小的种子之中。</blockquote>
+          <figcaption></figcaption>
+          <a class="qw-teleport" href="#ch-23">出自第 23 章 →</a>
+        </figure>        <figure class="qw-card" data-source="第1课">
+          <blockquote>所谓术者，是指你可以驱动和支配什么；所谓道者，是探究什么东西驱动和支配着你。</blockquote>
+          <figcaption></figcaption>
+          <a class="qw-teleport" href="#ch-1">出自第 1 章 →</a>
+        </figure>      </div>
+    </div>
+    <a class="next-cta" data-panel="panel-judge">下一步:看看该信几分 →</a>
+  </section>
+  <section class="panel" id="panel-judge">
+    <div class="verdict-bar" data-source="全书 · 可信度总评">
+      <span class="vb-score"><b>B+ (7/10)</b><span>可信度评级</span></span>
+      <p class="vb-text">作为一门面向公众的哲学启蒙课而非学术专著，其思想穿透力和体系完整度令人印象深刻。递弱代偿作为观照框架有强大的解释力，从宇宙演化到文明兴衰到人体疾病，展现了罕见的跨学科整合能力。但存在三方面不足：一是过度泛化倾向（一个理论解释一切时需要警惕）；二是地理决定论忽略了文化能动性；三是'六经注我'式解读老子虽有启发性但论证不够严密。作为思想启蒙课值得高分，作为学术论证则需更严格的检验。</p>
+    </div>
+    <div class="arg-restate" data-source="全书 · 论证链">
+      <p class="ar-sub">反驳之前,先复述 -- 这是作者的完整论证</p>
+      <ol class="arg-steps">        <li class="arg-step">自然进程规定性决定文明发生和走向（地理、气候、资源是第一因）</li>        <span class="arg-arrow" aria-hidden="true">→</span>        <li class="arg-step">东西方文明分化源于生存结构差异（封闭地貌→农业→具象思维；开放地貌→工商→抽象逻辑）</li>        <span class="arg-arrow" aria-hidden="true">→</span>        <li class="arg-step">农业文明过度精致导致转型困难（中国文化衰落的根本原因）</li>        <span class="arg-arrow" aria-hidden="true">→</span>        <li class="arg-step">工商业文明代偿能力更强但存在度更低（西方文明的发展 = 更快的弱化）</li>        <span class="arg-arrow" aria-hidden="true">→</span>        <li class="arg-step">人类能力增益等于加速死灭（递弱代偿在文明史的表达）</li>        <span class="arg-arrow" aria-hidden="true">→</span>        <li class="arg-step arg-step-last">文明程度越高危机越深重（环境污染、生态破坏、气候异常、毁灭性武器）</li>      </ol>
+      <p>自然选择决定文明走向 → 东西方分化是生存结构适配 → 农业文明精致化导致转型困难 → 工商业文明代偿能力更强但存在度更低 → 人类能力增益等于加速奔赴死灭 → 文明程度越高危机越深重</p>
+    </div>
+    <div class="tensions">
+      <h3 class="zone-title">书里自带的矛盾</h3>
+      <p class="section-lead">作者自己没完全调和的两个立场,点一行看仲裁。</p>
+      <div class="tn-list">        <article class="tn-row" data-source="全书对照">
+          <div class="tn-head"><span class="tn-a">无用之课的实用悖论</span></div>
+          <p class="tn-note">王东岳反复强调这门课无用、不追求实用，但整门课最终指向对人类命运的深切关怀和文明危机的诊断 -- 这恰恰是最实用的关切。无用之用，是否也是一种代偿？</p>
+        </article>        <article class="tn-row" data-source="全书对照">
+          <div class="tn-head"><span class="tn-a">六经注我的解读边界</span></div>
+          <p class="tn-note">王东岳用递弱代偿重新解读老子，承认这是'六经注我'而非'我注六经'。但解读的边界在哪里？如果任何前人思想都可以用递弱代偿重新解读，这种解读是否失去了可证伪性？</p>
+        </article>        <article class="tn-row" data-source="全书对照">
+          <div class="tn-head"><span class="tn-a">悲观沉思与行动瘫痪</span></div>
+          <p class="tn-note">递弱代偿的结论是人类正在加速奔赴死灭，但这个结论如果成立，除了悲观沉思还能做什么？王东岳说'我不给处方'，但不给处方本身是否也是一种逃避？</p>
+        </article>      </div>
+    </div>
+    <div class="crit-quad">
+      <section class="cq-zone cq-assume">
+        <h3 class="zone-title">没证明的前提</h3>        <p class="cq-item" data-source="全书">存在度可以用质量分布、时效、稳定性三项硬指标量化衡量</p>        <p class="cq-item" data-source="全书">存在度与代偿度之和为常量（存在阈）-- 这是一个未经验证的数学假设</p>        <p class="cq-item" data-source="全书">老子的道论德论确实指向递弱代偿 -- 这是王东岳的'六经注我'式解读，存在文本支撑争议</p>        <p class="cq-item" data-source="全书">所有文明最终都会走向衰落 -- 这是从单一案例（中国农业文明）推广到普遍规律</p>        <p class="cq-item" data-source="全书">存在度可以用质量分布、时效、稳定性三项硬指标衡量</p>        <p class="cq-item" data-source="全书">能力/属性是存在度不足时的代偿产物，而非独立变量</p>        <p class="cq-item" data-source="全书">大尺度观察（137亿年）比小尺度观察（人类文明史）更能揭示本质</p>        <p class="cq-item" data-source="全书">老子的道论德论确实指向递弱代偿（这一解读存在争议）</p>      </section>
+      <section class="cq-zone cq-blind">
+        <h3 class="zone-title">作者盲点</h3>        <p class="cq-item" data-source="全书">全盘否定进步叙事但未充分解释为什么人类预期寿命和知识量确实大幅增长</p>        <p class="cq-item" data-source="全书">将东西方文明差异完全归因于地理决定论，忽略了文化交流和偶然事件的作用</p>        <p class="cq-item" data-source="全书">对科学的批评停留在范式更替层面，未充分讨论科学方法本身的自我纠错机制</p>        <p class="cq-item" data-source="全书">用递弱代偿统一解释一切现象，存在过度泛化的风险 -- 一个解释一切的理论可能什么也没解释</p>      </section>
+      <section class="cq-zone cq-era">
+        <h3 class="zone-title">时代局限</h3>        <p class="cq-item" data-source="全书">2008年讲授，距今已十余年，气候危机、AI发展等议题已大幅演进</p>        <p class="cq-item" data-source="全书">对互联网和人工智能的讨论较少，未预见AI可能成为全新的代偿形态</p>        <p class="cq-item" data-source="全书">全球化进程在2018年后出现逆转趋势，文明融合的判断需要更新</p>      </section>
+      <section class="cq-zone cq-object">
+        <h3 class="zone-title">最强反对</h3>        <p class="cq-strong" data-source="全书 · 最强反对">递弱代偿理论的核心证据（越低级越稳定、越高级越脆弱）存在选择偏差：我们只能观察到现存的基本粒子和已灭绝的高等物种，无法排除存在过但已消亡的'低级不稳定'形态。此外，人类预期寿命、知识总量、疾病控制能力的客观提升，与'越发展越脆弱'的核心命题存在张力。</p>        <p class="cq-item" data-source="全书 · 反例">附:人类预期寿命大幅延长，婴儿死亡率大幅下降 -- 这是否说明存在度没有递减？</p>        <p class="cq-item" data-source="全书 · 反例">附:科学技术的确解决了很多问题（疫苗、抗生素、 Green Revolution）-- 代偿是否也能提升存在度？</p>        <p class="cq-item" data-source="全书 · 反例">附:某些物种（如蟑螂、老鼠）在文明环境中反而繁盛 -- 是否存在反例？</p>      </section>
+    </div>
+    <div class="reviews">
+      <h3 class="zone-title">别人怎么评</h3>
+      <p class="section-lead">正反都收(全好评 = 信源可疑),每条带来源,保持原始比例。</p>
+      <div class="review-cols">
+        <div class="review-col review-pos">
+          <h4>赞同</h4>          <div class="review-item" data-source="微博网友"><span class="stance">正</span>《中西哲学启蒙课》音频是一个非常好的人类文化史的科普课程,无论西哲还是中国传统文化部分,都是非常好的文化及哲学意义的科普课程。从演讲和哲学科普的角度来说,王东岳的课程引人入胜,是非常值得大众一听的。<a class="r-src" href="https://weibo.com/2065594927/Nk1dacJ9z" rel="noopener">微博网友</a></div>          <div class="review-item" data-source="头条网友"><span class="stance">正</span>王东岳的学说是康德和达尔文的升级版。他重新解读了老子的学说,这种解读是成立的。他用递弱代偿原理回答了古希腊以来哲学家们留下的几乎所有问题。国内学界一片沉默,意味着国内思想界的荒漠化由来已久。<a class="r-src" href="https://www.toutiao.com/item/6734645714338447885/" rel="noopener">头条网友</a></div>          <div class="review-item" data-source="喜马拉雅听众"><span class="stance">正</span>很震撼的哲学课,颠覆了我很多原来的常识认知,认认真真听完,开启了很多新鲜的思路。<a class="r-src" href="https://m.ximalaya.com/ting/7386" rel="noopener">喜马拉雅听众</a></div>        </div>
+        <div class="review-col review-neg">
+          <h4>质疑</h4>          <div class="review-item" data-source="科普作者"><span class="stance neg">反</span>讲课中存在常识性错误,对科学理解不够准确。递弱代偿没有完成推导,逻辑没有自洽,不成立。没有索引,自创借用引用混在一起。建议学生不要看,因为整体宇宙观是消极的。<a class="r-src" href="http://www.xtie.cn/zatan/5657.html" rel="noopener">科普作者</a></div>          <div class="review-item" data-source="百度百科"><span class="stance neg">反</span>课程对哲学发展脉络有一些理清作用,但整体哲学观和宇宙观都是消极的,不建议学生观看。<a class="r-src" href="http://baike.baidu.com/tashuo/browse/content?id=a8faef4940d82227fab12780" rel="noopener">百度百科</a></div>        </div>
+      </div>
+    </div>
+    <a class="views-entry" href="#sub-views">
+      <span class="ve-kicker">观点对照 · 该信几分</span>
+      <span class="ve-title">三个核心议题,赞同方与质疑方各说了什么</span>
+      <ul class="ve-list">        <li></li>        <li></li>        <li></li>      </ul>
+      <span class="ve-go">进入观点对照 →</span>
+    </a>
+    <a class="next-cta" data-panel="panel-action">下一步:读完这么用 →</a>
+  </section>
+  <section class="panel" id="panel-action">
+    <div class="chain" data-chain>
+      <h2 class="section-title">行动路线图</h2>
+      <p class="section-lead">读完这本书要走的一条路,5 环有先后。点某一环,跳到下方该环的情境规则。</p>
+      <div class="chain-steps">        <div class="chain-step" data-step="1">
+          <div class="cs-head"><span class="cs-no">1</span><span class="cs-label">拉大尺度看问题</span></div>
+          <p class="chain-explain"></p>
+          <div class="chain-detail" data-source="第22课">面对任何进步叙事（技术突破、经济增长、寿命延长），先问：在137亿年宇宙演化尺度上，这件事是在提升存在度还是在增加代偿？如果只是代偿，它的代价是什么？</div>
+        </div>        <div class="chain-step" data-step="2">
+          <div class="cs-head"><span class="cs-no">2</span><span class="cs-label">区分代偿与真知</span><span class="cs-badge">1 条相关做法</span></div>
+          <p class="chain-explain"></p>
+          <div class="chain-detail" data-source="第41课">面对新知识新理论，问：它是在降低存在度的前提下提升认知（代偿），还是在真正提升存在稳定性（真知）？科学是代偿不是真知 -- 它提升了能力但没有提升存在度。</div>
+        </div>        <div class="chain-step" data-step="3">
+          <div class="cs-head"><span class="cs-no">3</span><span class="cs-label">评估精致的代价</span><span class="cs-badge">2 条相关做法</span></div>
+          <p class="chain-explain"></p>
+          <div class="chain-detail" data-source="第126课">面对个人或组织的发展，问：精致化是否已超过转型所需的灵活性？宋朝经济最发达却最先被征服 -- 越精致越脆弱不是历史教训，是物演法则。</div>
+        </div>        <div class="chain-step" data-step="4">
+          <div class="cs-head"><span class="cs-no">4</span><span class="cs-label">审视健康干预的净效用</span><span class="cs-badge">1 条相关做法</span></div>
+          <p class="chain-explain"></p>
+          <div class="chain-detail" data-source="第90课">面对任何健康建议或医疗方案，算清净效用：增益（症状缓解）减去代价（副作用、医源性疾病、对自然结构的进一步干扰）。越先进的医疗体系，净效用递减越明显。</div>
+        </div>        <div class="chain-step" data-step="5">
+          <div class="cs-head"><span class="cs-no">5</span><span class="cs-label">做无用之学的打底</span><span class="cs-badge">2 条相关做法</span></div>
+          <p class="chain-explain"></p>
+          <div class="chain-detail" data-source="第0课">在功利主义的教育和知识消费中，保留一块'无用之学'的空间。不追求实用的精神奠基，反而是对抗浅层代偿的唯一方式 -- 追求实用就一定漂浮在最浅层。</div>
+        </div>      </div>
+      <div class="chain-loop">
+        <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><path class="cl-path" d="M20 6 A 14 14 0 1 1 6 20"/><path class="cl-path" d="M20 6 l-5 -3 M20 6 l-4 5"/></svg>
+        <span>走完第 ⑤ 环,回到第 ① 环,把自己再看一遍</span>
+      </div>
+    </div>
+    <div class="rules">
+      <h2 class="section-title">情境决策卡</h2>
+      <p class="section-lead">遇到具体情况怎么办 -- 按行动环或情境筛,每条「当/做/因为」三行全可见。</p>
+      <div class="rule-chips">
+        <span class="rc-group-label">按行动环筛选</span>
+        <button class="rc-chip on" type="button" data-filter-step="all">全部</button>
+        <button class="rc-chip" type="button" data-filter-step="1">环 ①</button>
+        <button class="rc-chip" type="button" data-filter-step="2">环 ②</button>
+        <button class="rc-chip" type="button" data-filter-step="3">环 ③</button>
+        <button class="rc-chip" type="button" data-filter-step="4">环 ④</button>
+        <button class="rc-chip" type="button" data-filter-step="5">环 ⑤</button>
+        <button class="rc-chip" type="button" data-filter-step="general">通用</button>
+      </div>
+      <div class="rule-list">        <article class="rule-card" data-step="3" data-situ="通用" data-source="第126课">
+          <p class="rc-when"><b>当</b> 面对具体情境</p>
+          <p class="rc-do"><b>做</b> 判断一个文明的发展阶段：看它的维持成本是否已超过产出 -- 超过就是衰落的前兆</p>
+          <p class="rc-because"><b>因为</b> 农业文明在宋朝达到技术经济高峰却最先被征服，说明维持成本超过产出时，越发达越脆弱</p>
+          <a class="rc-teleport" href="#ch-126">第 126 章 →</a>
+        </article>        <article class="rule-card" data-step="4" data-situ="通用" data-source="第41课">
+          <p class="rc-when"><b>当</b> 面对具体情境</p>
+          <p class="rc-do"><b>做</b> 判断一种思想是代偿还是真知：看它是否在降低存在度 -- 如果提升能力但不提升稳定性，就是代偿</p>
+          <p class="rc-because"><b>因为</b> 西方哲学提升认知能力但没有提升人类的存在稳定性，属于代偿而非真知</p>
+          <a class="rc-teleport" href="#ch-41">第 41 章 →</a>
+        </article>        <article class="rule-card" data-step="2" data-situ="通用" data-source="第66课">
+          <p class="rc-when"><b>当</b> 面对具体情境</p>
+          <p class="rc-do"><b>做</b> 判断一种社会制度的合理性：看它是否适配当前生存结构 -- 道德适合低复杂度社会，法律适合中等复杂度，强权适合极高复杂度</p>
+          <p class="rc-because"><b>因为</b> 法家出现在战国而非和平时期，说明制度是生存结构的代偿</p>
+          <a class="rc-teleport" href="#ch-66">第 66 章 →</a>
+        </article>        <article class="rule-card" data-step="5" data-situ="通用" data-source="第89课">
+          <p class="rc-when"><b>当</b> 面对具体情境</p>
+          <p class="rc-do"><b>做</b> 判断健康建议的可靠性：看它是在顺应自然结构还是在对抗自然结构 -- 直立行走已是妥协，久坐加高跟鞋是在叠加畸变</p>
+          <p class="rc-because"><b>因为</b> 文明病本质是存在度递减的人体表达，任何对抗自然结构的干预都在加深问题</p>
+          <a class="rc-teleport" href="#ch-89">第 89 章 →</a>
+        </article>        <article class="rule-card" data-step="5" data-situ="通用" data-source="第141课">
+          <p class="rc-when"><b>当</b> 面对具体情境</p>
+          <p class="rc-do"><b>做</b> 判断技术进步的净效用：算清增益减去代价 -- 如果增益在递减而代价在递增，就是递弱代偿在技术领域的表达</p>
+          <p class="rc-because"><b>因为</b> 核能解决了能源问题却制造了毁灭性武器，互联网加速了信息流通却制造了信息污染</p>
+          <a class="rc-teleport" href="#ch-141">第 141 章 →</a>
+        </article>        <article class="rule-card" data-step="3" data-situ="通用" data-source="第121课">
+          <p class="rc-when"><b>当</b> 面对具体情境</p>
+          <p class="rc-do"><b>做</b> 判断一种文化的前途：看它是否还有转型空间 -- 过度精致的文化丧失转型能力就是衰落</p>
+          <p class="rc-because"><b>因为</b> 中国农业文明过度精致导致近代转型困难，西方工商业文明也在走向同样的过度精致</p>
+          <a class="rc-teleport" href="#ch-121">第 121 章 →</a>
+        </article>      </div>
+    </div>
+    <div class="models">
+      <h2 class="section-title">心智模型工具架</h2>
+      <p class="section-lead">作者反复使用的思考透镜。点开一张,看怎么用、书里依据、以及什么时候失效。</p>
+      <div class="model-list">        <article class="model-drawer" data-source="第22课">
+          <button class="md-head" type="button"><span class="md-name">大尺度观察法</span><span class="md-essence">大尺度观察法</span><span class="md-toggle">展开 ▾</span></button>
+          <div class="md-body">
+            <div class="md-seg md-how"><span class="md-k">怎么用</span><p>把观察尺度拉到137亿年宇宙演化史，才能看到小尺度看不到的规律。盖天说在大尺度观察下变成地心说，地心说在更大尺度下变成日心说。递弱代偿也只有在宇宙尺度才能看到。</p></div>
+            <div class="md-seg md-evidence"><span class="md-k">书里依据</span><p>越低级越原始的物质存在形态，存在度越高；越进化越高级的，存在度反而越低 -- 这个规律只在137亿年尺度可见</p></div>
+            <div class="md-seg md-boundary"><span class="md-k">什么时候失效</span><p>作者未明确界定边界</p></div>
+          </div>
+        </article>        <article class="model-drawer" data-source="第138课">
+          <button class="md-head" type="button"><span class="md-name">代偿≠进步</span><span class="md-essence">代偿≠进步</span><span class="md-toggle">展开 ▾</span></button>
+          <div class="md-body">
+            <div class="md-seg md-how"><span class="md-k">怎么用</span><p>能力的提升不是存在度提升的标志，而是存在度下降的代偿。越高能力的物种存在度越低。这个模型打破了一切进步叙事。</p></div>
+            <div class="md-seg md-evidence"><span class="md-k">书里依据</span><p>基本粒子能力极低但存在137亿年，人类能力极高但才20万年就危机四伏</p></div>
+            <div class="md-seg md-boundary"><span class="md-k">什么时候失效</span><p>作者未明确界定边界</p></div>
+          </div>
+        </article>        <article class="model-drawer" data-source="第3课">
+          <button class="md-head" type="button"><span class="md-name">生存结构决定论</span><span class="md-essence">生存结构决定论</span><span class="md-toggle">展开 ▾</span></button>
+          <div class="md-body">
+            <div class="md-seg md-how"><span class="md-k">怎么用</span><p>文明的走向、思维的方式、社会制度的选择，都不是自由意志的产物，而是生存结构的规定性适配。改变文明首先要改变生存结构，而非改变思想。</p></div>
+            <div class="md-seg md-evidence"><span class="md-k">书里依据</span><p>东西方文明分化源于地理差异，诸子百家分野源于社会阶层差异</p></div>
+            <div class="md-seg md-boundary"><span class="md-k">什么时候失效</span><p>作者未明确界定边界</p></div>
+          </div>
+        </article>        <article class="model-drawer" data-source="第126课">
+          <button class="md-head" type="button"><span class="md-name">越精致越脆弱</span><span class="md-essence">越精致越脆弱</span><span class="md-toggle">展开 ▾</span></button>
+          <div class="md-body">
+            <div class="md-seg md-how"><span class="md-k">怎么用</span><p>一个系统越精致（高度优化、高度耦合），转型能力越差，面对环境变化时越脆弱。精致不是优势，而是过度适应的陷阱。</p></div>
+            <div class="md-seg md-evidence"><span class="md-k">书里依据</span><p>宋朝经济最发达却最先被征服，中国农业文明最精致却最难转型</p></div>
+            <div class="md-seg md-boundary"><span class="md-k">什么时候失效</span><p>作者未明确界定边界</p></div>
+          </div>
+        </article>      </div>
+    </div>
+    <div class="questions-wrap">
+      <h2 class="section-title">读完自检</h2>
+      <p class="section-lead">这几个问题,建议每隔一段时间回来问自己一遍(纯浏览,无打分)。</p>
+      <div class="questions">        <article class="question" data-source="全书">
+          <div>
+            <h3>你是否在用小尺度的进步叙事（我学了新技能、我赚了更多钱）掩盖大尺度的递弱事实（我的存在稳定性在下降）？</h3>
+            <p></p>
+            <a class="q-back" href="#ch-1">回到第 1 章 →</a>
+          </div>
+        </article>        <article class="question" data-source="全书">
+          <div>
+            <h3>你追求的能力提升，是在提升存在度，还是在代偿存在度的不足？如果是代偿，代价是什么？</h3>
+            <p></p>
+            <a class="q-back" href="#ch-1">回到第 1 章 →</a>
+          </div>
+        </article>        <article class="question" data-source="全书">
+          <div>
+            <h3>你的生活方式中有多少是在顺应自然结构，有多少是在对抗自然结构？对抗的部分是否在制造新的问题？</h3>
+            <p></p>
+            <a class="q-back" href="#ch-1">回到第 1 章 →</a>
+          </div>
+        </article>        <article class="question" data-source="全书">
+          <div>
+            <h3>你读前人的书，是在'我注六经'（忠实复述），还是在'六经注我'（用新信息量重新解读）？如果你做不到后者，你的读书可能只停留在信息消费层面。</h3>
+            <p></p>
+            <a class="q-back" href="#ch-1">回到第 1 章 →</a>
+          </div>
+        </article>        <article class="question" data-source="全书">
+          <div>
+            <h3>你的组织/团队是否已经过度精致化？精致到丧失了转型能力？如果是，越发达可能越危险。</h3>
+            <p></p>
+            <a class="q-back" href="#ch-1">回到第 1 章 →</a>
+          </div>
+        </article>        <article class="question" data-source="全书">
+          <div>
+            <h3>你是否在追求'更快更高更强'？如果是，你清楚自己要到哪里去吗？还是只是在拼命赶车却不知道目标？</h3>
+            <p></p>
+            <a class="q-back" href="#ch-1">回到第 1 章 →</a>
+          </div>
+        </article>      </div>
+    </div>
+    <a class="next-cta" data-panel="panel-extend">下一步:接着读什么 →</a>
+  </section>
+  <section class="panel" id="panel-extend">
+    <div class="similar">
+      <h2 class="section-title">同类书</h2>
+      <p class="section-lead">读完这本接着读的书,标出与本书的关系:印证 / 互补 / 纠偏。</p>
+      <div class="sim-grid">        <article class="sim-card" data-sim-idx="1" data-source="knowledge-index / 豆瓣">
+          <h3>物演通论 <span class="sim-rel rel-support">印证</span></h3>
+          <p class="sim-author">王东岳</p>
+          <p class="sim-why">本课程的最后12讲(第133-144课)基本是《物演通论》的讲座版,两者核心理论完全一致。课程更通俗,专著更严密。</p>
+          <p class="sim-fit"><strong>适合谁:</strong>同一作者的学术专著,本课程的递弱代偿部分即其通俗版</p>
+        </article>        <article class="sim-card" data-sim-idx="2" data-source="knowledge-index / 豆瓣">
+          <h3>中国哲学简史 <span class="sim-rel rel-extend">补充</span></h3>
+          <p class="sim-author">冯友兰</p>
+          <p class="sim-why">冯友兰以学术史框架介绍中国哲学,王东岳以递弱代偿框架重新解读中国哲学 -- 两种路径形成对照。</p>
+          <p class="sim-fit"><strong>适合谁:</strong>中国哲学史的经典入门,学术性更强但缺乏递弱代偿的统一框架</p>
+        </article>        <article class="sim-card" data-sim-idx="3" data-source="knowledge-index / 豆瓣">
+          <h3>西方哲学史 <span class="sim-rel rel-extend">补充</span></h3>
+          <p class="sim-author">伯特兰·罗素</p>
+          <p class="sim-why">罗素以哲学家为单位介绍西方哲学,王东岳以生存结构决定论解释西方哲学的发生 -- 视角差异显著。</p>
+          <p class="sim-fit"><strong>适合谁:</strong>西方哲学通史的经典,覆盖面更广但缺乏统一的文明诊断视角</p>
+        </article>        <article class="sim-card" data-sim-idx="4" data-source="knowledge-index / 豆瓣">
+          <h3>枪炮、病菌与钢铁 <span class="sim-rel rel-extend">补充</span></h3>
+          <p class="sim-author">贾雷德·戴蒙德</p>
+          <p class="sim-why">戴蒙德从生物学和地理学解释文明走向,王东岳从哲学和存在论解释 -- 两者在地理决定论上共鸣,但在'进步'评价上分歧。</p>
+          <p class="sim-fit"><strong>适合谁:</strong>从地理环境解释文明差异,与王东岳的文明溯源部分高度互补</p>
+        </article>        <article class="sim-card" data-sim-idx="5" data-source="knowledge-index / 豆瓣">
+          <h3>人类简史 <span class="sim-rel rel-extend">对比</span></h3>
+          <p class="sim-author">尤瓦尔·赫拉利</p>
+          <p class="sim-why">赫拉利认为农业革命是'史上最大骗局'但总体肯定进步,王东岳认为整个文明进程都是递弱 -- 同一事实,相反诊断。</p>
+          <p class="sim-fit"><strong>适合谁:</strong>同样大尺度俯瞰人类文明,但对'进步'的评价截然相反</p>
+        </article>        <article class="sim-card" data-sim-idx="6" data-source="knowledge-index / 豆瓣">
+          <h3>哲学王子王德峰讲座 <span class="sim-rel rel-extend">对比</span></h3>
+          <p class="sim-author">王德峰</p>
+          <p class="sim-why">网友评价:王德峰讲得好但深度不够,王东岳更深但也更争议 -- 科班vs民间的典型对照。</p>
+          <p class="sim-fit"><strong>适合谁:</strong>复旦哲学系教授的同类哲学课,科班出身但'深度不够'</p>
+        </article>      </div>
+    </div>
+    <div class="reading-path">
+      <h2 class="section-title">阅读路径</h2>
+      <p class="rp-desc">先听本课程建立框架 → 读《物演通论》深挖理论 → 读《枪炮病菌与钢铁》补充地理决定论 → 读《人类简史》对照相反立场 → 读冯友兰《中国哲学简史》补充学术视角</p>
+      <div class="rp-steps">        <button class="rp-step" type="button" data-sim-idx="1"><span class="rp-no">1</span>物演通论</button>        <span class="rp-arrow" aria-hidden="true">→</span>        <button class="rp-step" type="button" data-sim-idx="2"><span class="rp-no">2</span>中国哲学简史</button>        <span class="rp-arrow" aria-hidden="true">→</span>        <button class="rp-step" type="button" data-sim-idx="3"><span class="rp-no">3</span>西方哲学史</button>        <span class="rp-arrow" aria-hidden="true">→</span>        <button class="rp-step" type="button" data-sim-idx="4"><span class="rp-no">4</span>枪炮、病菌与钢铁</button>        <span class="rp-arrow" aria-hidden="true">→</span>        <button class="rp-step" type="button" data-sim-idx="5"><span class="rp-no">5</span>人类简史</button>        <span class="rp-arrow" aria-hidden="true">→</span>        <button class="rp-step" type="button" data-sim-idx="6"><span class="rp-no">6</span>哲学王子王德峰讲座</button>      </div>
+    </div>
+    <div class="author-shelf">
+      <div class="shelf-head">
+        <h2 class="section-title" style="margin:0">作者书架</h2>
+        <a href="#sub-author">还想读 王东岳 →</a>
+      </div>
+      <div class="shelf-row">        <article class="shelf-card">
+          <span class="sh-year">1998</span>
+          <p class="sh-title">物演通论 </p>
+          <p class="sh-one">递弱代偿原理的系统论证,三卷180章的哲学专著</p>
+        </article>        <article class="shelf-card">
+          <span class="sh-year">2009</span>
+          <p class="sh-title">知鱼之乐 </p>
+          <p class="sh-one">物演通论的通俗化散文集</p>
+        </article>        <article class="shelf-card">
+          <span class="sh-year">2013</span>
+          <p class="sh-title">人类的没落 </p>
+          <p class="sh-one">对人类文明危机的集中诊断</p>
+        </article>        <article class="shelf-card">
+          <span class="sh-year">2018</span>
+          <p class="sh-title">中西哲学启蒙课 <em class="au-thisbook-badge">本书</em></p>
+          <p class="sh-one">归隐前最后一次完整讲座,145堂课贯通东西方哲学与递弱代偿</p>
+        </article>      </div>
+    </div>
+    <div class="cross-domain">
+      <h3 class="zone-title">这套思想在别处叫什么</h3>
+      <p class="section-lead">把书里的核心思想挂到你已有的知识域上 -- 换个学科,它其实早有名字。</p>
+      <div class="xd-list">        <div class="xd-item"><span class="xd-domain">物理学</span><span class="xd-name">热力学第二定律（熵增）与递弱代偿指向同一方向：宇宙从有序走向无序，从高存在度走向</span><span class="xd-note">热力学第二定律（熵增）与递弱代偿指向同一方向：宇宙从有序走向无序，从高存在度走向低存在度。但递弱代偿强调的不是无序化，而是有序化的代价 -- 越有序的结构越脆弱。</span></div>        <div class="xd-item"><span class="xd-domain">生物学</span><span class="xd-name">进化论描述了从简单到复杂的方向，但递弱代偿揭示了进化的代价：越复杂的物种存在度越</span><span class="xd-note">进化论描述了从简单到复杂的方向，但递弱代偿揭示了进化的代价：越复杂的物种存在度越低。进化不是进步，而是被迫的代偿。</span></div>        <div class="xd-item"><span class="xd-domain">医学</span><span class="xd-name">进化医学发现许多常见病（近视、腰椎间盘突出、糖尿病）不是基因缺陷，而是进化适应与</span><span class="xd-note">进化医学发现许多常见病（近视、腰椎间盘突出、糖尿病）不是基因缺陷，而是进化适应与现代环境的错配。这与文明病是存在度递减的表达一致。</span></div>        <div class="xd-item"><span class="xd-domain">经济学</span><span class="xd-name">边际效用递减和递弱代偿有结构相似性：经济发展的初期投入产出比高，越到后期越需要更</span><span class="xd-note">边际效用递减和递弱代偿有结构相似性：经济发展的初期投入产出比高，越到后期越需要更多投入才能维持同等产出 -- 文明越发展，维持成本越高。</span></div>      </div>
+    </div>
+    <div class="crossbook">
+      <h3 class="zone-title">这本书在别的书里的回声</h3>
+      <p class="section-lead">同一概念在别的书里被印证 / 反驳,跨书越蒸越富。</p>
+      <div class="xb-list">        <div class="xb-echo" data-source="https://www.toutiao.com/item/6734645714338447885/"><span class="tag">NEW_CONCEPT</span><strong>递弱代偿 × 进化论</strong><p class="xb-this">本书:进化不是进步而是被迫的代偿,越复杂的物种存在度越低</p><p class="xb-ext">对照:达尔文进化论只描述了进化的事实(所然),递弱代偿试图解释进化的代价(所以然),两者互补而非矛盾</p><a href="https://www.toutiao.com/item/6734645714338447885/" rel="noopener">来源</a></div>        <div class="xb-echo" data-source="https://baike.baidu.com/item/%E7%89%A9%E6%BC%94%E9%80%9A%E8%AB%96/24136523"><span class="tag">NEW_CONCEPT</span><strong>地理决定论 × 枪炮病菌与钢铁</strong><p class="xb-this">本书:东西方文明分化源于地理地貌差异(封闭vs开放)</p><p class="xb-ext">对照:戴蒙德从大陆轴线方向解释文明差异,王东岳从封闭/开放地貌解释 -- 两者在地理决定论上共鸣</p><a href="https://baike.baidu.com/item/%E7%89%A9%E6%BC%94%E9%80%9A%E8%AB%96/24136523" rel="noopener">来源</a></div>        <div class="xb-echo" data-source="https://weibo.com/2065594927/Nk1dacJ9z"><span class="tag">NEW_CONCEPT</span><strong>进步观 × 人类简史</strong><p class="xb-this">本书:进步即衰退,文明程度越高危机越深重</p><p class="xb-ext">对照:赫拉利也认为农业革命是'史上最大骗局',但总体肯定人类进步;王东岳全盘否定进步 -- 同一事实,相反诊断</p><a href="https://weibo.com/2065594927/Nk1dacJ9z" rel="noopener">来源</a></div>        <div class="xb-echo" data-source="https://www2.jianshu.com/p/5043833e406e"><span class="tag">NEW_CONCEPT</span><strong>科学观 × 波普尔证伪主义</strong><p class="xb-this">本书:科学不是真理的逼近而是逻辑变革的代偿产物</p><p class="xb-ext">对照:波普尔认为科学是可证伪的知识,王东岳借用但改写了这一概念,批评者认为其理解不够准确</p><a href="https://www2.jianshu.com/p/5043833e406e" rel="noopener">来源</a></div>      </div>
+    </div>
+    <div class="takeaway-strip">
+      <p class="tw-head">离开前带走:</p>
+      <p class="tw-formula"><span class="tw-eq">存在度(Ed)↘ + 代偿度/属性(Pb)↗ = 存在阈(Ts, 常量)
+越原始越稳定，越进化越脆弱</span><span class="tw-tag">① 见过 · 回顾</span></p>
+      <div class="tw-rings">        <a class="tw-ring" data-panel="panel-action"></a>        <a class="tw-ring" data-panel="panel-action"></a>        <a class="tw-ring" data-panel="panel-action"></a>        <a class="tw-ring" data-panel="panel-action"></a>        <a class="tw-ring" data-panel="panel-action"></a>      </div>
+    </div>
+    <p class="extend-pointer">想看围绕本书观点的争论 → 回 <a href="#" data-panel="panel-judge">③ 批判与评价 · 观点对照</a></p>
+  </section>
+  <footer class="footer">
+    本页由 sansheng-distill 从《东西哲学启蒙课》(王东岳)蒸馏重组而成 -- 保留作者精确命名,出处页码按章节位置比例估算。
+    AI 蒸馏是地图,不是目的地 -- 关键章节请回原书细看。出处随文常显小灰字,右下角可切换 7 套主题。
+  </footer>
+
+  <div class="theme-picker" role="group" aria-label="切换主题" data-open="0">
+    <div class="tp-menu" role="menu">
+      <button data-theme-pick="brand-dark" role="menuitemradio"><span class="sw" aria-hidden="true"></span>深空</button>
+      <button data-theme-pick="warm-paper" role="menuitemradio"><span class="sw" aria-hidden="true"></span>暖纸典藏</button>
+      <button data-theme-pick="minimal" role="menuitemradio"><span class="sw" aria-hidden="true"></span>极简学术</button>
+      <button data-theme-pick="dark" role="menuitemradio"><span class="sw" aria-hidden="true"></span>夜读深空</button>
+      <button data-theme-pick="ink-wash" role="menuitemradio"><span class="sw" aria-hidden="true"></span>东方水墨</button>
+      <button data-theme-pick="vintage-editorial" role="menuitemradio"><span class="sw" aria-hidden="true"></span>复古编辑</button>
+      <button data-theme-pick="paper-ink" role="menuitemradio"><span class="sw" aria-hidden="true"></span>纸墨风</button>
+    </div>
+    <button class="tp-trigger" type="button" aria-haspopup="true" aria-expanded="false"><span class="tp-ico" aria-hidden="true">🎨</span><span class="tp-label">主题</span><svg class="tp-caret" width="9" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+  <section class="subpage" id="sub-author" hidden aria-label="作者页">
+    <div class="subpage-inner">
+      <div class="subpage-bar">
+        <button class="sub-back" type="button" data-sub-back>返回</button>
+        <h2 class="subpage-title">王东岳 · 作者档案</h2>
+        <span class="subpage-from">《东西哲学启蒙课》· 延伸档案</span>
+      </div>
+      <div class="subpage-body au-body">
+        <p class="au-tagline">医学硕士出身的独立哲学家,用'递弱代偿'贯通宇宙演化与文明诊断 -- 一位在罗辑思维和混沌大学走红后归隐终南山的思想者。</p>
+
+        <aside class="au-infobox" aria-label="基础信息">
+          <figure class="au-photo"><span class="au-monogram">王</span></figure>
+          <h3 class="au-name">王东岳</h3>
+          <p class="au-roles">自由学者 · 前西北大学哲学系客座教授 · 前西安交大管理学院客座教授</p>
+          <dl class="au-facts">            <div class="au-fact"><dt>出生</dt><dd>1953年7月 · 陕西</dd></div>            <div class="au-fact"><dt>祖籍</dt><dd>陕西</dd></div>            <div class="au-fact"><dt>学历</dt><dd>西安医学院 医疗系 学士&lt;br&gt;西安医科大学 医学硕士</dd></div>            <div class="au-fact"><dt>以何知名</dt><dd>递弱代偿原理 -- 贯通自然、精神与社会的统一哲学体系</dd></div>            <div class="au-fact"><dt>代表作</dt><dd>《物演通论》<br>《知鱼之乐》<br>《人类的没落》<br>《哲思讲演录》<br>《中西哲学启蒙课》</dd></div>            <div class="au-fact"><dt>笔名</dt><dd>子非鱼</dd></div>            <div class="au-fact"><dt>课程平台</dt><dd>喜马拉雅/混沌大学</dd></div>            <div class="au-fact"><dt>课程集数</dt><dd>216集/约58小时</dd></div>            <div class="au-fact"><dt>课程状态</dt><dd>归隐前最后一次完整讲座</dd></div>          </dl>
+        </aside>
+
+        <div class="au-main">
+          <section class="au-sec" id="au-life">
+            <h3 class="au-sec-title">人物经历 -- 从医学到哲学的跨界之路</h3>
+            <ol class="au-timeline">              <li class="au-tl" data-source="https://www.wuyantonglun.org/2022/287.html">
+                <span class="au-tl-period">1973-1982</span>
+                <div class="au-tl-body"><strong>医学院到工厂医师</strong><p>入西安医学院医疗系学习,毕业后在国营4390厂和4400厂职工医院做医师。医学训练后来成为他跨学科哲学的方法底色 -- 他自称'把医学院当哲学院来读'。</p></div>
+              </li>              <li class="au-tl" data-source="https://www.wuyantonglun.org/2022/287.html">
+                <span class="au-tl-period">1982-1995</span>
+                <div class="au-tl-body"><strong>研究生、教书与下海</strong><p>考入西安医科大学读硕士,毕业后留校任教,后转入药用动物研究所任所长。1991年创办方大科技公司任董事长,1993年担任西安民营企业商会首任会长。商界经历让他目睹了文明运转的底层逻辑。</p></div>
+              </li>              <li class="au-tl" data-source="https://baike.baidu.com/item/%E7%89%A9%E6%BC%94%E9%80%9A%E8%AB%96/24136523">
+                <span class="au-tl-period">1995-1998</span>
+                <div class="au-tl-body"><strong>重返书斋,写《物演通论》</strong><p>1995年5月脱离科研和经济工作,重返书斋。三年闭关撰写《物演通论》初稿,1998年10月出版。全书约35万字,三卷180章,以'递弱代偿原理'贯通自然存在、精神存在与社会存在。</p></div>
+              </li>              <li class="au-tl" data-source="https://m.ximalaya.com/ting/7386">
+                <span class="au-tl-period">1998-2018</span>
+                <div class="au-tl-body"><strong>客座讲学与公众传播</strong><p>2001年受聘西北大学哲学系客座教授,2006年受聘西安交大管理学院客座国学教授。2018年在混沌大学举办系列哲学讲座(即本课程),经罗辑思维、混沌大学、喜马拉雅等平台传播,在商界和知识界引发广泛关注。课程上线后播放量超1.28亿,为归隐前最后一次完整讲座。</p></div>
+              </li>            </ol>
+          </section>
+          <section class="au-sec" id="au-impact">
+            <h3 class="au-sec-title">成就与影响 -- 商界知识界的跨界传播</h3>
+            <div class="au-stats">              <div class="au-stat"><b>1.28亿</b><span>喜马拉雅播放量</span></div>              <div class="au-stat"><b>216集</b><span>课程总集数</span></div>              <div class="au-stat"><b>6.5万</b><span>线下课程学费(元)</span></div>              <div class="au-stat"><b>299</b><span>线上课程售价(元)</span></div>            </div>
+            <p>《东西哲学启蒙课》(又名《中西哲学启蒙课》)是王东岳归隐前的最后一次完整讲座,用145堂课从文明溯源讲到递弱代偿,是他学术精华的通俗化表达。与《物演通论》的艰深不同,这门课力求让大众听懂,但底层逻辑完全一致。</p>
+          </section>
+          <section class="au-sec" id="au-debate">
+            <h3 class="au-sec-title">争议与评价 -- 天才哲学家还是民哲</h3>
+            <div class="au-debate-cols">
+              <div class="au-dcol au-dcol-pro"><h4>围墙内</h4>                <article class="au-dentry" data-source=""><p>罗振宇(罗辑思维):</p><a href="" rel="noopener">来源</a></article>                <article class="au-dentry" data-source=""><p>李善友(混沌大学):</p><a href="" rel="noopener">来源</a></article>                <article class="au-dentry" data-source=""><p>部分商界精英:</p><a href="" rel="noopener">来源</a></article>              </div>
+              <div class="au-dcol au-dcol-con"><h4>围墙外</h4>                <article class="au-dentry" data-source=""><p>万维钢(得到):</p><a href="" rel="noopener">来源</a></article>                <article class="au-dentry" data-source=""><p>学术圈:</p><a href="" rel="noopener">来源</a></article>                <article class="au-dentry" data-source=""><p>部分科普作者:</p><a href="" rel="noopener">来源</a></article>              </div>
+            </div>
+          </section>
+          <section class="au-sec" id="au-thisbook">
+            <h3 class="au-sec-title">他与这本书 -- 归隐前的最后讲座</h3>
+            <p>《东西哲学启蒙课》(又名《中西哲学启蒙课》)是王东岳归隐前的最后一次完整讲座,用145堂课从文明溯源讲到递弱代偿,是他学术精华的通俗化表达。与《物演通论》的艰深不同,这门课力求让大众听懂,但底层逻辑完全一致。</p>
+          </section>
+          <section class="au-sec" id="au-works">
+            <h3 class="au-sec-title">主要作品</h3>
+            <ol class="au-works-list">              <li class="au-work"><span class="au-wyear">1998</span><div><strong>《物演通论》</strong><p>递弱代偿原理的系统论证,三卷180章的哲学专著</p></div></li>              <li class="au-work"><span class="au-wyear">2009</span><div><strong>《知鱼之乐》</strong><p>物演通论的通俗化散文集</p></div></li>              <li class="au-work"><span class="au-wyear">2013</span><div><strong>《人类的没落》</strong><p>对人类文明危机的集中诊断</p></div></li>              <li class="au-work au-work-this"><span class="au-wyear">2018</span><div><strong>《中西哲学启蒙课》</strong><em class="au-thisbook-badge">本书</em><p>归隐前最后一次完整讲座,145堂课贯通东西方哲学与递弱代偿</p></div></li>            </ol>
+          </section>
+          <div class="sp-srcs">来源:<a href="https://www.wuyantonglun.org/2022/287.html" rel="noopener">来源</a> · <a href="https://baike.baidu.com/item/%E7%89%A9%E6%BC%94%E9%80%9A%E8%AB%96/24136523" rel="noopener">来源</a> · <a href="https://wuyantonglun.com/post/265.html" rel="noopener">来源</a> · <a href="https://m.ximalaya.com/ting/7386" rel="noopener">来源</a> · <a href="https://weibo.com/2065594927/Nk1dacJ9z" rel="noopener">来源</a></div>        </div>
+      </div>
+    </div>
+  </section>
+  <section class="subpage" id="sub-views" hidden aria-label="观点对照页">
+    <div class="subpage-inner">
+      <div class="subpage-bar">
+        <button class="sub-back" type="button" data-sub-back>返回</button>
+        <h2 class="subpage-title">观点对照</h2>
+        <span class="subpage-from">《东西哲学启蒙课》· 延伸档案</span>
+      </div>
+      <div class="subpage-body">
+        <p class="sp-lead">书中核心主张的赞同方 / 质疑方对照,每条带来源。</p>        <article class="view-topic">
+          <h3 class="vt-viewpoint"></h3>
+          <p class="vt-focus">争议焦点:</p>
+          <div class="vt-cols">
+            <div class="vt-col vt-support">
+              <p class="vt-col-label">赞同方</p>              <div class="vt-entry" data-source="https://www2.jianshu.com/p/5043833e406e"><p class="vt-who">李善友(混沌大学)</p><p class="vt-say">递弱代偿是理解人类文明的全新认知框架,改变了我的世界观</p><a href="https://www2.jianshu.com/p/5043833e406e" rel="noopener">来源</a></div>              <div class="vt-entry" data-source="https://www.toutiao.com/item/6734645714338447885/"><p class="vt-who">部分网友</p><p class="vt-say">递弱代偿回答了古希腊以来哲学家留下的几乎所有问题,逻辑自洽且符合实证</p><a href="https://www.toutiao.com/item/6734645714338447885/" rel="noopener">来源</a></div>            </div>
+            <div class="vt-col vt-critic">
+              <p class="vt-col-label">质疑方</p>              <div class="vt-entry" data-source="https://www2.jianshu.com/p/5043833e406e"><p class="vt-who">万维钢(得到)</p><p class="vt-say">递弱代偿存在选择偏差,新造概念过多,逻辑不够自洽,属于民科式哲学</p><a href="https://www2.jianshu.com/p/5043833e406e" rel="noopener">来源</a></div>              <div class="vt-entry" data-source="http://www.xtie.cn/zatan/5657.html"><p class="vt-who">部分网友</p><p class="vt-say">没有完成推导,他洽和续洽都没有完成,递弱代偿不成立</p><a href="http://www.xtie.cn/zatan/5657.html" rel="noopener">来源</a></div>            </div>
+          </div>
+        </article>        <article class="view-topic">
+          <h3 class="vt-viewpoint"></h3>
+          <p class="vt-focus">争议焦点:</p>
+          <div class="vt-cols">
+            <div class="vt-col vt-support">
+              <p class="vt-col-label">赞同方</p>              <div class="vt-entry" data-source="https://weibo.com/2065594927/Nk1dacJ9z"><p class="vt-who">微博网友</p><p class="vt-say">无论西哲还是中国传统文化部分,都是非常好的文化及哲学意义的科普课程</p><a href="https://weibo.com/2065594927/Nk1dacJ9z" rel="noopener">来源</a></div>              <div class="vt-entry" data-source="https://m.ximalaya.com/ting/7386"><p class="vt-who">喜马拉雅听众</p><p class="vt-say">很震撼的哲学课,颠覆了很多原来的常识认知,开启了很多新鲜的思路</p><a href="https://m.ximalaya.com/ting/7386" rel="noopener">来源</a></div>            </div>
+            <div class="vt-col vt-critic">
+              <p class="vt-col-label">质疑方</p>              <div class="vt-entry" data-source="http://baike.baidu.com/tashuo/browse/content?id=a8faef4940d82227fab12780"><p class="vt-who">科普作者</p><p class="vt-say">讲课中存在常识性错误,对科学理解不够准确,建议学生不要看因为整体宇宙观是消极的</p><a href="http://baike.baidu.com/tashuo/browse/content?id=a8faef4940d82227fab12780" rel="noopener">来源</a></div>              <div class="vt-entry" data-source="http://www.xtie.cn/zatan/5657.html"><p class="vt-who">批评者</p><p class="vt-say">没有索引,自创借用引用混在一起,看的眼熟又不是,容易把没看过哲学普及书的人带沟里</p><a href="http://www.xtie.cn/zatan/5657.html" rel="noopener">来源</a></div>            </div>
+          </div>
+        </article>        <article class="view-topic">
+          <h3 class="vt-viewpoint"></h3>
+          <p class="vt-focus">争议焦点:</p>
+          <div class="vt-cols">
+            <div class="vt-col vt-support">
+              <p class="vt-col-label">赞同方</p>              <div class="vt-entry" data-source="https://www.toutiao.com/item/6734645714338447885/"><p class="vt-who">网友</p><p class="vt-say">达尔文感谢马尔萨斯也是'六经注我',真正做学问就应该用新信息量重新解读前人文本</p><a href="https://www.toutiao.com/item/6734645714338447885/" rel="noopener">来源</a></div>            </div>
+            <div class="vt-col vt-critic">
+              <p class="vt-col-label">质疑方</p>              <div class="vt-entry" data-source="http://www.xtie.cn/zatan/5657.html"><p class="vt-who">批评者</p><p class="vt-say">如果任何前人思想都可以用递弱代偿重新解读,这种解读是否失去了可证伪性?</p><a href="http://www.xtie.cn/zatan/5657.html" rel="noopener">来源</a></div>            </div>
+          </div>
+        </article>      </div>
+    </div>
+  </section></main>
+
+<script>
+/* 交互层: 自绘 SVG 脑图(懒渲染, 恒深色不随页面主题) + hash 路由(切tab/开手风琴章/滚动/高亮)。
+   v4.1: 脑图换自绘 SVG(读 nodeData 出图, 无 vendor),点二级 a.jump -> location.hash -> initHashRouter 接管。hash #ch-N 走 window.__bdOpenChapter。 */
+(() => {
+  'use strict';
+  window.__bdInitExtra = function(activateTab){
+    initMindmap(); initSketch(); initHashRouter(activateTab);
+  };
+  /* 因果骨架草图(v4,Q4-2):读 #bd-sketch-data 的 {type,caption,nodes[],edges[]} -> 纵向分层布局(最长路径分层,
+     源节点在顶、逐层向下)-> 生成内联 SVG(圆角描边节点 + 父子直角肘形折线,零交互静态一屏)。
+     直角经典 + 浅色配色:色全走 CSS 类(.sk-node/.sk-mid/.sk-line/.sk-label/.sk-elabel/.sk-arrow),JS 只设几何,零内联 hex。
+     通用生成器,换书换 #bd-sketch-data 即出图;数据缺 / 节点 <2 -> 隐藏整块。 */
+  function initSketch(){
+    const wrap = document.querySelector('.napkin-sketch');
+    if (!wrap) return;
+    const host = wrap.querySelector('#bd-sketch');
+    const dataEl = wrap.querySelector('#bd-sketch-data');
+    if (!host || !dataEl){ wrap.style.display = 'none'; return; }
+    let d; try { d = JSON.parse(dataEl.textContent); } catch (e) { wrap.style.display = 'none'; return; }
+    const nodes = (d && Array.isArray(d.nodes)) ? d.nodes : [];
+    const edges = (d && Array.isArray(d.edges)) ? d.edges : [];
+    if (nodes.length < 2){ wrap.style.display = 'none'; return; }
+    const SVGNS = 'http://www.w3.org/2000/svg';
+    const byId = {}; nodes.forEach(n => { byId[n.id] = n; });
+    // 分层:最长路径(源在 0 层,沿边 +1;带上限防环)
+    const layer = {}; nodes.forEach(n => { layer[n.id] = 0; });
+    const N = nodes.length;
+    for (let it = 0; it < N + 2; it++){
+      let changed = false;
+      edges.forEach(e => {
+        if (byId[e.from] === undefined || byId[e.to] === undefined) return;
+        if (layer[e.from] < N && layer[e.to] < layer[e.from] + 1){ layer[e.to] = layer[e.from] + 1; changed = true; }
+      });
+      if (!changed) break;
+    }
+    // 按层分组、层内保持数据顺序
+    const layers = {}; let maxL = 0;
+    nodes.forEach(n => { const L = layer[n.id]; (layers[L] = layers[L] || []).push(n); if (L > maxL) maxL = L; });
+    // 尺寸(CJK ~ 字号宽);节点宽随 label 自适应
+    // 横向布局(作者:横向从左到右、压低高度):层=列(x 递增),列内纵向堆叠居中
+    const FS = 11, CH = 15.2, PADX = 15, NH = 38, VGAP = 14, HGAP = 40, PAD = 12;
+    const wOf = n => Math.max(66, String(n.label || '').length * CH + PADX * 2);
+    // 每列宽=该列最宽节点;记最高列(节点最多)定画布高
+    const colW = {}; let maxColH = 0;
+    for (let L = 0; L <= maxL; L++){
+      const row = layers[L] || [];
+      colW[L] = row.reduce((m, n) => Math.max(m, wOf(n)), 0);
+      const h = row.length * NH + Math.max(0, row.length - 1) * VGAP;
+      if (h > maxColH) maxColH = h;
+    }
+    // 列 x 累加
+    const colX = {}; let xacc = PAD;
+    for (let L = 0; L <= maxL; L++){ colX[L] = xacc; xacc += colW[L] + HGAP; }
+    // 定位:列内纵向居中,x=列位
+    const pos = {};
+    for (let L = 0; L <= maxL; L++){
+      const row = layers[L] || [];
+      const colH = row.length * NH + Math.max(0, row.length - 1) * VGAP;
+      let y = PAD + (maxColH - colH) / 2;
+      const x = colX[L], w = colW[L];
+      row.forEach(n => { pos[n.id] = { x: x, y: y, w: w, cx: x + w / 2, cy: y + NH / 2, xL: x, xR: x + w }; y += NH + VGAP; });
+    }
+    const totalW = (xacc - HGAP) + PAD;
+    const totalH = PAD * 2 + maxColH;
+    const svg = document.createElementNS(SVGNS, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${Math.round(totalW)} ${Math.round(totalH)}`);
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', String((d && d.caption) || '全书因果骨架图'));
+    const mk = (t, a) => { const el = document.createElementNS(SVGNS, t); for (const k in a) el.setAttribute(k, a[k]); return el; };
+    // 边:横向直角肘(源右缘 -> 横 -> 竖 -> 横 -> 目标左缘);向右箭头。标签延后统一渲染(压在所有引线之上、节点之下,避免被后画的线穿过)
+    const elabels = [];
+    edges.forEach(e => {
+      const A = pos[e.from], B = pos[e.to];
+      if (!A || !B) return;
+      const x1 = A.xR, y1 = A.cy, x2 = B.xL, y2 = B.cy;
+      const midX = (x1 + x2) / 2;
+      const pts = (y1 === y2) ? `${x1},${y1} ${x2},${y2}` : `${x1},${y1} ${midX},${y1} ${midX},${y2} ${x2},${y2}`;
+      svg.appendChild(mk('polyline', { points: pts, class: 'sk-line' }));
+      const ah = 5;                                    // 向右小箭头(目标左缘)
+      svg.appendChild(mk('path', { d: `M ${x2 - ah} ${y2 - ah} L ${x2 - ah} ${y2 + ah} L ${x2} ${y2} Z`, class: 'sk-arrow' }));
+      const lab = (e.label || '').trim();
+      if (lab) elabels.push({ lab: lab, x: midX, ly: (y1 === y2) ? y1 : (y1 + y2) / 2 });
+    });
+    // 转换标签:纯文字挪到引线上方(不套框、不压箭头);延后渲染压在所有引线之上
+    elabels.forEach(b => {
+      const t = mk('text', { x: b.x, y: b.ly - 6, class: 'sk-elabel', 'text-anchor': 'middle' });
+      t.textContent = b.lab; svg.appendChild(t);
+    });
+    // 终点节点(有入边无出边)= 视觉落点深绿实底;中间产物 = 金实底;其余 = 浅底描边
+    const hasOut = {}, hasIn = {};
+    edges.forEach(e => { hasOut[e.from] = true; hasIn[e.to] = true; });
+    // 节点:三阶实底 + 居中文字(mid/end 用白字)
+    nodes.forEach(n => {
+      const p = pos[n.id]; if (!p) return;
+      const isEnd = !n.mid && hasIn[n.id] && !hasOut[n.id];
+      const cls = 'sk-node' + (n.mid ? ' sk-mid' : (isEnd ? ' sk-end' : ''));
+      svg.appendChild(mk('rect', { x: p.x, y: p.y, width: p.w, height: NH, rx: 9, ry: 9, class: cls }));
+      const tcls = 'sk-label' + (n.mid ? ' sk-tmid' : (isEnd ? ' sk-tend' : ''));
+      const t = mk('text', { x: p.cx, y: p.y + NH / 2 + FS * 0.35, class: tcls, 'text-anchor': 'middle' });
+      t.textContent = String(n.label || ''); svg.appendChild(t);
+    });
+    host.textContent = '';
+    if (d && d.caption){
+      const cap = document.createElement('p'); cap.className = 'sk-caption';
+      cap.innerHTML = '<b>一眼看清全书骨架 ·</b> ' + String(d.caption).replace(/[<>]/g, '');
+      host.appendChild(cap);
+    }
+    host.appendChild(svg);
+  }
+  /* 全书脑图:自绘 SVG 深色版(v4.1,替换 mind-elixir)。读内嵌 #bd-mindmap-data 的 nodeData 通用出图 --
+     tidy-tree 确定性布局 -> SVG 挂线节点(root 卡片 / 一级金奶油 / 二级双层[关键词+判断句+章码chip] / 三四级 emoji 前缀纯文字)
+     + 父子直角肘形梳齿引线(不画任何关联箭头/收纳虚线) + viewBox 缩放 viewer(连续指数 wheel/光标锚点/拖动不选中/pinch/双击复位/全屏/章码跳章)。
+     配色统一读 --mm-* dark token(与 CSS 同一套,零 hex 单一来源);nodeData 之外零硬编码,换书换数据即出图。 */
+  function initMindmap(){
+    const wrap = document.querySelector('.bd-mindmap-wrap');
+    const vp   = document.getElementById('bd-mindmap');
+    const dataEl = document.getElementById('bd-mindmap-data');
+    if (!wrap || !vp || !dataEl) return;
+    let stage = vp.querySelector('.mm-stage');
+    if (!stage) { stage = document.createElement('div'); stage.className = 'mm-stage'; vp.insertBefore(stage, vp.firstChild); }
+    let raw; try { raw = JSON.parse(dataEl.textContent); } catch (e) { return; }
+    const DATA = (raw && raw.nodeData) ? raw.nodeData : raw;      // 通用:只认 nodeData,arrows/summaries 一律忽略(SVG 版不画关联)
+    if (!DATA || !DATA.topic) return;
+
+    const SVGNS = 'http://www.w3.org/2000/svg';
+    const SERIF = '"Source Han Serif SC","Noto Serif SC","Songti SC","STSong","SimSun",Georgia,serif';
+    const SANS  = '"Source Han Sans SC","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif';
+    // 深色配色:统一读 --mm-* dark token(CSS 定义、JS getComputedStyle 读同一套 -> 零 hex 单一来源;fallback 仅兜底)
+    const cs = getComputedStyle(wrap);
+    const T = (n, fb) => { const v = (cs.getPropertyValue(n) || '').trim(); return v || fb; };
+    const C = {
+      ink:T('--mm-ink','#f2ede1'), ink2:T('--mm-ink2','#dfe8e0'), ink3:T('--mm-ink3','#bccfc4'),
+      sec:T('--mm-sec','#d7c48c'), judge:T('--mm-judge','#a9c2b7'),
+      rootFill:T('--mm-root-fill','#235c4f'), rootBd:T('--mm-root-bd','#3c8272'), rootText:T('--mm-root-tx','#f4efe4'),
+      line:T('--mm-line','#5f8579'),
+      chipBg:T('--mm-chip-bg','rgba(143,208,191,0.15)'), chipBd:T('--mm-chip-bd','rgba(143,208,191,0.32)'), chipTx:T('--mm-chip-tx','#bfe0d3')
+    };
+    const LEAD = 10;   // 引线末端 -> 文字留白(文字纯挂线,不套框)
+
+    // 文本度量 + CJK 逐字换行
+    const mctx = document.createElement('canvas').getContext('2d');
+    const measure = (t, f) => { mctx.font = f; return mctx.measureText(t).width; };
+    function wrapText(text, font, maxW){
+      mctx.font = font; const lines = []; let cur = '';
+      for (const ch of String(text)) { const t = cur + ch; if (mctx.measureText(t).width > maxW && cur !== '') { lines.push(cur); cur = ch; } else cur = t; }
+      if (cur !== '') lines.push(cur); return lines.length ? lines : [''];
+    }
+
+    // 建树 + 逐节点定尺(root=卡片,其余=纯文字挂线)
+    function buildNode(rw, depth){
+      const n = { id: rw.id, topic: rw.topic || '', depth, tags: rw.tags || null, hyperLink: rw.hyperLink || null, children: [], root: !!rw.root };
+      (rw.children || []).forEach(c => n.children.push(buildNode(c, depth + 1)));
+      sizeNode(n); return n;
+    }
+    function sizeNode(n){
+      const d = n.depth;
+      if (d === 0) { const font = '700 22px ' + SERIF, pad = 16, tw = measure(n.topic, font); Object.assign(n, { w: tw + pad * 2, h: 30 + pad * 2, pad, font, kind: 'root' }); return; }
+      if (d === 1) { const font = '700 16.5px ' + SERIF, lh = 24, tw = measure(n.topic, font); Object.assign(n, { w: LEAD + tw + 2, h: lh, font, lh, lines: [n.topic], color: C.sec, kind: 'sec' }); return; }
+      if (d === 2) { // 二级双层:关键词(米白) + 判断句(浅青) + 章码 chip,整块挂线
+        const kwFont = '700 15px ' + SERIF, jFont = '400 11.5px ' + SANS, chFont = '600 10px ' + SANS, jMax = 212;
+        const judge = n.tags ? (n.tags[0] || '') : '', chap = n.tags ? (n.tags[1] || '') : '';
+        const kwW = measure(n.topic, kwFont), jLines = wrapText(judge, jFont, jMax);
+        const jW = Math.max(0, ...jLines.map(l => measure(l, jFont))), chW = measure(chap, chFont) + 16;
+        const blockW = Math.max(kwW, jW, chW), kwLH = 20, jLH = 15, chipH = 16, gapJC = 6;
+        const blockH = kwLH + jLines.length * jLH + gapJC + chipH;
+        Object.assign(n, { w: LEAD + blockW + 2, h: blockH, kwFont, jFont, chFont, kwLH, jLH, chipH, gapJC, jLines, chap, chW, kind: 'dual' }); return;
+      }
+      // 三/四级:类型靠 emoji 前缀区分,浅色文字纯挂线
+      let font, color, maxW, lh;
+      if (d === 3) { font = '400 13px ' + SANS; color = C.ink2; maxW = 214; lh = 19; }
+      else { font = '400 12px ' + SANS; color = C.ink3; maxW = 198; lh = 17.5; }
+      const innerMax = maxW - LEAD - 2, lines = wrapText(n.topic, font, innerMax), lineW = Math.max(...lines.map(l => measure(l, font)));
+      const w = (lines.length === 1) ? LEAD + lineW + 2 : maxW, h = lines.length * lh;
+      Object.assign(n, { w, h, font, color, lh, lines, kind: 'leaf' });
+    }
+    const rootNode = buildNode(DATA, 0);
+
+    // 按层收集 -> 列宽/列 x
+    const byDepth = {}; let maxDepth = 0;
+    (function collect(n){ (byDepth[n.depth] = byDepth[n.depth] || []).push(n); maxDepth = Math.max(maxDepth, n.depth); n.children.forEach(collect); })(rootNode);
+    const HGAP = 46, colW = [], colX = [];
+    for (let d = 0; d <= maxDepth; d++) colW[d] = Math.max(...byDepth[d].map(n => n.w));
+    colX[0] = 0; for (let d = 1; d <= maxDepth; d++) colX[d] = colX[d - 1] + colW[d - 1] + HGAP;
+    // 竖向 tidy 布局:后序 y 游标(变高不重叠),父居子中点
+    const VGAP = 16; let cursor = 0;
+    (function place(n){ n.x = colX[n.depth]; if (n.children.length === 0) { n.top = cursor; n.cy = cursor + n.h / 2; cursor += n.h + VGAP; } else { n.children.forEach(place); const f = n.children[0], l = n.children[n.children.length - 1]; n.cy = (f.cy + l.cy) / 2; n.top = n.cy - n.h / 2; } })(rootNode);
+    // 画布边界
+    const MARGIN = 42; let minY = Infinity, maxY = -Infinity, maxX = -Infinity;
+    Object.values(byDepth).flat().forEach(n => { minY = Math.min(minY, n.top); maxY = Math.max(maxY, n.top + n.h); maxX = Math.max(maxX, n.x + n.w); });
+    const W = maxX + MARGIN * 2, H = (maxY - minY) + MARGIN * 2, offY = MARGIN - minY, offX = MARGIN;
+
+    // 生成 SVG 字符串
+    const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    function fontAttr(sh){ const m = sh.match(/^\s*(\d+)?\s*([\d.]+)px\s+(.+)$/); const weight = (m && m[1]) || '400', size = (m && m[2]) || '13', fam = (m && m[3]) || 'sans-serif'; return 'font-size="' + size + '" font-weight="' + weight + '" font-family="' + fam.replace(/"/g, '&quot;') + '"'; }
+    const X = n => n.x + offX, Y = n => n.top + offY, CY = n => n.cy + offY;
+    const parts = [];
+    parts.push('<svg xmlns="' + SVGNS + '" width="' + W.toFixed(0) + '" height="' + H.toFixed(0) + '" viewBox="0 0 ' + W.toFixed(0) + ' ' + H.toFixed(0) + '" font-family=\'' + SANS.replace(/"/g, '&quot;') + '\'>');
+    // 父子直角肘形梳齿引线(只画父子,SVG 版不画任何跨枝关联)
+    const conn = [];
+    Object.values(byDepth).flat().forEach(n => {
+      if (!n.children.length) return;
+      const busX = colX[n.children[0].depth] + offX - HGAP / 2, pRight = X(n) + n.w, pCy = CY(n);
+      let mn = pCy, mx = pCy; n.children.forEach(c => { mn = Math.min(mn, CY(c)); mx = Math.max(mx, CY(c)); });
+      conn.push('<path d="M' + pRight.toFixed(1) + ' ' + pCy.toFixed(1) + ' H' + busX.toFixed(1) + '"/>');
+      conn.push('<path d="M' + busX.toFixed(1) + ' ' + mn.toFixed(1) + ' V' + mx.toFixed(1) + '"/>');
+      n.children.forEach(c => { conn.push('<path d="M' + busX.toFixed(1) + ' ' + CY(c).toFixed(1) + ' H' + X(c).toFixed(1) + '"/>'); });
+    });
+    parts.push('<g fill="none" stroke="' + C.line + '" stroke-width="1" stroke-linecap="square" shape-rendering="crispEdges">' + conn.join('') + '</g>');
+    function nodeSVG(n){
+      const x = X(n), y = Y(n);
+      if (n.kind === 'root') {
+        let g = '<g>';
+        g += '<rect x="' + (x + 1).toFixed(1) + '" y="' + (y + 3).toFixed(1) + '" width="' + n.w.toFixed(1) + '" height="' + n.h.toFixed(1) + '" rx="8" fill="rgba(0,0,0,0.28)"/>';
+        g += '<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + n.w.toFixed(1) + '" height="' + n.h.toFixed(1) + '" rx="8" fill="' + C.rootFill + '" stroke="' + C.rootBd + '" stroke-width="1.4"/>';
+        g += '<text x="' + (x + n.w / 2).toFixed(1) + '" y="' + (y + n.h / 2 + 8).toFixed(1) + '" text-anchor="middle" ' + fontAttr(n.font) + ' fill="' + C.rootText + '">' + esc(n.topic) + '</text>';
+        return g + '</g>';
+      }
+      if (n.kind === 'sec') { const tx = x + LEAD, by = y + n.h / 2 + 16.5 * 0.34; return '<text x="' + tx.toFixed(1) + '" y="' + by.toFixed(1) + '" text-anchor="start" ' + fontAttr(n.font) + ' fill="' + n.color + '">' + esc(n.topic) + '</text>'; }
+      if (n.kind === 'dual') {
+        const tx = x + LEAD; let g = '<g>';
+        g += '<rect x="' + x.toFixed(1) + '" y="' + (y - 2).toFixed(1) + '" width="' + (n.w + 4).toFixed(1) + '" height="' + (n.h + 4).toFixed(1) + '" fill="rgba(0,0,0,0)" pointer-events="all"/>';
+        g += '<text x="' + tx.toFixed(1) + '" y="' + (y + 15).toFixed(1) + '" ' + fontAttr(n.kwFont) + ' fill="' + C.ink + '">' + esc(n.topic) + '</text>';
+        const jy = y + n.kwLH + 11; n.jLines.forEach((l, i) => { g += '<text x="' + tx.toFixed(1) + '" y="' + (jy + i * n.jLH).toFixed(1) + '" ' + fontAttr(n.jFont) + ' fill="' + C.judge + '">' + esc(l) + '</text>'; });
+        const chipTop = y + n.kwLH + n.jLines.length * n.jLH + n.gapJC;
+        g += '<rect x="' + tx.toFixed(1) + '" y="' + chipTop.toFixed(1) + '" width="' + n.chW.toFixed(1) + '" height="' + n.chipH + '" rx="8" fill="' + C.chipBg + '" stroke="' + C.chipBd + '" stroke-width="0.8"/>';
+        g += '<text x="' + (tx + n.chW / 2).toFixed(1) + '" y="' + (chipTop + n.chipH / 2 + 3.5).toFixed(1) + '" text-anchor="middle" ' + fontAttr(n.chFont) + ' fill="' + C.chipTx + '">' + esc(n.chap) + '</text>';
+        g += '</g>';
+        if (n.hyperLink) return '<a class="jump" href="' + esc(n.hyperLink) + '" data-ch="' + esc(n.hyperLink) + '">' + g + '</a>';
+        return g;
+      }
+      const tx = x + LEAD, fs = parseFloat(n.font.match(/(\d+(\.\d+)?)px/)[1]); let g = '';
+      n.lines.forEach((l, i) => { const by = y + i * n.lh + n.lh / 2 + fs * 0.34; g += '<text x="' + tx.toFixed(1) + '" y="' + by.toFixed(1) + '" text-anchor="start" ' + fontAttr(n.font) + ' fill="' + n.color + '">' + esc(l) + '</text>'; });
+      return g;
+    }
+    Object.values(byDepth).flat().forEach(n => parts.push(nodeSVG(n)));
+    parts.push('</svg>');
+    stage.innerHTML = parts.join('');
+    const svgEl = stage.querySelector('svg');
+
+    // ===== viewBox pan / zoom viewer(每次浏览器重新矢量光栅化,任意倍率锐利;非 transform:scale 位图放大糊) =====
+    const zb = vp.querySelector('.mm-zoom');
+    let stt = { x: 0, y: 0, k: 1 };
+    function apply(){ const r = vp.getBoundingClientRect(); if (!r.width || !r.height) return; svgEl.setAttribute('width', r.width); svgEl.setAttribute('height', r.height); svgEl.setAttribute('viewBox', (-stt.x / stt.k).toFixed(2) + ' ' + (-stt.y / stt.k).toFixed(2) + ' ' + (r.width / stt.k).toFixed(2) + ' ' + (r.height / stt.k).toFixed(2)); if (zb) zb.textContent = Math.round(stt.k * 100) + '%'; }
+    function fit(pad){ pad = pad || 28; const r = vp.getBoundingClientRect(); if (!r.width || !r.height) return; const k = Math.min((r.width - pad * 2) / W, (r.height - pad * 2) / H); stt.k = Math.min(k, 1.2); stt.x = (r.width - W * stt.k) / 2; stt.y = (r.height - H * stt.k) / 2; apply(); }
+    function zoomAt(cx, cy, f){ const r = vp.getBoundingClientRect(); const px = cx - r.left, py = cy - r.top, nk = Math.min(Math.max(stt.k * f, 0.15), 6); stt.x = px - (px - stt.x) * (nk / stt.k); stt.y = py - (py - stt.y) * (nk / stt.k); stt.k = nk; apply(); }
+    vp.addEventListener('wheel', e => { e.preventDefault(); let d = e.deltaY; if (e.deltaMode === 1) d *= 16; else if (e.deltaMode === 2) d *= 100; d = Math.max(-100, Math.min(100, d)); zoomAt(e.clientX, e.clientY, Math.exp(-d * 0.001)); }, { passive: false });
+    const pts = new Map(); let dragMoved = false, downPos = null, pinchStart = null, captured = false;
+    const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+    vp.addEventListener('pointerdown', e => {
+      if (e.target.closest && e.target.closest('.mm-toolbar')) return;   // 工具栏按钮不触发拖动
+      pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pts.size === 1) { downPos = { id: e.pointerId, x: e.clientX, y: e.clientY, sx: stt.x, sy: stt.y }; dragMoved = false; captured = false; vp.classList.add('grabbing'); }
+      if (pts.size === 2) { const a = [...pts.values()]; pinchStart = { d: dist(a[0], a[1]), k: stt.k, mx: (a[0].x + a[1].x) / 2, my: (a[0].y + a[1].y) / 2 }; try { vp.setPointerCapture(e.pointerId); } catch (_) {} }
+      hideHint();
+    });
+    vp.addEventListener('pointermove', e => {
+      if (!pts.has(e.pointerId)) return;
+      pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pts.size >= 2 && pinchStart) { const a = [...pts.values()], nd = dist(a[0], a[1]), r = vp.getBoundingClientRect(); const nk = Math.min(Math.max(pinchStart.k * (nd / pinchStart.d), 0.15), 6), px = pinchStart.mx - r.left, py = pinchStart.my - r.top; stt.x = px - (px - stt.x) * (nk / stt.k); stt.y = py - (py - stt.y) * (nk / stt.k); stt.k = nk; apply(); dragMoved = true; return; }
+      if (pts.size === 1 && downPos) { const dx = e.clientX - downPos.x, dy = e.clientY - downPos.y; if (Math.abs(dx) + Math.abs(dy) > 5) { dragMoved = true; if (!captured) { captured = true; try { vp.setPointerCapture(downPos.id); } catch (_) {} } } if (dragMoved) { stt.x = downPos.sx + dx; stt.y = downPos.sy + dy; apply(); } }
+    });
+    function up(e){ pts.delete(e.pointerId); if (pts.size < 2) pinchStart = null; if (pts.size === 0) { vp.classList.remove('grabbing'); captured = false; } }
+    vp.addEventListener('pointerup', up); vp.addEventListener('pointercancel', up);
+    vp.addEventListener('dblclick', () => fit());
+    // 章码跳章:点二级 a.jump -> location.hash -> 复用 initHashRouter(切 panel-full + 展开该章 + 高亮);拖动中不触发
+    stage.addEventListener('click', e => {
+      const a = e.target.closest && e.target.closest('a.jump'); if (!a) return;
+      e.preventDefault(); if (dragMoved) return;
+      const ch = a.getAttribute('data-ch') || a.getAttribute('href'); if (!ch) return;
+      const m = ch.match(/#ch-(\d+)/); if (m) toast('跳转到第 ' + m[1] + ' 章 · 逐章精读');
+      location.hash = ch;
+    }, true);
+    // 工具栏
+    const btn = k => vp.querySelector('.mm-toolbar [data-mm="' + k + '"]');
+    if (btn('in'))  btn('in').onclick  = () => { const r = vp.getBoundingClientRect(); zoomAt(r.left + r.width / 2, r.top + r.height / 2, 1.25); };
+    if (btn('out')) btn('out').onclick = () => { const r = vp.getBoundingClientRect(); zoomAt(r.left + r.width / 2, r.top + r.height / 2, 1 / 1.25); };
+    if (btn('fit')) btn('fit').onclick = () => fit();
+    const fsBtn = btn('fs');
+    // 全屏 = 把 wrap 临时移到 <body> 顶层再加 .mm-fullscreen(逃离 main{isolation:isolate} / panel{transform} 的祖先 stacking context,
+    // 否则 fixed 也困在 main 内、被 sticky nav / 主题浮层盖住,进不了纯深色聚焦态)。退出时复位回原处。
+    let fsSlot = null, fsHome = null;
+    function toggleFs(){
+      const on = !wrap.classList.contains('mm-fullscreen');
+      if (on) {
+        fsHome = wrap.parentNode; fsSlot = document.createComment('mm-fs-slot');
+        fsHome.insertBefore(fsSlot, wrap); document.body.appendChild(wrap);
+        wrap.classList.add('mm-fullscreen'); document.body.style.overflow = 'hidden';
+      } else {
+        wrap.classList.remove('mm-fullscreen'); document.body.style.overflow = '';
+        if (fsSlot && fsHome) { fsHome.insertBefore(wrap, fsSlot); fsSlot.remove(); fsSlot = null; }
+      }
+      if (fsBtn) fsBtn.textContent = on ? '⤡ 退出' : '⤢ 全屏';
+      fit(); setTimeout(fit, 80);
+    }
+    if (fsBtn) fsBtn.onclick = toggleFs;
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && wrap.classList.contains('mm-fullscreen')) toggleFs(); });
+    // 提示 / toast
+    const hintEl = vp.querySelector('.mm-hint'), toastEl = vp.querySelector('.mm-toast');
+    let hintTimer, toastTimer;
+    function showHint(){ if (!hintEl) return; const touch = matchMedia('(pointer:coarse)').matches || ('ontouchstart' in window) || navigator.maxTouchPoints > 0; hintEl.textContent = touch ? '双指缩放 · 单指拖动 · 双击复位' : '滚轮缩放 · 拖动平移 · 双击复位 · 点二级章码跳章'; hintEl.classList.add('show'); clearTimeout(hintTimer); hintTimer = setTimeout(hideHint, 4200); }
+    function hideHint(){ if (hintEl) hintEl.classList.remove('show'); }
+    function toast(msg){ if (!toastEl) return; toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2000); }
+    // 换肤 no-op:脑图恒深色,不随页面主题(保留全局符号,initThemes 调用安全)
+    window.__bdMindmapRetheme = function(){};
+    // 诊断(供 verify 冒烟:节点数 / 是否 SVG viewer)
+    const allNodes = Object.values(byDepth).flat();
+    window.__mm = { W: W, H: H, nodes: allNodes.length, maxDepth: maxDepth, fit: fit, setView: (x, y, k) => { stt.x = x; stt.y = y; stt.k = k; apply(); } };
+    // 懒渲染:panel 隐藏(getBoundingClientRect 为 0)时等切到①再 fit
+    let inited = false;
+    function ready(){ if (inited) return; const r = vp.getBoundingClientRect(); if (!r.width || !r.height) return; inited = true; fit(); showHint(); }
+    ready();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (inited) fit(); else ready(); });
+    window.addEventListener('resize', () => { if (inited) fit(); else ready(); });
+    document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => { if (t.dataset.panel === 'panel-glance') setTimeout(() => { ready(); if (inited) fit(); }, 60); }));
+  }
+  function initHashRouter(activateTab){
+    /* hash 路由: #sub-* → 开合全屏子视图;#ch-N → 章码传送门(切板块② + 展开该章 + 滚动 + 高亮);其余 #id → 切 tab + 滚动高亮。 */
+    const subpages = Array.prototype.slice.call(document.querySelectorAll('.subpage'));
+    const closeSubs = () => subpages.forEach(s => { s.hidden = true; });
+    const open = () => {
+      const id = decodeURIComponent(location.hash.slice(1));
+      if (id.indexOf('sub-') === 0) {
+        const sub = document.getElementById(id);
+        if (sub && sub.classList.contains('subpage')) {
+          subpages.forEach(s => { s.hidden = (s !== sub); });
+          sub.scrollTop = 0;
+          return;
+        }
+      }
+      closeSubs();
+      const chm = id.match(/^ch-(\d+)$/);
+      if (chm) {
+        activateTab('panel-full');
+        if (window.__bdOpenChapter) setTimeout(() => window.__bdOpenChapter(chm[1], true), 30);
+        return;
+      }
+      const el = id && document.getElementById(id);
+      if (!el) return;
+      const panel = el.closest('.panel');
+      if (panel && !panel.classList.contains('on')) activateTab(panel.id);
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1600);
+    };
+    window.addEventListener('hashchange', open); open();
+  }
+})();
+</script>
+<script>
+/* 基础层: IIFE 壳 + 幂等守卫 + 全部 v3 交互
+   initNav(tab/next-cta,切板滚到悬浮 tab 下方) / syncTabH(实测 tab 栏高→--tab-h) / initThemes / initChapters(手风琴多开+全展逃生门+已读计数)
+   / initCoreIdeas(展开三件) / initConcepts(弹卡+高亮章行) / initTensions / initModels(抽屉单开)
+   / initRules(chip 筛选 + chain-step 联动) / initReadingPath(高亮书卡) / initSubBack */
+(() => {
+  'use strict';
+  const $  = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
+  const lsKey = (k) => `bd:${(document.querySelector('main[data-book-slug]') || {}).dataset ? document.querySelector('main[data-book-slug]').dataset.bookSlug : 'x'}:${k}`;
+
+  function activateTab(panelId){
+    $$('.panel').forEach(p => p.classList.toggle('on', p.id === panelId));
+    $$('.tab').forEach(t => {
+      const on = t.dataset.panel === panelId;
+      t.classList.toggle('on', on);
+      /* Q7-6:移动端横滑单行 tab 栏,激活 tab 自动居中(桌面 grid 无横向溢出,无副作用) */
+      if (on && t.scrollIntoView) { try { t.scrollIntoView({ inline: 'center', block: 'nearest' }); } catch (e) {} }
+    });
+  }
+  function tabBarH(){ const n = document.getElementById('bd-tabs'); return n ? n.getBoundingClientRect().height : 0; }
+  function syncTabH(){ document.documentElement.style.setProperty('--tab-h', tabBarH() + 'px'); }
+  /* 切板 / 跳章后把目标顶部滚到 sticky tab 栏正下方(减去实测 tab 栏高度,不写死;scroll-margin-top 走 --tab-h) */
+  function scrollPanelTop(panelId){
+    const panel = document.getElementById(panelId);
+    if (!panel) return;
+    const y = panel.getBoundingClientRect().top + window.pageYOffset - tabBarH() - 6;
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+  }
+
+  /* 导航: tab + next-cta + 末行指路回链 全走 data-panel;切板后统一把内容落到悬浮 tab 正下方(导读条 .reading-guide 已废) */
+  function initNav(){
+    $$('[data-panel]').forEach(el => el.addEventListener('click', (e) => {
+      if (el.tagName === 'A') e.preventDefault();
+      activateTab(el.dataset.panel);
+      scrollPanelTop(el.dataset.panel);
+    }));
+  }
+
+  function initThemes(){
+    let saved = null; try { saved = localStorage.getItem(lsKey('theme')); } catch (e) {}
+    if (saved) document.body.dataset.theme = saved;
+    const picker = document.querySelector('.theme-picker');
+    if (!picker) return;
+    const trigger = picker.querySelector('.tp-trigger');
+    const markCurrent = () => {
+      const cur = document.body.dataset.theme || 'warm-paper';
+      picker.querySelectorAll('[data-theme-pick]').forEach(b =>
+        b.setAttribute('aria-current', String(b.dataset.themePick === cur)));
+    };
+    const setOpen = (o) => {
+      picker.dataset.open = o ? '1' : '0';
+      if (trigger) trigger.setAttribute('aria-expanded', String(!!o));
+    };
+    if (trigger) trigger.addEventListener('click', (e) => { e.stopPropagation(); setOpen(picker.dataset.open !== '1'); });
+    picker.querySelectorAll('[data-theme-pick]').forEach(b =>
+      b.addEventListener('click', () => {
+        document.body.dataset.theme = b.dataset.themePick;
+        try { localStorage.setItem(lsKey('theme'), b.dataset.themePick); } catch (e) {}
+        markCurrent(); setOpen(false);
+        if (window.__bdMindmapRetheme) window.__bdMindmapRetheme();
+      }));
+    document.addEventListener('click', (e) => { if (picker.dataset.open === '1' && !picker.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && picker.dataset.open === '1') setOpen(false); });
+    markCurrent();
+  }
+
+  /* ② 手风琴章节 + 目录态(v4 批次C:已读改章尾 IntersectionObserver 计数 + localStorage 持久;下一章预告卡;阅读中上下文条) */
+  const read = new Set();
+  function chTotal(){ return $$('.bd-chapter').length; }
+  function updateProgress(){
+    const total = chTotal();
+    const p = $('.toc-progress');
+    if (p) p.textContent = '已读 ' + read.size + '/' + total;
+    const cx = $('.ch-ctxbar .cx-progress');
+    if (cx) cx.textContent = '已读 ' + read.size + '/' + total;
+  }
+  function persistRead(){ try { localStorage.setItem(lsKey('read'), JSON.stringify(Array.from(read))); } catch (e) {} }
+  function loadRead(){   // Q5-3B:回访恢复已读(key 带 slug)
+    try {
+      const arr = JSON.parse(localStorage.getItem(lsKey('read')) || '[]');
+      if (Array.isArray(arr)) arr.forEach(n => {
+        if (!document.getElementById('ch-' + n)) return;
+        read.add(String(n));
+        const r = $('.toc-row[data-ch="' + n + '"]'); if (r) r.classList.add('read');
+      });
+    } catch (e) {}
+  }
+  function markRead(n){   // Q5-3:读到章尾入视口才计已读(非「点开即计」)
+    n = String(n);
+    if (read.has(n)) return;
+    read.add(n);
+    const r = $('.toc-row[data-ch="' + n + '"]'); if (r) r.classList.add('read');
+    persistRead(); updateProgress();
+  }
+  function setChapter(n, openState){   // Q5-3:只管展开/收起,不再碰已读
+    const ch = document.getElementById('ch-' + n);
+    const row = $('.toc-row[data-ch="' + n + '"]');
+    if (!ch) return;
+    ch.classList.toggle('open', openState);
+    if (row) row.classList.toggle('open', openState);
+  }
+  function openChapter(n, doScroll){
+    setChapter(n, true);
+    const ch = document.getElementById('ch-' + n);
+    if (doScroll && ch) {
+      ch.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      ch.classList.add('flash'); setTimeout(() => ch.classList.remove('flash'), 1600);
+    }
+  }
+  window.__bdOpenChapter = openChapter;
+
+  /* Q5-2:章尾裸钮 → 下一章预告卡(读 toc 论点标题 + 读时,JS 读 DOM);末章补终局卡跳 panel-judge */
+  function initChapterPreview(){
+    $$('.bd-chapter').forEach(ch => {
+      const n = ch.id.replace('ch-', '');
+      const nextBtn = ch.querySelector('[data-ch-next]');
+      const acts = ch.querySelector('.ch-actions');
+      if (nextBtn) {
+        const nn = String(Number(n) + 1);
+        const row = $('.toc-row[data-ch="' + nn + '"]');
+        const titleEl = row && row.querySelector('.toc-title');
+        const metaEl = row && row.querySelector('.toc-meta');
+        const title = titleEl ? (titleEl.textContent || '').trim() : '';
+        const meta = metaEl ? (metaEl.textContent || '').replace(/[▾▴▸→]/g, '').trim() : '';
+        if (title) {
+          nextBtn.classList.add('cn-card');
+          nextBtn.textContent = '';
+          const k = document.createElement('span'); k.className = 'cn-kick'; k.textContent = '继续读第 ' + nn + ' 章';
+          const t = document.createElement('span'); t.className = 'cn-title'; t.textContent = title;
+          const m = document.createElement('span'); m.className = 'cn-meta'; m.textContent = (meta ? meta + ' ' : '') + '→';
+          nextBtn.appendChild(k); nextBtn.appendChild(t); nextBtn.appendChild(m);
+        }
+      } else if (acts && !acts.querySelector('.ch-final')) {
+        const b = document.createElement('a');
+        b.className = 'ch-act ch-next ch-final';
+        b.setAttribute('data-panel', 'panel-judge');
+        const k = document.createElement('span'); k.className = 'cn-kick'; k.textContent = '全书读完 ✓';
+        const t = document.createElement('span'); t.className = 'cn-title'; t.textContent = '这书该信几分?';
+        const m = document.createElement('span'); m.className = 'cn-meta'; m.textContent = '→ 批判与评价';
+        b.appendChild(k); b.appendChild(t); b.appendChild(m);
+        acts.appendChild(b);
+      }
+    });
+  }
+
+  function initChapters(){
+    $$('.toc-row').forEach(row => row.addEventListener('click', () => {
+      const n = row.dataset.ch;
+      const ch = document.getElementById('ch-' + n);
+      const willOpen = !(ch && ch.classList.contains('open'));
+      setChapter(n, willOpen);
+      if (willOpen && ch) ch.scrollIntoView({ behavior: 'smooth', block: 'start' });   // Q5-8:平滑滚到章首,落 tab 下沿(scroll-margin-top)
+    }));
+    const btn = $('.toc-expand');
+    if (btn) btn.addEventListener('click', () => {   // Q5-3:全部展开只展开、不计已读
+      const chs = $$('.bd-chapter');
+      const anyClosed = chs.some(c => !c.classList.contains('open'));
+      chs.forEach(c => setChapter(c.id.replace('ch-', ''), anyClosed));
+      btn.textContent = anyClosed ? '全部收起' : '全部展开';
+    });
+    $$('.bd-chapter').forEach(ch => ch.addEventListener('click', (e) => {
+      const collapse = e.target.closest('[data-ch-collapse]');
+      const totoc = e.target.closest('[data-ch-totoc]');
+      const next = e.target.closest('[data-ch-next]:not(.ch-final)');
+      if (collapse) { setChapter(collapse.dataset.chCollapse, false); }
+      else if (totoc) { const t = $('.chapter-toc'); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      else if (next) { e.preventDefault(); const cur = next.dataset.chNext; setChapter(cur, false); openChapter(String(Number(cur) + 1), true); }
+      // .ch-final 终局卡走 data-panel="panel-judge",由 initNav 委托切板,不在此拦截
+    }));
+    initChapterPreview();
+    loadRead();
+    updateProgress();
+  }
+
+  /* Q5-3/Q5-4:章尾入视口才计已读(IO)+ 阅读中上下文条(当前章 · 已读 n/N · 回目录),离开正文自动隐藏 */
+  function initReadingObservers(){
+    if (!('IntersectionObserver' in window)) return;
+    const endOb = new IntersectionObserver((ents) => {
+      ents.forEach(e => { if (e.isIntersecting) { const ch = e.target.closest('.bd-chapter'); if (ch) markRead(ch.id.replace('ch-', '')); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0 });
+    $$('.bd-chapter .ch-actions').forEach(a => endOb.observe(a));
+
+    const bar = $('.ch-ctxbar');
+    if (!bar) return;
+    const cxCh = bar.querySelector('.cx-ch');
+    const totoc = bar.querySelector('.cx-totoc');
+    if (totoc) totoc.addEventListener('click', () => { const t = $('.chapter-toc'); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    const inView = new Map();
+    const paint = () => {
+      let pick = null, top = Infinity;
+      inView.forEach((vis, ch) => { if (vis) { const y = ch.getBoundingClientRect().top; if (y < top) { top = y; pick = ch; } } });
+      if (pick) {
+        if (cxCh) cxCh.textContent = '第 ' + pick.id.replace('ch-', '') + ' 章';
+        updateProgress();
+        bar.classList.add('show');
+      } else {
+        bar.classList.remove('show');
+      }
+    };
+    const bodyOb = new IntersectionObserver((ents) => {
+      ents.forEach(e => inView.set(e.target, e.isIntersecting));
+      paint();
+    }, { threshold: 0, rootMargin: '-100px 0px -38% 0px' });
+    $$('.bd-chapter').forEach(c => bodyOb.observe(c));
+  }
+
+  /* ① 核心观点卡: 点卡展开三件(explain+evidence+evlevel);内部传送门链不触发折叠;Q7-3 展开后翻文案 */
+  function initCoreIdeas(){
+    $$('.ci').forEach(card => card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      card.classList.toggle('on');
+      const more = card.querySelector('.ci-more');
+      if (more) {
+        if (!more.dataset.def) more.dataset.def = more.textContent;
+        more.textContent = card.classList.contains('on') ? '收起 ▴' : more.dataset.def;
+      }
+    }));
+  }
+
+  /* ② 概念 chip: 弹卡(单开)+ 高亮含该概念的目录行 */
+  function initConcepts(){
+    const chips = $$('.cc-chip');
+    chips.forEach(chip => chip.addEventListener('click', () => {
+      const idx = chip.dataset.conceptIdx;
+      const wasOn = chip.classList.contains('on');
+      chips.forEach(c => c.classList.toggle('on', c === chip && !wasOn));
+      $$('.cc-pop').forEach(p => p.classList.toggle('on', p.dataset.conceptIdx === idx && !wasOn));
+      $$('.toc-row').forEach(r => r.classList.remove('hl'));
+      if (!wasOn) (chip.dataset.conceptChs || '').split(/\s+/).filter(Boolean).forEach(cn => {
+        const r = $('.toc-row[data-ch="' + cn + '"]'); if (r) r.classList.add('hl');
+      });
+    }));
+  }
+
+  /* ③ 内在张力: 点行展开仲裁 note */
+  function initTensions(){
+    $$('.tn-row').forEach(row => row.addEventListener('click', () => row.classList.toggle('open')));
+  }
+
+  /* ④ 模型抽屉: 一次开一张(手风琴);Q7-3 展开后翻文案 展开 ▾ ⇄ 收起 ▴ */
+  function syncModelToggle(d){
+    const t = d.querySelector('.md-toggle');
+    if (t) t.textContent = d.classList.contains('open') ? '收起 ▴' : '展开 ▾';
+  }
+  function initModels(){
+    const drawers = $$('.model-drawer');
+    drawers.forEach(d => {
+      const head = d.querySelector('.md-head');
+      if (!head) return;
+      head.addEventListener('click', () => {
+        const willOpen = !d.classList.contains('open');
+        drawers.forEach(x => { x.classList.remove('open'); syncModelToggle(x); });
+        if (willOpen) d.classList.add('open');
+        syncModelToggle(d);
+      });
+    });
+  }
+
+  /* ④ 情境决策卡: rule-chips 双轴筛选 + chain-step 点击联动筛选并滚动 */
+  function initRules(){
+    let curStep = 'all', curSitu = 'all';
+    const cards = $$('.rule-card');
+    const apply = () => cards.forEach(c => {
+      const stepOk = curStep === 'all' || c.dataset.step === curStep;
+      const situOk = curSitu === 'all' || (c.dataset.situ || '').indexOf(curSitu) >= 0;
+      c.style.display = (stepOk && situOk) ? '' : 'none';
+    });
+    $$('.rc-chip[data-filter-step]').forEach(chip => chip.addEventListener('click', () => {
+      curStep = chip.dataset.filterStep;
+      $$('.rc-chip[data-filter-step]').forEach(c => c.classList.toggle('on', c === chip));
+      apply();
+    }));
+    $$('.rc-chip[data-filter-situ]').forEach(chip => chip.addEventListener('click', () => {
+      const wasOn = chip.classList.contains('on');
+      curSitu = wasOn ? 'all' : chip.dataset.filterSitu;
+      $$('.rc-chip[data-filter-situ]').forEach(c => c.classList.toggle('on', c === chip && !wasOn));
+      apply();
+    }));
+    $$('.chain-step').forEach(step => step.addEventListener('click', () => {
+      const s = step.dataset.step;
+      curStep = s;
+      $$('.rc-chip[data-filter-step]').forEach(c => c.classList.toggle('on', c.dataset.filterStep === s));
+      apply();
+      $$('.chain-step').forEach(x => x.classList.remove('hl')); step.classList.add('hl');
+      const rules = $('.rules'); if (rules) rules.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }));
+    apply();
+  }
+
+  /* ⑤ 阅读路径: 点路径步高亮对应书卡 */
+  function initReadingPath(){
+    $$('.rp-step').forEach(step => step.addEventListener('click', () => {
+      const t = step.dataset.simIdx;
+      $$('.rp-step').forEach(s => s.classList.toggle('hl', s === step));
+      $$('.sim-card').forEach(c => c.classList.toggle('hl', c.dataset.simIdx === t));
+      const card = $('.sim-card[data-sim-idx="' + t + '"]'); if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }));
+  }
+
+  /* 子视图返回: history.back() 优先;直达深链兜底清 hash */
+  function initSubBack(){
+    $$('[data-sub-back]').forEach(b => b.addEventListener('click', () => {
+      if (location.hash.indexOf('#sub-') === 0 && window.history.length > 1) window.history.back();
+      else location.hash = '';
+    }));
+  }
+
+  /* Q7-5:sticky tab 吸顶阴影 -- sentinel 滚出视口(IO 不相交)即 .stuck,吸顶瞬间浮起(iOS 质感) */
+  function initStickyShadow(){
+    const tabs = document.getElementById('bd-tabs');
+    if (!tabs || !('IntersectionObserver' in window)) return;
+    if (tabs.previousElementSibling && tabs.previousElementSibling.classList.contains('tabs-sentinel')) return;
+    const sen = document.createElement('div');
+    sen.className = 'tabs-sentinel'; sen.setAttribute('aria-hidden', 'true');
+    tabs.parentNode.insertBefore(sen, tabs);
+    new IntersectionObserver(([e]) => tabs.classList.toggle('stuck', !e.isIntersecting), { threshold: 0 }).observe(sen);
+  }
+
+  function bdInit(){
+    const m = document.querySelector('main[data-book-slug]');
+    if (!m || m.dataset.bdReady) return;
+    m.dataset.bdReady = '1';
+    /* initChapters 先跑:它注入末章 .ch-final[data-panel](Q5-2 终局卡),initNav 再统一委托绑 data-panel */
+    initChapters(); initNav(); initThemes(); initCoreIdeas(); initConcepts();
+    initTensions(); initModels(); initRules(); initReadingPath(); initSubBack();
+    initReadingObservers(); initStickyShadow();
+    syncTabH();
+    let rt = null;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(syncTabH, 120); });
+    if (window.__bdInitExtra) window.__bdInitExtra(activateTab);   // 脑图 + hash 路由
+  }
+  if (document.readyState !== 'loading') bdInit();
+  else document.addEventListener('DOMContentLoaded', bdInit);
+  document.addEventListener('astro:page-load', bdInit);
+})();
+</script>
+
+</body></html>
