@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>王东岳 · 蒸馏书房</title>
+<title>蒸馏书房</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -25,6 +25,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);line-hei
 /* Book grid */
 .books{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:48px}
 @media(max-width:720px){.books{grid-template-columns:1fr}}
+.books .full{grid-column:1/-1;max-width:560px;margin:0 auto}
 
 .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:box-shadow .2s,transform .15s;cursor:pointer;display:flex;flex-direction:column}
 .card:hover{box-shadow:0 8px 28px rgba(43,37,32,.12);transform:translateY(-3px)}
@@ -53,9 +54,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);line-hei
 <div class="wrap">
 
   <div class="hero">
-    <h1>王东岳 · 蒸馏书房</h1>
-    <p class="sub">递弱代偿宇宙观的深度蒸馏 -- 两本书,一个思想体系,可交互精读</p>
-    <p class="formula">存在度(Ed)↘ + 代偿度(Pb)↗ = 存在阈(Ts) &nbsp;|&nbsp; <em>越原始越稳定,越进化越脆弱</em></p>
+    <h1>蒸馏书房</h1>
+    <p class="sub">sansheng-distill 交互蒸馏 -- 三本书,三个领域,一个精读入口</p>
+    <p class="formula">从哲学到投资,从宇宙演化到周期博弈 <em>每本书一杯蒸馏</em></p>
   </div>
 
   <div class="books">
@@ -77,7 +78,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);line-hei
       </div>
       <div class="card-foot">
         <span class="read">进入蒸馏页</span>
-        <span class="arrow">→</span>
+        <span class="arrow">&rarr;</span>
       </div>
     </a>
 
@@ -98,7 +99,28 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);line-hei
       </div>
       <div class="card-foot">
         <span class="read">进入蒸馏页</span>
-        <span class="arrow">→</span>
+        <span class="arrow">&rarr;</span>
+      </div>
+    </a>
+
+    <a class="card full" href="yuda.html">
+      <div class="card-head">
+        <span class="card-tag">投资文集 · 392页</span>
+        <h2 class="card-title">鱼大文章汇编</h2>
+        <p class="card-author">鱼大(寒武纪的鳄鱼) · 周期投资</p>
+      </div>
+      <div class="card-body">
+        <p class="card-oneliner">专注商品 &times; 立足周期 &times; 低位买入 &times; 长期持有</p>
+        <p class="card-sub">392页文章合集,从"证券化囤货"到周期投资,构建一套高度聚焦的个人投资操作系统。涵盖投资理念、策略、认知随笔、问答与读书方法,以商品供需为锚、以企业杠杆为帆,在周期波动中寻找确定性。蒸馏页同时呈现 8 条批判性审查,直指体系的集中度风险与确定性过强问题。</p>
+        <div class="card-meta">
+          <span><b>7</b> 蒸馏模块</span>
+          <span><b>30</b> 蒸馏单元</span>
+          <span><b>392</b> 原始页</span>
+        </div>
+      </div>
+      <div class="card-foot">
+        <span class="read">进入蒸馏页</span>
+        <span class="arrow">&rarr;</span>
       </div>
     </a>
 
